@@ -1,0 +1,5 @@
+#initialization
+/run/initialize
+
+# modify number of column of detectors
+/control/loop scandet.mac cols 10 100 10
