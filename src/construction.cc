@@ -140,11 +140,24 @@ void MyDetectorConstruction::setVisualization()
     // uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * yDet) + " um y 1 0.75 0 manual " + std::to_string(-xWorld) + " " + std::to_string(-yWorld + yDet) + " " + std::to_string(zWorld) + " mm");
 }
 
+void MyDetectorConstruction::AddHit(std::pair<G4int, G4double> pair)
+{
+    simOutput[pair.first] += pair.second;
+}
+
 void MyDetectorConstruction::PrintHitsMap()
 {
     for (auto itr = simOutput.begin(); itr != simOutput.end(); itr++)
     {
-        G4cout << itr->first << " : " << itr->second << G4endl;
+        G4cout << itr->first << " : " << itr->second << " GeV " << G4endl;
+    }
+}
+
+void MyDetectorConstruction::ClearHitsMap()
+{
+    for (auto itr = simOutput.begin(); itr != simOutput.end(); itr++)
+    {
+        itr->second = 0.0;
     }
 }
 

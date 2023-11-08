@@ -9,7 +9,10 @@ MyEventAction::MyEventAction(MyRunAction *)
 
 MyEventAction::~MyEventAction() {}
 
-void MyEventAction::BeginOfEventAction(const G4Event *) {}
+void MyEventAction::BeginOfEventAction(const G4Event *)
+{
+    MyDetectorConstruction::ClearHitsMap();
+}
 
 void MyEventAction::EndOfEventAction(const G4Event *event)
 {
@@ -35,14 +38,9 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
 
             // pair (ID, eDep) of the step
             std::pair<G4int, G4double> stepData(hit->GetID(), hit->GetEnergy());
-            AddToMap(stepData);
-
-            G4cout << "Detector ID: " << stepData.first << G4endl;
-            G4cout << "Energy deposition: " << stepData.second << G4endl;
+            MyDetectorConstruction::AddHit(stepData);
         }
     }
-}
 
-void MyEventAction::AddToMap(std::pair<G4int, G4double> pair)
-{
+    MyDetectorConstruction::PrintHitsMap();
 }

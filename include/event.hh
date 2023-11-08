@@ -23,6 +23,4 @@ public:
 
     virtual void BeginOfEventAction(const G4Event *);
     virtual void EndOfEventAction(const G4Event *);
-
-    void AddToMap(std::pair<G4int, G4double>);
 };

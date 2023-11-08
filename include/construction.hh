@@ -69,6 +69,7 @@ public:
     static void setVisualization();
 
     // get hits map
-    static std::map<G4int, G4double> GetHitsMap() { return simOutput; }
+    static void AddHit(std::pair<G4int, G4double>);
     static void PrintHitsMap();
+    static void ClearHitsMap();
 };
