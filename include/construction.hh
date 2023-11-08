@@ -49,7 +49,7 @@ private:
     virtual void ConstructSDandField();
 
     // map of hits
-    std::map<G4int, G4double> simOutput;
+    static std::map<G4int, G4double> simOutput;
 
 public:
     MyDetectorConstruction();
@@ -57,9 +57,6 @@ public:
 
     // create all the volumes
     virtual G4VPhysicalVolume *Construct();
-
-    // get scoring volume
-    G4LogicalVolume *GetScoringVolume() const { return fScoringVolume; }
 
     // set number of pixels
     static void SetNPixel(G4int);
@@ -70,4 +67,8 @@ public:
 
     // modify visualization
     static void setVisualization();
+
+    // get hits map
+    static std::map<G4int, G4double> GetHitsMap() { return simOutput; }
+    static void PrintHitsMap();
 };

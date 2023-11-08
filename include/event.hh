@@ -17,8 +17,6 @@ private:
     G4double fEdep;
     G4int index;
 
-    std::map<G4int, G4double> simOutput;
-
 public:
     MyEventAction(MyRunAction *);
     ~MyEventAction();
@@ -26,5 +24,5 @@ public:
     virtual void BeginOfEventAction(const G4Event *);
     virtual void EndOfEventAction(const G4Event *);
 
-    void AddToMap(std::pair<G4int, G4double>) const;
+    void AddToMap(std::pair<G4int, G4double>);
 };

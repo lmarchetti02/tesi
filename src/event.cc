@@ -1,5 +1,6 @@
 #include "event.hh"
 #include "hits.hh"
+#include "construction.hh"
 
 MyEventAction::MyEventAction(MyRunAction *)
 {
@@ -32,10 +33,16 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
         {
             MyHit *hit = (*hitsColl)[i];
 
+            // pair (ID, eDep) of the step
             std::pair<G4int, G4double> stepData(hit->GetID(), hit->GetEnergy());
+            AddToMap(stepData);
 
             G4cout << "Detector ID: " << stepData.first << G4endl;
             G4cout << "Energy deposition: " << stepData.second << G4endl;
         }
     }
+}
+
+void MyEventAction::AddToMap(std::pair<G4int, G4double> pair)
+{
 }

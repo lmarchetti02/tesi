@@ -17,6 +17,9 @@ G4double MyDetectorConstruction::xWorld = 0;
 G4double MyDetectorConstruction::yWorld = 0;
 G4double MyDetectorConstruction::zWorld = 0;
 
+// hit map
+auto MyDetectorConstruction::simOutput = std::map<G4int, G4double>();
+
 MyDetectorConstruction::MyDetectorConstruction()
 {
     //  define materials
@@ -92,6 +95,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
             simOutput[ID] = 0.0;
         }
     }
+    PrintHitsMap();
     // ---------------------------------------------------------------------------------------------
 
     return physWorld;
@@ -134,6 +138,14 @@ void MyDetectorConstruction::setVisualization()
     uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * zDet) + " mm z 1 0.75 0 manual " + std::to_string(xWorld) + " " + std::to_string(yWorld) + " " + std::to_string(zWorld - zDet) + " mm");
     // uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * xDet) + " um x 1 0.75 0 manual " + std::to_string(-xWorld + xDet) + " " + std::to_string(-yWorld) + " " + std::to_string(zWorld) + " mm");
     // uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * yDet) + " um y 1 0.75 0 manual " + std::to_string(-xWorld) + " " + std::to_string(-yWorld + yDet) + " " + std::to_string(zWorld) + " mm");
+}
+
+void MyDetectorConstruction::PrintHitsMap()
+{
+    for (auto itr = simOutput.begin(); itr != simOutput.end(); itr++)
+    {
+        G4cout << itr->first << " : " << itr->second << G4endl;
+    }
 }
 
 void MyDetectorConstruction::SetNPixel(G4int N)
