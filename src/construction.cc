@@ -17,7 +17,7 @@ G4double MyDetectorConstruction::xWorld = 0;
 G4double MyDetectorConstruction::yWorld = 0;
 G4double MyDetectorConstruction::zWorld = 0;
 
-// hit map
+// hits map
 auto MyDetectorConstruction::simOutput = std::map<G4int, G4double>();
 
 MyDetectorConstruction::MyDetectorConstruction()

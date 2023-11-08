@@ -4,6 +4,7 @@
 
 MyEventAction::MyEventAction(MyRunAction *)
 {
+    // index of HC
     index = -1;
 }
 
