@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cmath>
+#include <map>
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
@@ -46,6 +47,9 @@ private:
 
     // create detector
     virtual void ConstructSDandField();
+
+    // map of hits
+    std::map<G4int, G4double> simOutput;
 
 public:
     MyDetectorConstruction();

@@ -77,14 +77,19 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     {
         for (G4int j = 0; j < nPixel; j++)
         {
+            G4int ID = i * nPixel + j;
+
             physDetector = new G4PVPlacement(nullptr,
                                              G4ThreeVector(-xWorld + (2 * j + 1) * xDet, -yWorld + (2 * i + 1) * yDet, zWorld - zDet),
                                              logicDetector,
                                              "physDetector",
                                              logicWorld,
                                              false,
-                                             i * nPixel + j, // unique id's
+                                             ID, // unique id's
                                              true);
+
+            // initialize map with hits per pixel
+            simOutput[ID] = 0.0;
         }
     }
     // ---------------------------------------------------------------------------------------------
@@ -143,6 +148,4 @@ void MyDetectorConstruction::SetNPixel(G4int N)
         zWorld += zDet * 2;
     else
         zWorld += xWorld * 2;
-
-    // TODO: map
 }
