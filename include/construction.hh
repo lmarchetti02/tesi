@@ -48,9 +48,6 @@ private:
     // create detector
     virtual void ConstructSDandField();
 
-    // map of hits
-    static std::map<G4int, G4double> simOutput;
-
 public:
     MyDetectorConstruction();
     ~MyDetectorConstruction();
@@ -68,9 +65,4 @@ public:
 
     // modify visualization
     static void setVisualization();
-
-    // get hits map
-    static void AddHit(std::pair<G4int, G4double>);
-    static void PrintHitsMap();
-    static void ClearHitsMap();
 };
