@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <vector>
 
 #include "G4UserEventAction.hh"
 #include "G4Event.hh"
@@ -9,13 +10,19 @@
 #include "G4HCofThisEvent.hh"
 
 #include "run.hh"
+#include "construction.hh"
+
+using std::map;
+using std::vector;
 
 class MyEventAction : public G4UserEventAction
 {
 private:
-    // deposited energy
-    G4double fEdep;
+    // HC index
     G4int index;
+
+    // hits map
+    vector<G4double> energyVector;
 
 public:
     MyEventAction(MyRunAction *);

@@ -12,11 +12,14 @@ MyEventAction::~MyEventAction() {}
 
 void MyEventAction::BeginOfEventAction(const G4Event *)
 {
-    MyDetectorConstruction::ClearHitsMap();
+    G4int nPixel = MyDetectorConstruction::GetNPixel();
+    energyVector = vector<G4double>(nPixel * nPixel, 0.);
 }
 
 void MyEventAction::EndOfEventAction(const G4Event *event)
 {
+    G4AnalysisManager *man = G4AnalysisManager::Instance();
+
     // find index of HC
     if (index < 0)
         index = G4SDManager::GetSDMpointer()->GetCollectionID("SensitiveDetector/MyHitsCollection");
@@ -39,7 +42,15 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
 
             // pair (ID, eDep) of the step
             std::pair<G4int, G4double> stepData(hit->GetID(), hit->GetEnergy());
-            MyDetectorConstruction::AddHit(stepData);
+
+            energyVector[stepData.first] += stepData.second;
         }
+    }
+
+    for (int i = 0; i < energyVector.size(); i++)
+    {
+        man->FillNtupleIColumn(0, i);
+        man->FillNtupleDColumn(1, energyVector[i]);
+        man->AddNtupleRow(0);
     }
 }
