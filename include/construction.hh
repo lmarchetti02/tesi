@@ -17,8 +17,6 @@
 #include "G4UImanager.hh"
 #include "G4SDManager.hh"
 
-#include "hitsmap.hh"
-
 using std::vector;
 
 class MyDetectorConstruction : public G4VUserDetectorConstruction

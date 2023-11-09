@@ -1,7 +1,7 @@
 #include "hits.hh"
 #include "G4SystemOfUnits.hh"
 
-G4ThreadLocal G4Allocator<MyHit> *MyHitAllocator = 0;
+G4ThreadLocal G4Allocator<MyHit> *MyHitAllocator;
 
 MyHit::MyHit()
 {

@@ -1,7 +1,6 @@
 #include "event.hh"
 #include "hits.hh"
 #include "construction.hh"
-#include "hitsmap.hh"
 
 MyEventAction::MyEventAction(MyRunAction *)
 {

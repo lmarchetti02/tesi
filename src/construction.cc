@@ -95,7 +95,6 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
             simOutput[ID] = 0.0;
         }
     }
-    MyHitsMap::Instance().InitializeMap(nPixel);
     // ---------------------------------------------------------------------------------------------
 
     return physWorld;
