@@ -17,6 +17,8 @@
 #include "G4UImanager.hh"
 #include "G4SDManager.hh"
 
+#include "hitsmap.hh"
+
 using std::vector;
 
 class MyDetectorConstruction : public G4VUserDetectorConstruction
@@ -60,6 +62,7 @@ public:
 
     // set number of pixels
     static void SetNPixel(G4int);
+    static G4int GetNPixel() { return nPixel; }
 
     // access geometry dimensions
     static vector<G4double> GetWorldDimensions();

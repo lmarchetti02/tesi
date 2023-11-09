@@ -1,6 +1,7 @@
 #include "event.hh"
 #include "hits.hh"
 #include "construction.hh"
+#include "hitsmap.hh"
 
 MyEventAction::MyEventAction(MyRunAction *)
 {
@@ -42,6 +43,4 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
             MyDetectorConstruction::AddHit(stepData);
         }
     }
-
-    MyDetectorConstruction::PrintHitsMap();
 }
