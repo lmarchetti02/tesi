@@ -1,14 +1,14 @@
 /control/verbose 1
 /run/verbose 1
 
-/run/numberOfThreads 4
+/run/numberOfThreads 8
 /run/initialize
 
 /beam/momentum 50 keV
 /run/beamOn 1000000
 
-/beam/momentum 75 keV
-/run/beamOn 1000000
+#/beam/momentum 75 keV
+#/run/beamOn 1000000
 
-/beam/momentum 100 keV
-/run/beamOn 1000000
+#/beam/momentum 100 keV
+#/run/beamOn 1000000
