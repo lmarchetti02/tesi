@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(Rivelatore)
 
 # delete root files
-set(results_path ${PROJECT_SOURCE_DIR}/results/)
+set(results_path ${PROJECT_SOURCE_DIR}/root/results/)
 file(GLOB results "${results_path}/*.root")
 
 if(NOT results)

@@ -25,7 +25,7 @@ void MyRunAction::BeginOfRunAction(const G4Run *run)
     G4String runNumber = to_string(run->GetRunID());
 
     // create file to store run
-    man->OpenFile("../results/output" + runNumber + ".root");
+    man->OpenFile("../root/results/output" + runNumber + ".root");
 }
 
 void MyRunAction::EndOfRunAction(const G4Run *)

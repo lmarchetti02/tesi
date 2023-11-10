@@ -9,6 +9,8 @@
 #include "TGraph.h"
 #include "TCanvas.h"
 #include "TAxis.h"
+#include "TGraph2D.h"
+#include "TStyle.h"
 
 #include "functions.hh"
 
@@ -19,32 +21,30 @@ using std::pair;
 using std::string;
 using std::vector;
 
-void analize(const char *fileName)
+void analyze(const char *fileName)
 {
 
     TFile *resultsFile = new TFile(fileName, "READ");
     TTree *resultsTree = (TTree *)resultsFile->Get("Hits");
 
+    // get z values
     map<int, double> hitsMap = read_ntuple(resultsTree);
-    print_map(hitsMap);
 
-    TGraph *graph = new TGraph();
+    // generate (x,y) points
+    int nPixel = TMath::Sqrt(hitsMap.size());
+    cout << "Number of pixels: " << nPixel << endl;
+    map<int, vector<double>> pixelMap = reconstruct_grid(nPixel);
+
     TCanvas *c = new TCanvas("c", "c", 800, 600);
+    TGraph2D *graph = new TGraph2D();
 
-    for (auto itr = hitsMap.begin(); itr != hitsMap.end(); itr++)
+    for (int i = 0; i < nPixel * nPixel; i++)
     {
-        graph->SetPoint(graph->GetN(), itr->first, itr->second);
+        graph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], hitsMap[i]);
     }
 
-    graph->SetTitle("Graph");
-
-    graph->SetMarkerStyle(8);
-    graph->SetMarkerSize(1);
-
-    graph->GetXaxis()->SetTitle("pixel number");
-    graph->GetYaxis()->SetTitle("energy deposition");
-
-    graph->Draw("ALP");
+    gStyle->SetPalette(1);
+    graph->Draw("surf1");
 
     resultsFile->Close();
 }

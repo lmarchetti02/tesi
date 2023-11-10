@@ -66,21 +66,27 @@ map<int, double> read_ntuple(TTree *tree)
     return result;
 }
 
-map<vector<double>, vector<double>> reconstruct_grid(int N)
+map<int, vector<double>> reconstruct_grid(const int N)
 {
-    const double DIM = 1.0;
+    const double DIM = 0.5;
     const double STEP = DIM / N;
 
-    map<vector<double>, vector<double>> result;
-    vector<double> values;
+    map<int, vector<double>> result;
 
+    // generate (x,y)
     for (int i = 0; i < N; i++)
     {
-        values.push_back(i + STEP / 2);
-    }
+        for (int j = 0; j < N; j++)
+        {
+            int ID = i * N + j;
+            double x = -DIM + (2 * j + 1) * STEP;
+            double y = -DIM + (2 * i + 1) * STEP;
+            vector<double> xy = {x, y};
 
-    pair<vector<double>, vector<double>> p(values, values);
-    result.insert(p);
+            pair<int, vector<double>> p(ID, xy);
+            result.insert(p);
+        }
+    }
 
     return result;
 }
