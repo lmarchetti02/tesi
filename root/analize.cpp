@@ -26,13 +26,6 @@ void analize(const char *fileName)
     TTree *resultsTree = (TTree *)resultsFile->Get("Hits");
 
     map<int, double> hitsMap = read_ntuple(resultsTree);
-
-    // mean
-    // for (auto itr = hitsMap.begin(); itr != hitsMap.end(); itr++)
-    // {
-    //     itr->second = vector<double>(1, get_mean(itr->second));
-    // }
-
     print_map(hitsMap);
 
     TGraph *graph = new TGraph();
