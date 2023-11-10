@@ -12,18 +12,6 @@ using std::map;
 using std::pair;
 using std::vector;
 
-double get_mean(const vector<double> &data)
-{
-    double mean = 0;
-
-    for (double value : data)
-    {
-        mean += value;
-    }
-
-    return mean / data.size();
-}
-
 double get_mean(const vector<double> *data)
 {
     double mean = 0;
@@ -74,6 +62,25 @@ map<int, double> read_ntuple(TTree *tree)
         pair<int, double> p(itr->first, get_mean(itr->second));
         result.insert(p);
     }
+
+    return result;
+}
+
+map<vector<double>, vector<double>> reconstruct_grid(int N)
+{
+    const double DIM = 1.0;
+    const double STEP = DIM / N;
+
+    map<vector<double>, vector<double>> result;
+    vector<double> values;
+
+    for (int i = 0; i < N; i++)
+    {
+        values.push_back(i + STEP / 2);
+    }
+
+    pair<vector<double>, vector<double>> p(values, values);
+    result.insert(p);
 
     return result;
 }

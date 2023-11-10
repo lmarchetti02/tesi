@@ -5,7 +5,10 @@
 /run/initialize
 
 /beam/momentum 50 keV
-/run/beamOn 1000000
+/run/beamOn 1000
+
+#/beam/momentum 50 keV
+#/run/beamOn 1000000
 
 #/beam/momentum 75 keV
 #/run/beamOn 1000000
