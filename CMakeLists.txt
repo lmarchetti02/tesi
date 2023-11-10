@@ -5,7 +5,7 @@ project(Rivelatore)
 
 # delete root files
 set(results_path ${PROJECT_SOURCE_DIR}/results/)
-file(GLOB results "${results_path}/*")
+file(GLOB results "${results_path}/*.root")
 
 if(NOT results)
     message("ROOT directory is empty")
