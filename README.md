@@ -1,6 +1,4 @@
-# ARRAY OF CdTe PIXELS
-# Geant4-based simulation
-### Author: Luca Marchetti
-#### Università degli Studi di Torino
+# ARRAY OF CdTe PIXELS <br/> Geant4-based simulation
+### Luca Marchetti <br/>  Università degli Studi di Torino
 
 
