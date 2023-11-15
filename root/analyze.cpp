@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <map>
+#include <fstream>
 
 #include "TFile.h"
 #include "TTree.h"
@@ -41,6 +42,22 @@ void analyze(const char *fileName)
     {
         graph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], hitsMap[i]);
     }
+
+    std::fstream dataFile;
+    dataFile.open("results/data.txt", std::ios::out);
+    if (dataFile.is_open())
+    {
+        dataFile << "RISULTATI DELLA SIMULAZIONE" << endl;
+        dataFile << "---------------------------" << endl;
+
+        int i = 0;
+        while (i < nPixel * nPixel)
+        {
+            dataFile << pixelMap[i][0] << "," << pixelMap[i][1] << "," << hitsMap[i] << endl;
+            i++;
+        }
+    }
+    dataFile.close();
 
     gStyle->SetPalette(1);
     graph->Draw("surf1");
