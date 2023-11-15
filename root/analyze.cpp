@@ -23,7 +23,6 @@ using std::vector;
 
 void analyze(const char *fileName)
 {
-
     TFile *resultsFile = new TFile(fileName, "READ");
     TTree *resultsTree = (TTree *)resultsFile->Get("Hits");
 
