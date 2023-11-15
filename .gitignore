@@ -39,3 +39,4 @@ root/results
 /.vscode
 merge_root.sh
 compile.sh
+*.ipynb
