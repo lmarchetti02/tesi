@@ -16,9 +16,6 @@ public:
 
     inline void *operator new(size_t);
     inline void operator delete(void *);
-
-    void Print();
-
 private:
     G4double energyDep; // Photon energy energy
     G4int detectorID;   // Position of the hit

@@ -22,10 +22,6 @@ void MySensitiveDetector::Initialize(G4HCofThisEvent *HCE)
 
 G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *)
 {
-    // track of particle
-    // G4Track *track = aStep->GetTrack();
-    // track->SetTrackStatus(fStopAndKill); // photon deleted once enters the detector
-
     // get the id of the detector that interacted w/ photon
     const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
     G4int copyNo = touchable->GetCopyNumber();
@@ -34,8 +30,10 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *)
     G4VPhysicalVolume *physVol = touchable->GetVolume();
     G4ThreeVector posDetector = physVol->GetTranslation();
 
+    // energy deposition of the step
     G4double eDep = aStep->GetTotalEnergyDeposit();
 
+    // save step in HC
     MyHit *hit = new MyHit();
     hit->SetEnergy(eDep);
     hit->SetID(copyNo);

@@ -29,10 +29,3 @@ G4bool MyHit::operator==(const MyHit &right) const
 {
     return (this == &right) ? true : false;
 }
-
-void MyHit::Print()
-{
-
-    G4cout << energyDep / keV << G4endl;
-    G4cout << detectorID / mm << G4endl;
-}
