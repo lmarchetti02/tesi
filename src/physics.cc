@@ -31,7 +31,7 @@ MyPhysicsList::MyPhysicsList()
     DumpCutValuesTable();
 
     // EM physics
-    fEmPhysicsList = new G4EmStandardPhysics_option4();
+    fEmPhysicsList = new G4EmLivermorePhysics();
 
     // Add Decay
     fDecPhysicsList = new G4DecayPhysics();
@@ -65,6 +65,8 @@ void MyPhysicsList::ConstructProcess()
     G4LossTableManager::Instance()->SetAtomDeexcitation(de);
     de->SetFluo(true);
     de->SetAuger(true);
+    de->SetPIXE(true);
+    de->SetAugerCascade(true);
 
     // To model full Auger cascade include in the macro file
     // the following UI commands:

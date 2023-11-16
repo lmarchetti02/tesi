@@ -3,6 +3,8 @@
 /control/saveHistory
 /run/verbose 2
 
+/process/em/deexcitationIgnoreCut true
+
 # initialize
 /run/numberOfThreads 3
 /run/initialize
