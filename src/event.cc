@@ -1,6 +1,7 @@
 #include "event.hh"
 #include "hits.hh"
 #include "construction.hh"
+#include "detector.hh"
 
 MyEventAction::MyEventAction(MyRunAction *)
 {
@@ -53,4 +54,6 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
         man->FillNtupleDColumn(1, energyVector[i]);
         man->AddNtupleRow(0);
     }
+
+    G4cout << "First hit: " << MySensitiveDetector::GetFirstHit() << G4endl;
 }

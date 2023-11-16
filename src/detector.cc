@@ -1,5 +1,7 @@
 #include "detector.hh"
 
+G4ThreeVector MySensitiveDetector::firstHit = G4ThreeVector();
+
 // SensitiveDetectorName and collectionName are data members of G4VSensitiveDetector
 
 MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name)
@@ -11,6 +13,8 @@ MySensitiveDetector::~MySensitiveDetector() {}
 
 void MySensitiveDetector::Initialize(G4HCofThisEvent *HCE)
 {
+    ProcessHitsCounter = 0;
+    InitializeFirstHit();
 
     hitsCollection = new MyHitsCollection(SensitiveDetectorName, collectionName[0]);
 
@@ -26,9 +30,14 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *)
     const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
     G4int copyNo = touchable->GetCopyNumber();
 
-    // get position of the detector that interacted w/ photon
-    G4VPhysicalVolume *physVol = touchable->GetVolume();
-    G4ThreeVector posDetector = physVol->GetTranslation();
+    // update firstHit vector
+    if (ProcessHitsCounter == 0)
+    {
+        G4StepPoint *preStepPoint = aStep->GetPreStepPoint();
+        G4ThreeVector posPhoton = preStepPoint->GetPosition();
+        SetFirstHit(posPhoton);
+    }
+    ProcessHitsCounter++;
 
     // energy deposition of the step
     G4double eDep = aStep->GetTotalEnergyDeposit();
