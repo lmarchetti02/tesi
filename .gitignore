@@ -40,3 +40,4 @@ root/results
 merge_root.sh
 compile.sh
 *.ipynb
+*.DS_store
