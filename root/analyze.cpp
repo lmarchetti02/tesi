@@ -22,17 +22,16 @@ using std::pair;
 using std::string;
 using std::vector;
 
-void analyze(const char *fileName)
+void analyze(const char *fileName, const int nPixel)
 {
     TFile *resultsFile = new TFile(fileName, "READ");
     TTree *resultsTree = (TTree *)resultsFile->Get("Hits");
 
     // get z values
-    map<int, double> hitsMap = read_ntuple(resultsTree);
+    map<int, double> hitsMap = read_ntuple(resultsTree, nPixel);
+    print_map(hitsMap);
 
     // generate (x,y) points
-    int nPixel = TMath::Sqrt(hitsMap.size());
-    cout << "Number of pixels: " << nPixel << endl;
     map<int, vector<double>> pixelMap = reconstruct_grid(nPixel);
 
     TCanvas *c = new TCanvas("c", "c", 800, 600);

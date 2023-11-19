@@ -3,6 +3,7 @@
 #include <map>
 #include <vector>
 #include <iostream>
+#include <memory>
 
 #include "TTree.h"
 
@@ -12,16 +13,16 @@ using std::map;
 using std::pair;
 using std::vector;
 
-double get_mean(const vector<double> *data)
+double get_mean(const vector<double> &data)
 {
     double mean = 0;
 
-    for (long int i = 0; i < (long int)data->size(); i++)
+    for (long int i = 0; i < (long int)data.size(); i++)
     {
-        mean += data->at(i);
+        mean += data.at(i);
     }
 
-    return mean / data->size();
+    return mean / data.size();
 }
 
 void print_map(const map<int, double> &map)
@@ -32,35 +33,54 @@ void print_map(const map<int, double> &map)
     }
 }
 
-map<int, double> read_ntuple(TTree *tree)
+map<int, double> read_ntuple(TTree *tree, const int N)
 {
     int ID;
     double Energy;
     tree->SetBranchAddress("ID", &ID);
     tree->SetBranchAddress("eVector", &Energy);
 
-    map<int, vector<double> *> fMap;
+    auto fMap = std::make_unique<map<int, vector<double>>>();
 
     for (long int i = 0; i < (long int)tree->GetEntries(); i++)
     {
         tree->GetEntry(i);
 
-        if (fMap.count(ID) != 1)
+        if (fMap->count(ID) != 1)
         {
-            auto *v = new vector<double>(1, Energy);
+            auto v = vector<double>(1, Energy);
 
-            pair<int, vector<double> *> p(ID, v);
-            fMap.insert(p);
+            pair<int, vector<double>> p(ID, v);
+            fMap->insert(p);
         }
         else
-            fMap[ID]->push_back(Energy);
+            fMap->at(ID).push_back(Energy);
     }
 
+    // for (auto itr = fMap->begin(); itr != fMap->end(); itr++)
+    // {
+    //     cout << itr->first << " : ";
+    //     for (double d : itr->second)
+    //     {
+    //         cout << d << " ";
+    //     }
+    //     cout << endl;
+    // }
+
     map<int, double> result;
-    for (auto itr = fMap.begin(); itr != fMap.end(); itr++)
+
+    for (auto itr = fMap->begin(); itr != fMap->end(); itr++)
     {
         pair<int, double> p(itr->first, get_mean(itr->second));
         result.insert(p);
+    }
+
+    for (int i = 0; i < N * N; i++)
+    {
+        if (!result.count(i))
+        {
+            result[i] = 0;
+        }
     }
 
     return result;
