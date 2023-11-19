@@ -52,11 +52,14 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
     {
         if (energyVector[i] != 0)
         {
-            man->FillNtupleIColumn(0, i);
-            man->FillNtupleDColumn(1, energyVector[i]);
+            man->FillNtupleIColumn(0, 0, i);
+            man->FillNtupleDColumn(0, 1, energyVector[i]);
             man->AddNtupleRow(0);
         }
     }
 
-    G4cout << "First hit: " << MySensitiveDetector::GetFirstHit() << G4endl;
+    man->FillNtupleDColumn(1, 0, MySensitiveDetector::GetFirstHit()[0]);
+    man->FillNtupleDColumn(1, 1, MySensitiveDetector::GetFirstHit()[1]);
+    // man->FillNtupleDColumn(1, 2, MySensitiveDetector::GetFirstHit()[2]);
+    man->AddNtupleRow(1);
 }

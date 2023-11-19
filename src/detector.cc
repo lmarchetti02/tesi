@@ -35,7 +35,9 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *)
     {
         G4StepPoint *preStepPoint = aStep->GetPreStepPoint();
         G4ThreeVector posPhoton = preStepPoint->GetPosition();
-        SetFirstHit(posPhoton);
+
+        G4ThreeVector firstHit = G4ThreeVector(posPhoton[0], posPhoton[1], 0);
+        SetFirstHit(firstHit);
     }
     ProcessHitsCounter++;
 

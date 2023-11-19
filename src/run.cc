@@ -4,15 +4,25 @@
 MyRunAction::MyRunAction()
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
-
     man->SetNtupleMerging(true);
 
-    // rows
+    // Ntuple for hits
     man->CreateNtuple("Hits", "Hits");
-    // columns
     man->CreateNtupleIColumn("ID");
     man->CreateNtupleDColumn("eVector");
     man->FinishNtuple(0);
+
+    // Ntuple for pixels
+    man->CreateNtuple("First Hit", "First Hit");
+    man->CreateNtupleDColumn("x");
+    man->CreateNtupleDColumn("y");
+    // man->CreateNtupleDColumn("z");
+    man->FinishNtuple(1);
+
+    // Ntuple for pixels
+    // man->CreateNtuple("Pixels", "Pixels");
+    // man->CreateNtupleIColumn("nPixel");
+    // man->FinishNtuple(1);
 }
 
 MyRunAction::~MyRunAction() {}
@@ -21,10 +31,8 @@ void MyRunAction::BeginOfRunAction(const G4Run *run)
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
-    // get run number
+    // create ROOT file
     G4String runNumber = to_string(run->GetRunID());
-
-    // create file to store run
     man->OpenFile("../root/results/output" + runNumber + ".root");
 }
 
