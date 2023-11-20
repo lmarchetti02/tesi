@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include <array>
 
 #include "TFile.h"
 #include "TTree.h"
@@ -13,8 +14,11 @@
 #include "TGraph2D.h"
 #include "TStyle.h"
 
-#include "functions.hh"
+#include "include/data.hh"
+#include "include/functions.hh"
+#include "include/charge_sharing.hh"
 
+using std::array;
 using std::cout;
 using std::endl;
 using std::map;
@@ -28,11 +32,13 @@ void analyze(const char *fileName, const int nPixel)
     TTree *resultsTree = (TTree *)resultsFile->Get("Hits");
 
     // get z values
-    map<int, double> hitsMap = read_ntuple(resultsTree, nPixel);
-    print_map(hitsMap);
+    map<int, double> hitsMap = data::read_ntuple(resultsTree, nPixel);
+    cout << "AVG ENERGY DEPOSITION PER PIXEL" << endl;
+    cout << "-------------------------------" << endl;
+    functions::print_map(hitsMap);
 
     // generate (x,y) points
-    map<int, vector<double>> pixelMap = reconstruct_grid(nPixel);
+    map<int, array<double, 2>> pixelMap = data::reconstruct_grid(nPixel);
 
     TCanvas *c = new TCanvas("c", "c", 800, 600);
     TGraph2D *graph = new TGraph2D();

@@ -8,9 +8,9 @@ using std::endl;
 G4int MyDetectorConstruction::nPixel = 0;
 
 // half dimensions of pixels
-G4double MyDetectorConstruction::xDet = 50 * um;
-G4double MyDetectorConstruction::yDet = 50 * um;
-G4double MyDetectorConstruction::zDet = 0.75 * mm;
+G4double MyDetectorConstruction::xDet = 25 * um;
+G4double MyDetectorConstruction::yDet = 25 * um;
+G4double MyDetectorConstruction::zDet = 0.5 * mm;
 
 // world dimensions
 G4double MyDetectorConstruction::xWorld = 0;
