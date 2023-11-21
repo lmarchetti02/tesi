@@ -44,6 +44,15 @@ namespace functions
         }
     }
 
+    void print_map(const map<int, array<double, 3>> &map)
+    {
+        for (auto itr = map.begin(); itr != map.end(); itr++)
+        {
+            cout << itr->first << " : ";
+            cout << "(" << itr->second[0] << ", " << itr->second[1] << ", " << itr->second[2] << ")" << endl;
+        }
+    }
+
     void print_vector(const vector<double> &v)
     {
         cout << "[";
@@ -54,7 +63,7 @@ namespace functions
         cout << "]" << endl;
     }
 
-    map<int, double> get_mean(std::unique_ptr<map<int, vector<double>>> &inMap, const int N)
+    map<int, double> get_mean(const std::unique_ptr<map<int, vector<double>>> &inMap, const int N)
     {
         map<int, double> result;
 

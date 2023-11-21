@@ -59,4 +59,24 @@ namespace charge_sharing
         return 0;
     }
 
+    map<int, array<double, 3>> get_cs_map(TTree *fhTree, TTree *eTree)
+    {
+        double eDep;
+        eTree->SetBranchAddress("eDep", &eDep);
+
+        std::unique_ptr<map<int, array<double, 2>>> fhMap = data::read_first_hit(fhTree);
+        auto Map = map<int, array<double, 3>>();
+
+        for (long int i = 0; i < (long int)eTree->GetEntries(); i++)
+        {
+            eTree->GetEntry(i);
+
+            array<double, 3> xyE = {fhMap->at(i)[0], fhMap->at(i)[1], eDep};
+
+            pair<int, array<double, 3>> p(i, xyE);
+            Map.insert(p);
+        }
+
+        return Map;
+    }
 }

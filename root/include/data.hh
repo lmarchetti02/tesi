@@ -44,22 +44,25 @@ namespace data
         return functions::get_mean(fMap, N);
     }
 
-    map<int, double> read_energy_deposition(TTree *tree)
+    std::unique_ptr<map<int, array<double, 2>>> read_first_hit(TTree *tree)
     {
-        double eDep;
-        tree->SetBranchAddress("eDep", &eDep);
+        double x, y;
+        tree->SetBranchAddress("x", &x);
+        tree->SetBranchAddress("y", &y);
 
-        auto fMap = map<int, double>();
+        auto fhMap = std::make_unique<map<int, array<double, 2>>>();
 
         for (long int i = 0; i < (long int)tree->GetEntries(); i++)
         {
             tree->GetEntry(i);
 
-            pair<int, double> p(i, eDep);
-            fMap.insert(p);
+            array<double, 2> xy = {x, y};
+            pair<int, array<double, 2>> p(i, xy);
+
+            fhMap->insert(p);
         }
 
-        return fMap;
+        return fhMap;
     }
 
     map<int, array<double, 2>> reconstruct_grid(const int N)

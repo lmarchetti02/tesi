@@ -31,6 +31,7 @@ void analyze(const char *fileName, const int nPixel)
     TFile *resultsFile = new TFile(fileName, "READ");
     TTree *hitsTree = (TTree *)resultsFile->Get("Hits");
     TTree *energyTree = (TTree *)resultsFile->Get("Total Edep");
+    TTree *fhTree = (TTree *)resultsFile->Get("First Hit");
 
     // get z values
     map<int, double> hitsMap = data::read_hits(hitsTree, nPixel);
@@ -38,11 +39,11 @@ void analyze(const char *fileName, const int nPixel)
     cout << "-------------------------------" << endl;
     functions::print_map(hitsMap);
 
-    // get z values
-    map<int, double> energyMap = data::read_energy_deposition(energyTree);
-    // cout << "\nTOTAL ENERGY DEPOSITION PER EVENT" << endl;
-    // cout << "-------------------------------" << endl;
-    // functions::print_map(energyMap);
+    // get charge sharing map
+    map<int, array<double, 3>> csMap = charge_sharing::get_cs_map(fhTree, energyTree);
+    cout << "\nCHARGE SHARING MAP" << endl;
+    cout << "------------------" << endl;
+    functions::print_map(csMap);
 
     // generate (x,y) points
     map<int, array<double, 2>> pixelMap = data::reconstruct_grid(nPixel);
