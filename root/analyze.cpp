@@ -28,24 +28,39 @@ using std::vector;
 
 void analyze(const char *fileName, const int nPixel)
 {
+
+    // GET TTRESS FROM GEANT4 SIMULATION
+    // **********************************************************
     TFile *resultsFile = new TFile(fileName, "READ");
+
+    // get trees from file
     TTree *hitsTree = (TTree *)resultsFile->Get("Hits");
     TTree *energyTree = (TTree *)resultsFile->Get("Total Edep");
     TTree *fhTree = (TTree *)resultsFile->Get("First Hit");
+    // **********************************************************
 
-    // get z values
+    // GET AVERAGE ENERGY DEPOSITION PER PIXEL
+    // ************************************************************
     map<int, double> hitsMap = data::read_hits(hitsTree, nPixel);
     cout << "\nAVG ENERGY DEPOSITION PER PIXEL" << endl;
     cout << "-------------------------------" << endl;
     functions::print_map(hitsMap);
+    // ************************************************************
 
-    // get charge sharing map
+    // GET MAP WITH {#evt : (fh_x, fh_y, E_dep)}
+    // *******************************************************************************
     map<int, array<double, 3>> csMap = charge_sharing::get_cs_map(fhTree, energyTree);
     cout << "\nCHARGE SHARING MAP" << endl;
     cout << "------------------" << endl;
     functions::print_map(csMap);
 
-    // generate (x,y) points
+    // close file
+    resultsFile->Close();
+    // *******************************************************************************
+
+    // PLOT SIMULATION DATA
+    // *****************************************************************************************
+    // get (x,y) of pixels center
     map<int, array<double, 2>> pixelMap = data::reconstruct_grid(nPixel);
 
     TCanvas *c = new TCanvas("c", "c", 800, 600);
@@ -56,6 +71,12 @@ void analyze(const char *fileName, const int nPixel)
         graph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], hitsMap[i]);
     }
 
+    gStyle->SetPalette(1);
+    graph->Draw("surf1");
+    // *****************************************************************************************
+
+    // OUTPUT DATA TO TEXT FILE
+    // *****************************************************************************************
     std::fstream dataFile;
     dataFile.open("results/data.txt", std::ios::out);
     if (dataFile.is_open())
@@ -71,9 +92,5 @@ void analyze(const char *fileName, const int nPixel)
         }
     }
     dataFile.close();
-
-    gStyle->SetPalette(1);
-    graph->Draw("surf1");
-
-    resultsFile->Close();
+    // *****************************************************************************************
 }
