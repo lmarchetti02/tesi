@@ -29,13 +29,20 @@ using std::vector;
 void analyze(const char *fileName, const int nPixel)
 {
     TFile *resultsFile = new TFile(fileName, "READ");
-    TTree *resultsTree = (TTree *)resultsFile->Get("Hits");
+    TTree *hitsTree = (TTree *)resultsFile->Get("Hits");
+    TTree *energyTree = (TTree *)resultsFile->Get("Total Edep");
 
     // get z values
-    map<int, double> hitsMap = data::read_ntuple(resultsTree, nPixel);
-    cout << "AVG ENERGY DEPOSITION PER PIXEL" << endl;
+    map<int, double> hitsMap = data::read_hits(hitsTree, nPixel);
+    cout << "\nAVG ENERGY DEPOSITION PER PIXEL" << endl;
     cout << "-------------------------------" << endl;
     functions::print_map(hitsMap);
+
+    // get z values
+    map<int, double> energyMap = data::read_energy_deposition(energyTree);
+    // cout << "\nTOTAL ENERGY DEPOSITION PER EVENT" << endl;
+    // cout << "-------------------------------" << endl;
+    // functions::print_map(energyMap);
 
     // generate (x,y) points
     map<int, array<double, 2>> pixelMap = data::reconstruct_grid(nPixel);

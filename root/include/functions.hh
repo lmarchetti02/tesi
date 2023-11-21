@@ -74,33 +74,4 @@ namespace functions
 
         return result;
     }
-
-    map<int, double> energy_deposition(std::unique_ptr<map<int, vector<double>>> &inMap)
-    {
-        auto container = map<int, vector<double>>();
-
-        for (auto itr = inMap->begin(); itr != inMap->end(); itr++)
-        {
-            long int evtCounter = 0;
-            for (double d : itr->second)
-            {
-                container[evtCounter].push_back(d);
-                evtCounter++;
-            }
-        }
-
-        auto res = map<int, double>();
-        for (auto itr = container.begin(); itr != container.end(); itr++)
-        {
-            res[itr->first] = sum(itr->second);
-        }
-
-        cout << endl;
-        cout << "ENERGY DEPOSITION PER EVENT" << endl;
-        cout << "-----------------" << endl;
-        print_map(res);
-        cout << endl;
-
-        return res;
-    }
 }

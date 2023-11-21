@@ -17,7 +17,7 @@ namespace data
 {
     double pixelSize = 50e-6;
 
-    map<int, double> read_ntuple(TTree *tree, const int N)
+    map<int, double> read_hits(TTree *tree, const int N)
     {
         int ID;
         double Energy;
@@ -41,9 +41,25 @@ namespace data
                 fMap->at(ID).push_back(Energy);
         }
 
-        auto e = functions::energy_deposition(fMap);
-
         return functions::get_mean(fMap, N);
+    }
+
+    map<int, double> read_energy_deposition(TTree *tree)
+    {
+        double eDep;
+        tree->SetBranchAddress("eDep", &eDep);
+
+        auto fMap = map<int, double>();
+
+        for (long int i = 0; i < (long int)tree->GetEntries(); i++)
+        {
+            tree->GetEntry(i);
+
+            pair<int, double> p(i, eDep);
+            fMap.insert(p);
+        }
+
+        return fMap;
     }
 
     map<int, array<double, 2>> reconstruct_grid(const int N)
