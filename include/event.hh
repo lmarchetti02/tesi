@@ -29,4 +29,6 @@ public:
 
     virtual void BeginOfEventAction(const G4Event *);
     virtual void EndOfEventAction(const G4Event *);
+
+    G4double VectorSum(const vector<G4double> &);
 };

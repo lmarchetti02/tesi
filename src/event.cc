@@ -62,4 +62,19 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
     man->FillNtupleDColumn(1, 1, MySensitiveDetector::GetFirstHit()[1]);
     // man->FillNtupleDColumn(1, 2, MySensitiveDetector::GetFirstHit()[2]);
     man->AddNtupleRow(1);
+
+    man->FillNtupleDColumn(2, 0, VectorSum(energyVector));
+    man->AddNtupleRow(2);
+}
+
+G4double MyEventAction::VectorSum(const vector<G4double> &vector)
+{
+    G4double sum = 0;
+
+    for (G4double d : vector)
+    {
+        sum += d;
+    }
+
+    return sum;
 }

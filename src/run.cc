@@ -19,6 +19,12 @@ MyRunAction::MyRunAction()
     // man->CreateNtupleDColumn("z");
     man->FinishNtuple(1);
 
+    // Ntuple for total energy deposition
+    man->CreateNtuple("Total Edep", "Total Edep");
+    man->CreateNtupleDColumn("eDep");
+    // man->CreateNtupleDColumn("z");
+    man->FinishNtuple(2);
+
     // Ntuple for pixels
     // man->CreateNtuple("Pixels", "Pixels");
     // man->CreateNtupleIColumn("nPixel");
