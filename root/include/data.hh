@@ -41,6 +41,8 @@ namespace data
                 fMap->at(ID).push_back(Energy);
         }
 
+        // TODO: add energy deposition
+
         return functions::get_mean(fMap, N);
     }
 

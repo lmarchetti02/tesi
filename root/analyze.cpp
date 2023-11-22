@@ -39,7 +39,7 @@ void analyze(const char *fileName, const int nPixel)
     TTree *fhTree = (TTree *)resultsFile->Get("First Hit");
     // **********************************************************
 
-    // GET AVERAGE ENERGY DEPOSITION PER PIXEL
+    // GET AVERAGE ENERGY DEPOSITION PER PIXEL (NO CHARGE SHARING)
     // ************************************************************
     map<int, double> hitsMap = data::read_hits(hitsTree, nPixel);
     cout << "\nAVG ENERGY DEPOSITION PER PIXEL" << endl;

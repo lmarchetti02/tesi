@@ -64,7 +64,7 @@ namespace charge_sharing
         double eDep;
         eTree->SetBranchAddress("eDep", &eDep);
 
-        std::unique_ptr<map<int, array<double, 2>>> fhMap = data::read_first_hit(fhTree);
+        auto fhMap = data::read_first_hit(fhTree);
         auto Map = map<int, array<double, 3>>();
 
         for (long int i = 0; i < (long int)eTree->GetEntries(); i++)
@@ -79,4 +79,14 @@ namespace charge_sharing
 
         return Map;
     }
+
+    // std::unique_ptr<map<int, vector<double>>> add_charge_sharing(const std::unique_ptr<map<int, vector<double>>> &hitsMap, TTree *fhTree, TTree *eTree)
+    // {
+    //     auto cdMap = get_cs_map(fhTree, eTree);
+    //     auto resMap = std::make_unique<map<int, vector<double>>>();
+
+    //     for (auto itr = hitsMap->begin(); itr != hitsMap->end(); itr++)
+    //     {
+    //     }
+    // }
 }
