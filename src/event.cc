@@ -2,6 +2,7 @@
 #include "hits.hh"
 #include "construction.hh"
 #include "detector.hh"
+#include "charge_sharing.hh"
 
 MyEventAction::MyEventAction(MyRunAction *)
 {
@@ -48,6 +49,11 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
         }
     }
 
+    // add charge sharing
+    G4int nPixel = MyDetectorConstruction::GetNPixel();
+    energyVector = charge_sharing::add_charge_sharing(energyVector, nPixel * 100);
+
+    // save energy depositions
     for (int i = 0; i < energyVector.size(); i++)
     {
         if (energyVector[i] != 0)

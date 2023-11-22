@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <cmath>
+#include <array>
 #include <map>
 
 #include "G4VUserDetectorConstruction.hh"
@@ -17,6 +18,9 @@
 #include "G4UImanager.hh"
 #include "G4SDManager.hh"
 
+using std::array;
+using std::map;
+using std::pair;
 using std::vector;
 
 class MyDetectorConstruction : public G4VUserDetectorConstruction
@@ -32,6 +36,9 @@ private:
     static G4double xDet;
     static G4double yDet;
     static G4double zDet;
+
+    // map with centers of pixels
+    static map<G4int, array<G4double, 2>> pixelMap;
 
     // volumes (to be only defined once)
     G4Box *solidWorld, *solidDetector;
@@ -60,9 +67,14 @@ public:
     static G4int GetNPixel() { return nPixel; }
 
     // access geometry dimensions
-    static vector<G4double> GetWorldDimensions();
-    static vector<G4double> GetPixelDimensions();
+    static array<G4double, 3> GetWorldDimensions();
+    static array<G4double, 3> GetPixelDimensions();
 
     // modify visualization
     static void setVisualization();
+
+    // access pixel map
+    static void AddToPixelMap(const pair<G4int, array<G4double, 2>> &p) { pixelMap.insert(p); }
+    static map<G4int, array<G4double, 2>> GetPixelMap() { return pixelMap; }
+    static void PrintPixelMap();
 };
