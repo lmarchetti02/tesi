@@ -18,6 +18,7 @@ private:
 
     G4int ProcessHitsCounter;
     static G4ThreeVector firstHit;
+    static G4int pixelFirstHit;
 
 public:
     MySensitiveDetector(G4String);
@@ -30,4 +31,7 @@ public:
     static void InitializeFirstHit() { firstHit = G4ThreeVector(); }
     static void SetFirstHit(const G4ThreeVector &pos) { firstHit = pos; }
     static G4ThreeVector GetFirstHit() { return firstHit; }
+
+    static void SetPixelFirstHit(G4int ID) { pixelFirstHit = ID; }
+    static G4int GetPixelFirstHit() { return pixelFirstHit; }
 };

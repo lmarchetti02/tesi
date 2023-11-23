@@ -1,9 +1,7 @@
 #pragma once
 
 #include <array>
-#include <chrono>
 #include <ctime>
-#include <limits>
 #include <memory>
 #include <vector>
 #include <map>
@@ -67,6 +65,11 @@ namespace charge_sharing
     {
         G4double s = MyDetectorConstruction::GetPixelDimensions()[0];
         map<G4int, array<G4double, 2>> pixels = MyDetectorConstruction::GetPixelMap();
+
+        G4int firstPixel = MySensitiveDetector::GetPixelFirstHit();
+
+        if (abs(position[0] - pixels[firstPixel][0]) < s && abs(position[1] - pixels[firstPixel][1]) < s)
+            return firstPixel;
 
         for (auto itr = pixels.begin(); itr != pixels.end(); itr++)
         {
