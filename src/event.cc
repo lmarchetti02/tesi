@@ -10,15 +10,25 @@ MyEventAction::MyEventAction(MyRunAction *)
     index = -1;
 }
 
-MyEventAction::~MyEventAction() {}
-
-void MyEventAction::BeginOfEventAction(const G4Event *)
+/**
+ * Geant4 function called at the beginning of the event.
+ * It creates the vector containing the energy deposition of each pixel (per event).
+ *
+ * @param Event Not used.
+ */
+void MyEventAction::BeginOfEventAction(const G4Event *Event)
 {
     G4int nPixel = MyDetectorConstruction::GetNPixel();
     energyVector = vector<G4double>(nPixel * nPixel, 0.);
 }
 
-void MyEventAction::EndOfEventAction(const G4Event *event)
+/**
+ * Geant4 function called at the end of the event.
+ * It saves the energy deposition in a ROOT tree and adds the charge sharing.
+ *
+ * @param[in] Event The pointer to the event.
+ */
+void MyEventAction::EndOfEventAction(const G4Event *Event)
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
@@ -27,7 +37,7 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
         index = G4SDManager::GetSDMpointer()->GetCollectionID("SensitiveDetector/MyHitsCollection");
 
     // retrieve all HCs
-    G4HCofThisEvent *HCE = event->GetHCofThisEvent();
+    G4HCofThisEvent *HCE = Event->GetHCofThisEvent();
 
     // retrieve HCs by index
     MyHitsCollection *hitsColl;
@@ -73,11 +83,17 @@ void MyEventAction::EndOfEventAction(const G4Event *event)
     man->AddNtupleRow(2);
 }
 
-G4double MyEventAction::VectorSum(const vector<G4double> &vector)
+/**
+ * Template for getting the sum of all the elements inside an `std::vector`.
+ *
+ * @tparam T the type of the elements inside the vector.
+ */
+template <typename T>
+T MyEventAction::VectorSum(const vector<T> &vector)
 {
-    G4double sum = 0;
+    T sum = 0;
 
-    for (G4double d : vector)
+    for (T d : vector)
     {
         sum += d;
     }

@@ -25,10 +25,11 @@ private:
 
 public:
     MyEventAction(MyRunAction *);
-    ~MyEventAction();
+    virtual ~MyEventAction() {}
 
     virtual void BeginOfEventAction(const G4Event *);
     virtual void EndOfEventAction(const G4Event *);
 
-    G4double VectorSum(const vector<G4double> &);
+    template <typename T>
+    T VectorSum(const vector<T> &);
 };
