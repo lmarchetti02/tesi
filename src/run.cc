@@ -16,19 +16,12 @@ MyRunAction::MyRunAction()
     man->CreateNtuple("First Hit", "First Hit");
     man->CreateNtupleDColumn("x");
     man->CreateNtupleDColumn("y");
-    // man->CreateNtupleDColumn("z");
     man->FinishNtuple(1);
 
     // Ntuple for total energy deposition
     man->CreateNtuple("Total Edep", "Total Edep");
     man->CreateNtupleDColumn("eDep");
-    // man->CreateNtupleDColumn("z");
     man->FinishNtuple(2);
-
-    // Ntuple for pixels
-    // man->CreateNtuple("Pixels", "Pixels");
-    // man->CreateNtupleIColumn("nPixel");
-    // man->FinishNtuple(1);
 }
 
 MyRunAction::~MyRunAction() {}

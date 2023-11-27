@@ -99,7 +99,22 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
             AddToPixelMap(p);
         }
     }
-    PrintPixelMap();
+    // ---------------------------------------------------------------------------------------------
+
+    // SAVE INFO ABOUT THE DETECTOR
+    // ---------------------------------------------------------------------------------------------
+    fstream outFile;
+    outFile.open("../root/results/info.txt", std::ios::out);
+    if (outFile.is_open())
+    {
+        outFile << "INFORMATION ABOUT SIMULATION" << endl;
+        outFile << "----------------------------" << endl;
+        outFile << "Number of pixels: " << nPixel << endl;
+        outFile << "Pixel x-dimension: " << 2 * xDet << " mm" << endl;
+        outFile << "Pixel y-dimension: " << 2 * yDet << " mm" << endl;
+        outFile << "Pixel z-dimension: " << 2 * zDet << " mm" << endl;
+    }
+    outFile.close();
     // ---------------------------------------------------------------------------------------------
 
     return physWorld;

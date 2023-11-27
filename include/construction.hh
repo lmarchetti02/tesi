@@ -4,6 +4,7 @@
 #include <cmath>
 #include <array>
 #include <map>
+#include <fstream>
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
@@ -17,8 +18,10 @@
 #include "G4GenericMessenger.hh"
 #include "G4UImanager.hh"
 #include "G4SDManager.hh"
+#include "G4AnalysisManager.hh"
 
 using std::array;
+using std::fstream;
 using std::map;
 using std::pair;
 using std::vector;
