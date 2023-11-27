@@ -1,7 +1,5 @@
 #pragma once
 
-#include <fstream>
-
 #include "G4VSensitiveDetector.hh"
 #include "G4TouchableHistory.hh"
 #include "G4AnalysisManager.hh"
@@ -22,13 +20,14 @@ private:
 
 public:
     MySensitiveDetector(G4String);
-    ~MySensitiveDetector();
+    virtual ~MySensitiveDetector() {}
 
     virtual void Initialize(G4HCofThisEvent *);
     virtual G4bool ProcessHits(G4Step *, G4TouchableHistory *);
     virtual void EndOfEvent(G4HCofThisEvent *);
 
-    static void InitializeFirstHit() { firstHit = G4ThreeVector(); }
+    //! @todo SERVE??
+    static void InitializeFirstHit();
     static void SetFirstHit(const G4ThreeVector &pos) { firstHit = pos; }
     static G4ThreeVector GetFirstHit() { return firstHit; }
 
