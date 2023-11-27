@@ -51,32 +51,28 @@ private:
     // scoring volume
     G4LogicalVolume *fScoringVolume;
 
-    // materials (to be only defined once)
+    // materials
     G4Material *worldMat, *detectorMat;
     void DefineMaterials();
 
-    // create detector
     virtual void ConstructSDandField();
 
 public:
     MyDetectorConstruction();
-    ~MyDetectorConstruction();
+    virtual ~MyDetectorConstruction() {}
 
-    // create all the volumes
     virtual G4VPhysicalVolume *Construct();
+    void ConstructWorld();
+    void ConstructPixels();
 
-    // set number of pixels
     static void SetNPixel(G4int);
     static G4int GetNPixel() { return nPixel; }
 
-    // access geometry dimensions
     static array<G4double, 3> GetWorldDimensions();
     static array<G4double, 3> GetPixelDimensions();
 
-    // modify visualization
     static void setVisualization();
 
-    // access pixel map
     static void AddToPixelMap(const pair<G4int, array<G4double, 2>> &p) { pixelMap.insert(p); }
     static map<G4int, array<G4double, 2>> GetPixelMap() { return pixelMap; }
     static void PrintPixelMap();

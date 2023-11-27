@@ -22,12 +22,12 @@ auto MyDetectorConstruction::pixelMap = map<G4int, array<G4double, 2>>();
 
 MyDetectorConstruction::MyDetectorConstruction()
 {
-    //  define materials
     DefineMaterials();
 }
 
-MyDetectorConstruction::~MyDetectorConstruction() {}
-
+/**
+ * Function for defining the material of the world and detector volumes.
+ */
 void MyDetectorConstruction::DefineMaterials()
 {
     // manager of G4 materials database
@@ -40,10 +40,39 @@ void MyDetectorConstruction::DefineMaterials()
     detectorMat = nist->FindOrBuildMaterial("G4_CADMIUM_TELLURIDE");
 }
 
+/**
+ * Geant4 function for constructing the detector volume.
+ *
+ * @return The physical volume of the world volume containing the detector.
+ */
 G4VPhysicalVolume *MyDetectorConstruction::Construct()
 {
-    // DEFINE WORLD VOLUME (BOUNDARIES)
-    // ---------------------------------------------------------------------------------------------
+    // construct volumes
+    ConstructWorld();
+    ConstructPixels();
+
+    // save info about the detector in text file
+    fstream outFile;
+    outFile.open("../root/results/info.txt", std::ios::out);
+    if (outFile.is_open())
+    {
+        outFile << "INFORMATION ABOUT SIMULATION" << endl;
+        outFile << "----------------------------" << endl;
+        outFile << "Number of pixels: " << nPixel << endl;
+        outFile << "Pixel x-dimension: " << 2 * xDet << " mm" << endl;
+        outFile << "Pixel y-dimension: " << 2 * yDet << " mm" << endl;
+        outFile << "Pixel z-dimension: " << 2 * zDet << " mm" << endl;
+    }
+    outFile.close();
+
+    return physWorld;
+}
+
+/**
+ * Function for constructing the solid, logical and physical volumes of the world volume.
+ */
+void MyDetectorConstruction::ConstructWorld()
+{
     // size of volume
     solidWorld = new G4Box("solidWorld", // name
                            xWorld,       // half lenght (meters)
@@ -65,9 +94,13 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
                                   0,                         // copy number
                                   true);                     // overlapping
     // ---------------------------------------------------------------------------------------------
+}
 
-    // DEFINE DETECTOR VOLUME
-    // ---------------------------------------------------------------------------------------------
+/**
+ * Function for constructing the solid, logical and physical volumes of the array of pixels.
+ */
+void MyDetectorConstruction::ConstructPixels()
+{
     solidDetector = new G4Box("solidDetector", xDet, yDet, zDet);
 
     logicDetector = new G4LogicalVolume(solidDetector, detectorMat, "logicDetector");
@@ -100,26 +133,11 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
         }
     }
     // ---------------------------------------------------------------------------------------------
-
-    // SAVE INFO ABOUT THE DETECTOR
-    // ---------------------------------------------------------------------------------------------
-    fstream outFile;
-    outFile.open("../root/results/info.txt", std::ios::out);
-    if (outFile.is_open())
-    {
-        outFile << "INFORMATION ABOUT SIMULATION" << endl;
-        outFile << "----------------------------" << endl;
-        outFile << "Number of pixels: " << nPixel << endl;
-        outFile << "Pixel x-dimension: " << 2 * xDet << " mm" << endl;
-        outFile << "Pixel y-dimension: " << 2 * yDet << " mm" << endl;
-        outFile << "Pixel z-dimension: " << 2 * zDet << " mm" << endl;
-    }
-    outFile.close();
-    // ---------------------------------------------------------------------------------------------
-
-    return physWorld;
 }
 
+/**
+ * Geant4 function for making the array of pixel a sensitive detector.
+ */
 void MyDetectorConstruction::ConstructSDandField()
 {
     // create detector
@@ -130,6 +148,11 @@ void MyDetectorConstruction::ConstructSDandField()
     logicDetector->SetSensitiveDetector(sensDet);
 }
 
+/**
+ * Static function for accessing the dimensions of the world volume.
+ *
+ * @return `std::array(xWorld, yWorld, zWorld)`
+ */
 array<G4double, 3> MyDetectorConstruction::GetWorldDimensions()
 {
     array<G4double, 3> worldDim = {xWorld, yWorld, zWorld};
@@ -137,6 +160,11 @@ array<G4double, 3> MyDetectorConstruction::GetWorldDimensions()
     return worldDim;
 }
 
+/**
+ * Static function for accessing the dimensions of the pixels.
+ *
+ * @return `std::array(xPixel, yPixel, zPixel)`
+ */
 array<G4double, 3> MyDetectorConstruction::GetPixelDimensions()
 {
     array<G4double, 3> detDim = {xDet, yDet, zDet};
@@ -144,6 +172,10 @@ array<G4double, 3> MyDetectorConstruction::GetPixelDimensions()
     return detDim;
 }
 
+/**
+ * Function for modifying the visualization macro at runtime.
+ *
+ */
 void MyDetectorConstruction::setVisualization()
 {
     auto *uiManager = G4UImanager::GetUIpointer();
@@ -155,19 +187,15 @@ void MyDetectorConstruction::setVisualization()
 
     // scale
     uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * zDet) + " mm z 1 0.75 0 manual " + std::to_string(xWorld) + " " + std::to_string(yWorld) + " " + std::to_string(zWorld - zDet) + " mm");
-    // uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * xDet) + " um x 1 0.75 0 manual " + std::to_string(-xWorld + xDet) + " " + std::to_string(-yWorld) + " " + std::to_string(zWorld) + " mm");
-    // uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * yDet) + " um y 1 0.75 0 manual " + std::to_string(-xWorld) + " " + std::to_string(-yWorld + yDet) + " " + std::to_string(zWorld) + " mm");
 }
 
-void MyDetectorConstruction::PrintPixelMap()
-{
-    for (auto &itr : pixelMap)
-    {
-        G4cout << itr.first << " : ";
-        G4cout << "(" << itr.second[0] << ", " << itr.second[1] << ")" << G4endl;
-    }
-}
-
+/**
+ * Function for setting the number of pixels in the array at runtime.
+ *
+ * It also modifies the world dimensions according to the number of pixels.
+ *
+ * @param[in] N The number of pixel along x and y, so the square root of the total number of pixels.
+ */
 void MyDetectorConstruction::SetNPixel(G4int N)
 {
     nPixel += N;
@@ -180,4 +208,16 @@ void MyDetectorConstruction::SetNPixel(G4int N)
         zWorld += zDet * 2;
     else
         zWorld += xWorld * 2;
+}
+
+/**
+ * @todo CHECK IF THE PIXEL MAP IS USED SOMEWHERE
+ */
+void MyDetectorConstruction::PrintPixelMap()
+{
+    for (auto &itr : pixelMap)
+    {
+        G4cout << itr.first << " : ";
+        G4cout << "(" << itr.second[0] << ", " << itr.second[1] << ")" << G4endl;
+    }
 }
