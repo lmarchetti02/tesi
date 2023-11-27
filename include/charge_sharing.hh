@@ -73,39 +73,54 @@ namespace charge_sharing
     /*
     Function for determining which pixel corresponds to a given point (x,y).
     */
+    // G4int which_pixel(array<G4double, 2> position)
+    // {
+    //     // get info about pixel configuration
+    //     G4double pixelSize = MyDetectorConstruction::GetPixelDimensions()[0];
+    //     map<G4int, array<G4double, 2>> pixels = MyDetectorConstruction::GetPixelMap();
+    //     G4int firstPixel = MySensitiveDetector::GetPixelFirstHit();
+    //     G4int N = MyDetectorConstruction::GetNPixel();
+
+    //     // check if (x, y) is inside the first pixel hit
+    //     if (absolute(position[0] - pixels[firstPixel][0]) < pixelSize && absolute(position[1] - pixels[firstPixel][1]) < pixelSize)
+    //         return firstPixel;
+
+    //     // check if (x,y) is in the pixels contiguous to the first one
+    //     auto contiguousSquares = search_algorithm::contiguous_squares(firstPixel, N);
+    //     for (G4int ID : contiguousSquares)
+    //     {
+    //         if (absolute(position[0] - pixels[ID][0]) < pixelSize && absolute(position[1] - pixels[ID][1]) < pixelSize)
+    //             return ID;
+    //     }
+
+    //     // check if (x,y) is in the remaining pixels
+    //     pixels = search_algorithm::remaining_squares(pixels, contiguousSquares, firstPixel);
+    //     for (auto itr = pixels.begin(); itr != pixels.end(); itr++)
+    //     {
+    //         G4double x = itr->second[0];
+    //         G4double y = itr->second[1];
+
+    //         if (absolute(position[0] - x) < pixelSize && absolute(position[1] - y) < pixelSize)
+    //             return itr->first;
+    //     }
+
+    //     G4cout << "No pixel found" << G4endl;
+    //     return 0;
+    // }
+
     G4int which_pixel(array<G4double, 2> position)
     {
-        // get info about pixel configuration
-        G4double pixelSize = MyDetectorConstruction::GetPixelDimensions()[0];
-        map<G4int, array<G4double, 2>> pixels = MyDetectorConstruction::GetPixelMap();
-        G4int firstPixel = MySensitiveDetector::GetPixelFirstHit();
-        G4int N = MyDetectorConstruction::GetNPixel();
+        G4double xWorld = MyDetectorConstruction::GetWorldDimensions()[0];
+        G4double yWorld = MyDetectorConstruction::GetWorldDimensions()[1];
+        G4double xDet = MyDetectorConstruction::GetPixelDimensions()[0];
+        G4double yDet = MyDetectorConstruction::GetPixelDimensions()[1];
+        G4int nPixel = MyDetectorConstruction::GetNPixel();
 
-        // check if (x, y) is inside the first pixel hit
-        if (absolute(position[0] - pixels[firstPixel][0]) < pixelSize && absolute(position[1] - pixels[firstPixel][1]) < pixelSize)
-            return firstPixel;
+        G4int j = ((position[0] + xWorld) / xDet - 1) * 0.5;
+        G4int i = ((position[1] + yWorld) / yDet - 1) * 0.5;
+        G4int ID = i * nPixel + j;
 
-        // check if (x,y) is in the pixels contiguous to the first one
-        auto contiguousSquares = search_algorithm::contiguous_squares(firstPixel, N);
-        for (G4int ID : contiguousSquares)
-        {
-            if (absolute(position[0] - pixels[ID][0]) < pixelSize && absolute(position[1] - pixels[ID][1]) < pixelSize)
-                return ID;
-        }
-
-        // check if (x,y) is in the remaining pixels
-        pixels = search_algorithm::remaining_squares(pixels, contiguousSquares, firstPixel);
-        for (auto itr = pixels.begin(); itr != pixels.end(); itr++)
-        {
-            G4double x = itr->second[0];
-            G4double y = itr->second[1];
-
-            if (absolute(position[0] - x) < pixelSize && absolute(position[1] - y) < pixelSize)
-                return itr->first;
-        }
-
-        G4cout << "No pixel found" << G4endl;
-        return 0;
+        return ID;
     }
 
     vector<G4double> add_charge_sharing(const vector<G4double> &energyVector, G4int nParts)
@@ -114,7 +129,10 @@ namespace charge_sharing
         const G4double ENERGY = TOTAL_ENERGY / nParts;
         const array<G4double, 2> FIRST_HIT = {MySensitiveDetector::GetFirstHit()[0], MySensitiveDetector::GetFirstHit()[1]};
 
-        vector<G4double> result = energyVector;
+        // G4cout << "First pixel: " << which_pixel(FIRST_HIT) << G4endl;
+
+        G4int N = MyDetectorConstruction::GetNPixel();
+        auto result = vector<G4double>(N * N, 0);
 
         for (G4int i = 0; i < nParts; i++)
         {
