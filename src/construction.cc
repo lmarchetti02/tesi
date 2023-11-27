@@ -218,7 +218,7 @@ G4int MyDetectorConstruction::GetNPixel()
 }
 
 /**
- * @todo CHECK IF THE PIXEL MAP IS USED SOMEWHERE
+ * Static function for printing `pixelMap`.
  */
 void MyDetectorConstruction::PrintPixelMap()
 {
@@ -228,10 +228,22 @@ void MyDetectorConstruction::PrintPixelMap()
         G4cout << "(" << itr.second[0] << ", " << itr.second[1] << ")" << G4endl;
     }
 }
-void MyDetectorConstruction::AddToPixelMap(const pair<G4int, array<G4double, 2>> &p)
+
+/**
+ * Static function for adding a new element to `pixelMap`.
+ *
+ * @param[in] newElement Reference to the `std::pair` containing the ID of the pixel and the coordinates of its center.
+ */
+void MyDetectorConstruction::AddToPixelMap(const pair<G4int, array<G4double, 2>> &newElement)
 {
-    pixelMap.insert(p);
+    pixelMap.insert(newElement);
 }
+
+/**
+ * Static function for accessing `pixelMap`.
+ *
+ * @return The static variable `pixelMap`, which contains {ID : (xCenter, yCenter)} of each pixel.
+ */
 map<G4int, array<G4double, 2>> MyDetectorConstruction::GetPixelMap()
 {
     return pixelMap;
