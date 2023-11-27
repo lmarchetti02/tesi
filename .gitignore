@@ -41,3 +41,4 @@ merge_root.sh
 compile.sh
 *.ipynb
 *.DS_store
+include/.DS_Store

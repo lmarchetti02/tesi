@@ -31,5 +31,5 @@ public:
     virtual void EndOfEventAction(const G4Event *);
 
     template <typename T>
-    T VectorSum(const vector<T> &);
+    static T VectorSum(const vector<T> &);
 };

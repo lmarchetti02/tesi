@@ -12,6 +12,7 @@
 
 #include "construction.hh"
 #include "sensitive_detector.hh"
+#include "event.hh"
 
 using std::array;
 using std::map;
@@ -19,34 +20,6 @@ using std::vector;
 
 namespace charge_sharing
 {
-    /*
-    Template for getting the sum of all the elements in a vector.
-    */
-    template <typename T>
-    T sum_vector(const vector<T> &vector)
-    {
-        T sum = 0;
-
-        for (T element : vector)
-        {
-            sum += element;
-        }
-        return sum;
-    }
-
-    /*
-    Function for computing the absolute value of a G4double.
-    */
-    G4double absolute(G4double value)
-    {
-        if (value >= 0)
-            return value;
-        else if (value < 0)
-            return -value;
-
-        return 0;
-    }
-
     /*
     Function for returning an array containing (x,y) of a point in the detector plane,
     chose randomly according to a 2D gaussian.
@@ -87,23 +60,64 @@ namespace charge_sharing
         return ID;
     }
 
+    // vector<G4double> add_charge_sharing(const vector<G4double> &energyVector, G4int nParts)
+    // {
+    //     const G4double TOTAL_ENERGY = MyEventAction::VectorSum(energyVector);
+    //     const G4double ENERGY = TOTAL_ENERGY / nParts;
+    //     const array<G4double, 2> FIRST_HIT = {MySensitiveDetector::GetFirstHit()[0], MySensitiveDetector::GetFirstHit()[1]};
+
+    //     // G4cout << "First pixel: " << which_pixel(FIRST_HIT) << G4endl;
+
+    //     G4int N = MyDetectorConstruction::GetNPixel();
+    //     auto result = vector<G4double>(N * N, 0);
+
+    //     for (G4int i = 0; i < nParts; i++)
+    //     {
+    //         array<G4double, 2> randomXY = sample(FIRST_HIT, 11 * um);
+    //         G4int randomID = which_pixel(randomXY);
+
+    //         result[randomID] += ENERGY;
+    //     }
+
+    //     return result;
+    // }
+
+    /**
+     * Function that adds the charge sharing by following this algorithm:
+     *  1. the energy deposition of a pixel is split into a sufficiently high number of parts;
+     *  2. each part is moved around in the detector plane, following a 2D symmetrical gaussian distribution;
+     *  3. each random (x,y) is converted into an ID and the energy is added to that pixel.
+     *
+     * @param[in] energyVector Constant reference to the vector containing the energy depositions before the charge sharing.
+     * @param[in] nParts The number of parts the energy has to be divided into.
+     *
+     * @return The vector containing the energy depositions after the charge sharing.
+     */
     vector<G4double> add_charge_sharing(const vector<G4double> &energyVector, G4int nParts)
     {
-        const G4double TOTAL_ENERGY = sum_vector(energyVector);
-        const G4double ENERGY = TOTAL_ENERGY / nParts;
-        const array<G4double, 2> FIRST_HIT = {MySensitiveDetector::GetFirstHit()[0], MySensitiveDetector::GetFirstHit()[1]};
-
-        // G4cout << "First pixel: " << which_pixel(FIRST_HIT) << G4endl;
-
         G4int N = MyDetectorConstruction::GetNPixel();
         auto result = vector<G4double>(N * N, 0);
 
-        for (G4int i = 0; i < nParts; i++)
+        G4int ID = 0;
+        for (G4double d : energyVector)
         {
-            array<G4double, 2> randomXY = sample(FIRST_HIT, 11 * um);
-            G4int randomID = which_pixel(randomXY);
 
-            result[randomID] += ENERGY;
+            if (d != 0)
+            {
+                const G4double PIXEL_ENERGY = d;
+                const G4double ENERGY = PIXEL_ENERGY / nParts;
+                const array<G4double, 2> XY_CENTER = MyDetectorConstruction::GetPixelMap()[ID];
+
+                for (G4int i = 0; i < nParts; i++)
+                {
+                    array<G4double, 2> randomXY = sample(XY_CENTER, 11 * um);
+                    G4int randomID = which_pixel(randomXY);
+
+                    result[randomID] += ENERGY;
+                }
+            }
+
+            ID++;
         }
 
         return result;
