@@ -43,13 +43,10 @@ private:
     // map with centers of pixels
     static map<G4int, array<G4double, 2>> pixelMap;
 
-    // volumes (to be only defined once)
+    // volumes
     G4Box *solidWorld, *solidDetector;
     G4LogicalVolume *logicWorld, *logicDetector;
     G4VPhysicalVolume *physWorld, *physDetector;
-
-    // scoring volume
-    G4LogicalVolume *fScoringVolume;
 
     // materials
     G4Material *worldMat, *detectorMat;
@@ -66,14 +63,14 @@ public:
     void ConstructPixels();
 
     static void SetNPixel(G4int);
-    static G4int GetNPixel() { return nPixel; }
+    static G4int GetNPixel();
 
     static array<G4double, 3> GetWorldDimensions();
     static array<G4double, 3> GetPixelDimensions();
 
     static void setVisualization();
 
-    static void AddToPixelMap(const pair<G4int, array<G4double, 2>> &p) { pixelMap.insert(p); }
-    static map<G4int, array<G4double, 2>> GetPixelMap() { return pixelMap; }
+    static void AddToPixelMap(const pair<G4int, array<G4double, 2>> &);
+    static map<G4int, array<G4double, 2>> GetPixelMap();
     static void PrintPixelMap();
 };

@@ -105,9 +105,6 @@ void MyDetectorConstruction::ConstructPixels()
 
     logicDetector = new G4LogicalVolume(solidDetector, detectorMat, "logicDetector");
 
-    // scoring volume
-    fScoringVolume = logicDetector;
-
     // array of detectors
     for (G4int i = 0; i < nPixel; i++)
     {
@@ -211,6 +208,16 @@ void MyDetectorConstruction::SetNPixel(G4int N)
 }
 
 /**
+ * Static function for accessing the number of pixels in the array.
+ *
+ * @return The number of pixel along x and y, so the square root of the total number of pixels.
+ */
+G4int MyDetectorConstruction::GetNPixel()
+{
+    return nPixel;
+}
+
+/**
  * @todo CHECK IF THE PIXEL MAP IS USED SOMEWHERE
  */
 void MyDetectorConstruction::PrintPixelMap()
@@ -220,4 +227,12 @@ void MyDetectorConstruction::PrintPixelMap()
         G4cout << itr.first << " : ";
         G4cout << "(" << itr.second[0] << ", " << itr.second[1] << ")" << G4endl;
     }
+}
+void MyDetectorConstruction::AddToPixelMap(const pair<G4int, array<G4double, 2>> &p)
+{
+    pixelMap.insert(p);
+}
+map<G4int, array<G4double, 2>> MyDetectorConstruction::GetPixelMap()
+{
+    return pixelMap;
 }
