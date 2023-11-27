@@ -1,5 +1,5 @@
 #include "construction.hh"
-#include "detector.hh"
+#include "sensitive_detector.hh"
 
 using std::cout;
 using std::endl;

@@ -1,7 +1,7 @@
 #include "event.hh"
 #include "hits.hh"
 #include "construction.hh"
-#include "detector.hh"
+#include "sensitive_detector.hh"
 #include "charge_sharing.hh"
 
 MyEventAction::MyEventAction(MyRunAction *)

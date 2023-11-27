@@ -11,7 +11,7 @@
 #include "G4SystemOfUnits.hh"
 
 #include "construction.hh"
-#include "detector.hh"
+#include "sensitive_detector.hh"
 
 using std::array;
 using std::map;

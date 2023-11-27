@@ -1,4 +1,4 @@
-#include "detector.hh"
+#include "sensitive_detector.hh"
 
 G4ThreeVector MySensitiveDetector::firstHit = G4ThreeVector();
 G4int MySensitiveDetector::pixelFirstHit = G4int();

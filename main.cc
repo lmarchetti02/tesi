@@ -11,7 +11,7 @@
 #include "construction.hh"
 #include "physics.hh"
 #include "action.hh"
-#include "detector.hh"
+#include "sensitive_detector.hh"
 
 int main(int argc, char **argv)
 {
