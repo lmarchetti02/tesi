@@ -60,28 +60,6 @@ namespace charge_sharing
         return ID;
     }
 
-    // vector<G4double> add_charge_sharing(const vector<G4double> &energyVector, G4int nParts)
-    // {
-    //     const G4double TOTAL_ENERGY = MyEventAction::VectorSum(energyVector);
-    //     const G4double ENERGY = TOTAL_ENERGY / nParts;
-    //     const array<G4double, 2> FIRST_HIT = {MySensitiveDetector::GetFirstHit()[0], MySensitiveDetector::GetFirstHit()[1]};
-
-    //     // G4cout << "First pixel: " << which_pixel(FIRST_HIT) << G4endl;
-
-    //     G4int N = MyDetectorConstruction::GetNPixel();
-    //     auto result = vector<G4double>(N * N, 0);
-
-    //     for (G4int i = 0; i < nParts; i++)
-    //     {
-    //         array<G4double, 2> randomXY = sample(FIRST_HIT, 11 * um);
-    //         G4int randomID = which_pixel(randomXY);
-
-    //         result[randomID] += ENERGY;
-    //     }
-
-    //     return result;
-    // }
-
     /**
      * Function that adds the charge sharing by following this algorithm:
      *  1. the energy deposition of a pixel is split into a sufficiently high number of parts;

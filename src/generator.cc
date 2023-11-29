@@ -1,6 +1,11 @@
 #include "generator.hh"
 #include "construction.hh"
 
+/**
+ * Constructor.
+ *
+ * Initializes the particle gun (particle type, initial position and momentum).
+ */
 MyPrimaryGenerator::MyPrimaryGenerator()
 {
     fParticleGun = new G4ParticleGun(1); // 1 particles per event
@@ -32,6 +37,9 @@ MyPrimaryGenerator::~MyPrimaryGenerator()
     delete fParticleGun;
 }
 
+/**
+ * Geant4 function for generating the primary vertex.
+ */
 void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
     G4ThreeVector momDir = randomDirVector(maxTheta);
@@ -42,6 +50,12 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
+/**
+ * Function for generating a random unit vector inside a cone.
+ *
+ * @param[in] maxTheta The angle that defines the cone.
+ * @return A random unit vector inside the cone defined by `maxTheta`.
+ */
 G4ThreeVector MyPrimaryGenerator::randomDirVector(G4double maxTheta)
 {
     maxTheta = maxTheta * (M_PI / 180);
@@ -56,6 +70,9 @@ G4ThreeVector MyPrimaryGenerator::randomDirVector(G4double maxTheta)
     return G4ThreeVector(x, y, z);
 }
 
+/**
+ * Function for defining the messenger commands.
+ */
 void MyPrimaryGenerator::DefineCommands()
 {
     fMessenger = new G4GenericMessenger(this, "/beam/", "X ray beam customization");

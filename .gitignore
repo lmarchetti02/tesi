@@ -42,3 +42,4 @@ compile.sh
 *.ipynb
 *.DS_store
 include/.DS_Store
+src/.DS_Store
