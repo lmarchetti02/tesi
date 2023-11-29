@@ -1,5 +1,5 @@
 #include "generator.hh"
-#include "construction.hh"
+#include "detector_construction.hh"
 
 /**
  * Constructor.

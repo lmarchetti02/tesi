@@ -8,8 +8,8 @@
 #include "G4RunManagerFactory.hh"
 
 // my scripts
-#include "construction.hh"
 #include "physics.hh"
+#include "detector_construction.hh"
 #include "action_initialization.hh"
 #include "sensitive_detector.hh"
 

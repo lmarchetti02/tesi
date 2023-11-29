@@ -9,7 +9,7 @@
 #include "G4HCofThisEvent.hh"
 
 #include "run_action.hh"
-#include "construction.hh"
+#include "detector_construction.hh"
 
 using std::map;
 using std::vector;

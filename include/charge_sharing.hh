@@ -10,7 +10,7 @@
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "construction.hh"
+#include "detector_construction.hh"
 #include "sensitive_detector.hh"
 #include "event.hh"
 

@@ -1,4 +1,4 @@
-#include "construction.hh"
+#include "detector_construction.hh"
 #include "sensitive_detector.hh"
 
 #include "G4NistManager.hh"

@@ -1,5 +1,5 @@
 #include "run_action.hh"
-#include "construction.hh"
+#include "detector_construction.hh"
 
 #include "G4AnalysisManager.hh"
 
