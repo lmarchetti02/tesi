@@ -32,6 +32,8 @@ public:
     virtual void BeginOfEventAction(const G4Event *);
     virtual void EndOfEventAction(const G4Event *);
 
+    void readHitsCollection(const G4Event *);
+
     template <typename T>
     static T VectorSum(const std::vector<T> &);
 };

@@ -15,21 +15,22 @@ MyRunAction::MyRunAction()
     G4AnalysisManager *man = G4AnalysisManager::Instance();
     man->SetNtupleMerging(true);
 
-    // Ntuple for hits
+    // Ntuple for hits (no CS)
     man->CreateNtuple("Hits", "Hits");
     man->CreateNtupleIColumn("ID");
     man->CreateNtupleDColumn("eVector");
     man->FinishNtuple(0);
 
+    // Ntuple for hits (with CS)
+    man->CreateNtuple("CS", "CS");
+    man->CreateNtupleIColumn("ID");
+    man->CreateNtupleDColumn("eVector");
+    man->FinishNtuple(1);
+
     // Ntuple for pixels
     man->CreateNtuple("First Hit", "First Hit");
     man->CreateNtupleDColumn("x");
     man->CreateNtupleDColumn("y");
-    man->FinishNtuple(1);
-
-    // Ntuple for total energy deposition
-    man->CreateNtuple("Total Edep", "Total Edep");
-    man->CreateNtupleDColumn("eDep");
     man->FinishNtuple(2);
 }
 
