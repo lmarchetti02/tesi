@@ -1,31 +1,25 @@
 #pragma once
 
-#include <vector>
-#include <cmath>
 #include <array>
 #include <map>
-#include <fstream>
 
 #include "G4VUserDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
-#include "G4NistManager.hh"
+#include "G4LogicalVolume.hh"
 #include "G4Material.hh"
 #include "G4Box.hh"
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4SystemOfUnits.hh" // allows the use of SI units
-#include "G4GenericMessenger.hh"
-#include "G4UImanager.hh"
-#include "G4SDManager.hh"
-#include "G4AnalysisManager.hh"
 
-using std::array;
-using std::fstream;
-using std::map;
-using std::pair;
-using std::vector;
+// using std::std::array;
+// using std::std::map;
+// using std::pair;
 
+/**
+ * Detector Construction Class
+ * ---
+ *
+ * Defines the geometry and the materials of the detector used
+ * in the simulation.
+ */
 class MyDetectorConstruction : public G4VUserDetectorConstruction
 {
 private:
@@ -36,12 +30,12 @@ private:
     static G4double yWorld;
     static G4double zWorld;
 
-    static G4double xDet;
-    static G4double yDet;
-    static G4double zDet;
+    static G4double xPixel;
+    static G4double yPixel;
+    static G4double zPixel;
 
     // map with centers of pixels
-    static map<G4int, array<G4double, 2>> pixelMap;
+    static std::map<G4int, std::array<G4double, 2>> pixelMap;
 
     // volumes
     G4Box *solidWorld, *solidDetector;
@@ -65,12 +59,12 @@ public:
     static void SetNPixel(G4int);
     static G4int GetNPixel();
 
-    static array<G4double, 3> GetWorldDimensions();
-    static array<G4double, 3> GetPixelDimensions();
+    static std::array<G4double, 3> GetWorldDimensions();
+    static std::array<G4double, 3> GetPixelDimensions();
 
     static void setVisualization();
 
-    static void AddToPixelMap(const pair<G4int, array<G4double, 2>> &);
-    static map<G4int, array<G4double, 2>> GetPixelMap();
+    static void AddToPixelMap(const std::pair<G4int, std::array<G4double, 2>> &);
+    static std::map<G4int, std::array<G4double, 2>> GetPixelMap();
     static void PrintPixelMap();
 };

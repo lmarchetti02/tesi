@@ -1,6 +1,15 @@
 #include "construction.hh"
 #include "sensitive_detector.hh"
 
+#include "G4NistManager.hh"
+#include "G4PVPlacement.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UImanager.hh"
+#include "G4SDManager.hh"
+#include "G4AnalysisManager.hh"
+
+#include <fstream>
+
 using std::cout;
 using std::endl;
 
@@ -8,9 +17,9 @@ using std::endl;
 G4int MyDetectorConstruction::nPixel = 0;
 
 // half dimensions of pixels
-G4double MyDetectorConstruction::xDet = 25 * um;
-G4double MyDetectorConstruction::yDet = 25 * um;
-G4double MyDetectorConstruction::zDet = 0.5 * mm;
+G4double MyDetectorConstruction::xPixel = 25 * um;
+G4double MyDetectorConstruction::yPixel = 25 * um;
+G4double MyDetectorConstruction::zPixel = 0.5 * mm;
 
 // world dimensions
 G4double MyDetectorConstruction::xWorld = 0;
@@ -18,7 +27,7 @@ G4double MyDetectorConstruction::yWorld = 0;
 G4double MyDetectorConstruction::zWorld = 0;
 
 // pixel map
-auto MyDetectorConstruction::pixelMap = map<G4int, array<G4double, 2>>();
+auto MyDetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
 
 MyDetectorConstruction::MyDetectorConstruction()
 {
@@ -52,16 +61,16 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     ConstructPixels();
 
     // save info about the detector in text file
-    fstream outFile;
+    std::fstream outFile;
     outFile.open("../root/results/info.txt", std::ios::out);
     if (outFile.is_open())
     {
         outFile << "INFORMATION ABOUT SIMULATION" << endl;
         outFile << "----------------------------" << endl;
         outFile << "Number of pixels: " << nPixel << endl;
-        outFile << "Pixel x-dimension: " << 2 * xDet << " mm" << endl;
-        outFile << "Pixel y-dimension: " << 2 * yDet << " mm" << endl;
-        outFile << "Pixel z-dimension: " << 2 * zDet << " mm" << endl;
+        outFile << "Pixel x-dimension: " << 2 * xPixel << " mm" << endl;
+        outFile << "Pixel y-dimension: " << 2 * yPixel << " mm" << endl;
+        outFile << "Pixel z-dimension: " << 2 * zPixel << " mm" << endl;
     }
     outFile.close();
 
@@ -101,7 +110,7 @@ void MyDetectorConstruction::ConstructWorld()
  */
 void MyDetectorConstruction::ConstructPixels()
 {
-    solidDetector = new G4Box("solidDetector", xDet, yDet, zDet);
+    solidDetector = new G4Box("solidDetector", xPixel, yPixel, zPixel);
 
     logicDetector = new G4LogicalVolume(solidDetector, detectorMat, "logicDetector");
 
@@ -111,11 +120,11 @@ void MyDetectorConstruction::ConstructPixels()
         for (G4int j = 0; j < nPixel; j++)
         {
             G4int ID = i * nPixel + j;
-            G4double x = -xWorld + (2 * j + 1) * xDet;
-            G4double y = -yWorld + (2 * i + 1) * yDet;
+            G4double x = -xWorld + (2 * j + 1) * xPixel;
+            G4double y = -yWorld + (2 * i + 1) * yPixel;
 
             physDetector = new G4PVPlacement(nullptr,
-                                             G4ThreeVector(x, y, zWorld - zDet),
+                                             G4ThreeVector(x, y, zWorld - zPixel),
                                              logicDetector,
                                              "physDetector",
                                              logicWorld,
@@ -124,8 +133,8 @@ void MyDetectorConstruction::ConstructPixels()
                                              true);
 
             // add to pixel map
-            array<G4double, 2> xy = {x, y};
-            pair<G4int, array<G4double, 2>> p(ID, xy);
+            std::array<G4double, 2> xy = {x, y};
+            std::pair<G4int, std::array<G4double, 2>> p(ID, xy);
             AddToPixelMap(p);
         }
     }
@@ -150,9 +159,9 @@ void MyDetectorConstruction::ConstructSDandField()
  *
  * @return `std::array(xWorld, yWorld, zWorld)`
  */
-array<G4double, 3> MyDetectorConstruction::GetWorldDimensions()
+std::array<G4double, 3> MyDetectorConstruction::GetWorldDimensions()
 {
-    array<G4double, 3> worldDim = {xWorld, yWorld, zWorld};
+    std::array<G4double, 3> worldDim = {xWorld, yWorld, zWorld};
 
     return worldDim;
 }
@@ -162,9 +171,9 @@ array<G4double, 3> MyDetectorConstruction::GetWorldDimensions()
  *
  * @return `std::array(xPixel, yPixel, zPixel)`
  */
-array<G4double, 3> MyDetectorConstruction::GetPixelDimensions()
+std::array<G4double, 3> MyDetectorConstruction::GetPixelDimensions()
 {
-    array<G4double, 3> detDim = {xDet, yDet, zDet};
+    std::array<G4double, 3> detDim = {xPixel, yPixel, zPixel};
 
     return detDim;
 }
@@ -183,7 +192,7 @@ void MyDetectorConstruction::setVisualization()
     uiManager->ApplyCommand("/vis/scene/add/text2D 0.9 -0.8 18 ! ! Number of pixels: " + std::to_string(nPixel) + " x " + std::to_string(nPixel));
 
     // scale
-    uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * zDet) + " mm z 1 0.75 0 manual " + std::to_string(xWorld) + " " + std::to_string(yWorld) + " " + std::to_string(zWorld - zDet) + " mm");
+    uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * zPixel) + " mm z 1 0.75 0 manual " + std::to_string(xWorld) + " " + std::to_string(yWorld) + " " + std::to_string(zWorld - zPixel) + " mm");
 }
 
 /**
@@ -198,11 +207,11 @@ void MyDetectorConstruction::SetNPixel(G4int N)
     nPixel += N;
 
     // update world dim
-    xWorld += N * xDet;
-    yWorld += N * yDet;
+    xWorld += N * xPixel;
+    yWorld += N * yPixel;
 
-    if (xWorld < zDet)
-        zWorld += zDet * 2;
+    if (xWorld < zPixel)
+        zWorld += zPixel * 2;
     else
         zWorld += xWorld * 2;
 }
@@ -234,7 +243,7 @@ void MyDetectorConstruction::PrintPixelMap()
  *
  * @param[in] newElement Reference to the `std::pair` containing the ID of the pixel and the coordinates of its center.
  */
-void MyDetectorConstruction::AddToPixelMap(const pair<G4int, array<G4double, 2>> &newElement)
+void MyDetectorConstruction::AddToPixelMap(const std::pair<G4int, std::array<G4double, 2>> &newElement)
 {
     pixelMap.insert(newElement);
 }
@@ -244,7 +253,7 @@ void MyDetectorConstruction::AddToPixelMap(const pair<G4int, array<G4double, 2>>
  *
  * @return The static variable `pixelMap`, which contains {ID : (xCenter, yCenter)} of each pixel.
  */
-map<G4int, array<G4double, 2>> MyDetectorConstruction::GetPixelMap()
+std::map<G4int, std::array<G4double, 2>> MyDetectorConstruction::GetPixelMap()
 {
     return pixelMap;
 }
