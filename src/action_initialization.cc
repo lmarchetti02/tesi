@@ -1,5 +1,12 @@
-#include "action.hh"
+#include "action_initialization.hh"
 
+#include "generator.hh"
+#include "run_action.hh"
+#include "event.hh"
+
+/**
+ * The default constructor.
+ */
 MyActionInitialization::MyActionInitialization() {}
 
 /**

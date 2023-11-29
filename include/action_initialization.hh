@@ -2,10 +2,13 @@
 
 #include "G4VUserActionInitialization.hh"
 
-#include "generator.hh"
-#include "run_action.hh"
-#include "event.hh"
-
+/**
+ * Action Initialization Class
+ * ---
+ *
+ * Defines how to interact with the simulation, by initializing
+ * the particle gun, the run action and the event action.
+ */
 class MyActionInitialization : public G4VUserActionInitialization
 {
 public:
