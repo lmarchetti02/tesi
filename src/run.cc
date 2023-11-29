@@ -1,6 +1,14 @@
 #include "run.hh"
 #include "construction.hh"
 
+#include "G4AnalysisManager.hh"
+
+/**
+ * The default constructor.
+ *
+ * It creates all the NTuples necessary for saving
+ * the results of the simulation.
+ */
 MyRunAction::MyRunAction()
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
@@ -24,22 +32,32 @@ MyRunAction::MyRunAction()
     man->FinishNtuple(2);
 }
 
-MyRunAction::~MyRunAction() {}
-
+/**
+ * Geant4 function called at the beginning of the run action.
+ *
+ * It creates the ROOT files where the NTuples are saved.
+ *
+ * @param run A pointer to the current `G4Run` object.
+ */
 void MyRunAction::BeginOfRunAction(const G4Run *run)
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
-    // create ROOT file
     G4String runNumber = to_string(run->GetRunID());
     man->OpenFile("../root/results/output" + runNumber + ".root");
 }
 
-void MyRunAction::EndOfRunAction(const G4Run *)
+/**
+ * Geant4 function called at the end of the run action.
+ *
+ *  Saves the data in the ROOT files and closes them.
+ *
+ * @param run Not used.
+ */
+void MyRunAction::EndOfRunAction(const G4Run *run)
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance(); // singleton
 
-    // close file used to store run
     man->Write();
     man->CloseFile();
 }
