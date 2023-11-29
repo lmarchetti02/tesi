@@ -7,6 +7,15 @@
 
 #include "run_action.hh"
 
+/**
+ * Event Action Class
+ * ---
+ *
+ * Defines all the operations to perform throughout each
+ * event of the simulation. In particular, it is used to get the
+ * data from the HitsCollection, operate on it, and save the results
+ * in the NTuple.
+ */
 class MyEventAction : public G4UserEventAction
 {
 private:
