@@ -8,7 +8,7 @@
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 
-#include "run.hh"
+#include "run_action.hh"
 #include "construction.hh"
 
 using std::map;
