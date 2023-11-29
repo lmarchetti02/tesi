@@ -1,9 +1,14 @@
 #pragma once
 
 #include "G4VModularPhysicsList.hh"
-#include "G4EmConfigurator.hh"
 
-// Modular physics used in this application
+/**
+ * Physics List Class
+ * ---
+ *
+ * Defines all the physics necessary for the simulation. In particular,
+ * it defines al the particles and physical processes needed.
+ */
 class MyPhysicsList : public G4VModularPhysicsList
 {
 public:

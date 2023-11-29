@@ -1,12 +1,5 @@
 #include "physics.hh"
 
-// MyPhysicsList::MyPhysicsList()
-// {
-//     RegisterPhysics(new G4EmStandardPhysics_option4());
-// }
-
-// MyPhysicsList::~MyPhysicsList() {}
-
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4DecayPhysics.hh"
@@ -22,6 +15,9 @@
 #include "G4UAtomicDeexcitation.hh"
 #include "G4LossTableManager.hh"
 
+/**
+ * The default constructor.
+ */
 MyPhysicsList::MyPhysicsList()
 {
     SetVerboseLevel(1);
@@ -38,6 +34,9 @@ MyPhysicsList::MyPhysicsList()
     fRadDecayPhysicsList = new G4RadioactiveDecayPhysics();
 }
 
+/**
+ * The destructor.
+ */
 MyPhysicsList::~MyPhysicsList()
 {
     delete fDecPhysicsList;
@@ -45,11 +44,17 @@ MyPhysicsList::~MyPhysicsList()
     delete fEmPhysicsList;
 }
 
+/**
+ * Geant4 function for constructing the particles used in the simulation.
+ */
 void MyPhysicsList::ConstructParticle()
 {
     fDecPhysicsList->ConstructParticle();
 }
 
+/**
+ * Geant4 function for constructing the physical processes used in the simulation.
+ */
 void MyPhysicsList::ConstructProcess()
 {
     AddTransportation();
