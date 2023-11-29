@@ -4,6 +4,13 @@
 #include "G4ParticleGun.hh"
 #include "G4GenericMessenger.hh"
 
+/**
+ * Primary Generator Class
+ * ---
+ *
+ * Creates the particle gun and defines the properties
+ * of the particles to be shot (position and momentum).
+ */
 class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
 private:

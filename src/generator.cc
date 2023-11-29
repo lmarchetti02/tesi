@@ -37,6 +37,9 @@ MyPrimaryGenerator::MyPrimaryGenerator() : momentum(50 * keV), maxTheta(0.)
     DefineCommands();
 }
 
+/**
+ * The destructor.
+ */
 MyPrimaryGenerator::~MyPrimaryGenerator()
 {
     delete fParticleGun;
