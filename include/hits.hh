@@ -5,45 +5,46 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 
+/**
+ * Custom Hits Class
+ * ---
+ *
+ * It defines a custom type of hit, inheriting from the builtin `G4Hit`.
+ * For each step in the sensitive detector, a hit object is created and
+ * stored in a HitsCollection. The `MyHit` object contains information about the
+ * step, which can be customized in this class.
+ *
+ * In particular, for each hit, the information saved is:
+ *  - the deposited energy of the step;
+ *  - the ID of the detector inside which the step has been created.
+ */
 class MyHit : public G4VHit
 {
 public:
     MyHit();
     ~MyHit();
     MyHit(const MyHit &);
+
     const MyHit &operator=(const MyHit &);
     G4bool operator==(const MyHit &) const;
 
-    inline void *operator new(size_t);
-    inline void operator delete(void *);
+    void *operator new(size_t);
+    void operator delete(void *);
+
 private:
-    G4double energyDep; // Photon energy energy
-    G4int detectorID;   // Position of the hit
+    G4double energyDep;
+    G4int detectorID;
 
 public:
-    // Set functions to store information on hits
-    inline void SetEnergy(G4double fEn) { energyDep = fEn; }
-    inline void SetID(G4int ID) { detectorID = ID; }
+    void SetEnergy(G4double);
+    void SetID(G4int ID);
 
-    // Get functions to access information on hits
-    inline G4double GetEnergy() { return energyDep; }
-    inline G4int GetID() { return detectorID; }
+    G4double GetEnergy();
+    G4int GetID();
 };
 
-// define the type of hit collection
+// Alias of the HitsCollection
 typedef G4THitsCollection<MyHit> MyHitsCollection;
 
-// memory safety functions
+// Allocator of the Hits Class
 extern G4ThreadLocal G4Allocator<MyHit> *MyHitAllocator;
-
-inline void *MyHit::operator new(size_t)
-{
-    if (!MyHitAllocator)
-        MyHitAllocator = new G4Allocator<MyHit>;
-    return (void *)MyHitAllocator->MallocSingle();
-}
-
-inline void MyHit::operator delete(void *aHit)
-{
-    MyHitAllocator->FreeSingle((MyHit *)aHit);
-}
