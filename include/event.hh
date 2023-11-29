@@ -14,7 +14,7 @@ private:
     G4int index;
 
     // hits map
-    vector<G4double> energyVector;
+    std::vector<G4double> energyVector;
 
 public:
     MyEventAction(MyRunAction *);
