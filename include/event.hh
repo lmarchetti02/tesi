@@ -4,12 +4,8 @@
 
 #include "G4UserEventAction.hh"
 #include "G4Event.hh"
-#include "G4AnalysisManager.hh"
-#include "G4SDManager.hh"
-#include "G4HCofThisEvent.hh"
 
 #include "run_action.hh"
-#include "detector_construction.hh"
 
 using std::map;
 using std::vector;

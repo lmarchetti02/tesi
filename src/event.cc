@@ -1,8 +1,13 @@
 #include "event.hh"
+
 #include "hits.hh"
 #include "detector_construction.hh"
 #include "sensitive_detector.hh"
 #include "charge_sharing.hh"
+
+#include "G4AnalysisManager.hh"
+#include "G4SDManager.hh"
+#include "G4HCofThisEvent.hh"
 
 MyEventAction::MyEventAction(MyRunAction *)
 {
