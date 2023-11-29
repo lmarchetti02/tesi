@@ -1,7 +1,8 @@
 #include "run_action.hh"
-#include "detector_construction.hh"
 
 #include "G4AnalysisManager.hh"
+
+#include "detector_construction.hh"
 
 /**
  * The default constructor.
