@@ -1,4 +1,5 @@
 #include "hits.hh"
+
 #include "G4SystemOfUnits.hh"
 
 G4ThreadLocal G4Allocator<MyHit> *MyHitAllocator;

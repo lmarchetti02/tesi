@@ -3,7 +3,6 @@
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
-#include "G4ThreeVector.hh"
 
 /**
  * Custom Hits Class
