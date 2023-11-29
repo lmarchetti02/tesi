@@ -1,4 +1,9 @@
 #include "generator.hh"
+
+#include "G4SystemOfUnits.hh"
+#include "G4ParticleTable.hh"
+#include "Randomize.hh"
+
 #include "detector_construction.hh"
 
 /**
@@ -6,7 +11,7 @@
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-MyPrimaryGenerator::MyPrimaryGenerator()
+MyPrimaryGenerator::MyPrimaryGenerator() : momentum(50 * keV), maxTheta(0.)
 {
     fParticleGun = new G4ParticleGun(1); // 1 particles per event
 
