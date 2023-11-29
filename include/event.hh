@@ -7,9 +7,6 @@
 
 #include "run_action.hh"
 
-using std::map;
-using std::vector;
-
 class MyEventAction : public G4UserEventAction
 {
 private:
@@ -27,5 +24,5 @@ public:
     virtual void EndOfEventAction(const G4Event *);
 
     template <typename T>
-    static T VectorSum(const vector<T> &);
+    static T VectorSum(const std::vector<T> &);
 };

@@ -94,7 +94,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
  * @tparam T the type of the elements inside the vector.
  */
 template <typename T>
-T MyEventAction::VectorSum(const vector<T> &vector)
+T MyEventAction::VectorSum(const std::vector<T> &vector)
 {
     T sum = 0;
 
