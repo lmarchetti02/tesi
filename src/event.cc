@@ -9,7 +9,12 @@
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 
-MyEventAction::MyEventAction(MyRunAction *)
+/**
+ * The constructor.
+ *
+ * @param[in] run Not used
+ */
+MyEventAction::MyEventAction(MyRunAction *run)
 {
     // index of HC
     index = -1;
