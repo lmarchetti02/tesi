@@ -1,9 +1,18 @@
 #include "sensitive_detector.hh"
 
+#include "G4AnalysisManager.hh"
+#include "G4RunManager.hh"
+#include "G4SDManager.hh"
+
 G4ThreeVector MySensitiveDetector::firstHit = G4ThreeVector();
 G4int MySensitiveDetector::pixelFirstHit = G4int();
 
-MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name)
+/**
+ * The constructor.
+ *
+ * @param[in] name The name of the sensitive detector.
+ */
+MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name), HCID(-1)
 {
     // SensitiveDetectorName and collectionName are data members of G4VSensitiveDetector
     collectionName.insert("MyHitsCollection");
