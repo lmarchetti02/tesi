@@ -18,12 +18,21 @@ using std::array;
 using std::map;
 using std::vector;
 
+/**
+ * Library containing the necessary methods for adding the
+ * charge sharing to the results of the simulation.
+ */
 namespace charge_sharing
 {
-    /*
-    Function for returning an array containing (x,y) of a point in the detector plane,
-    chose randomly according to a 2D gaussian.
-    */
+    /**
+     * Function for returning an array containing (x,y) of a point in the detector plane,
+     * chose randomly according to a 2D gaussian.
+     *
+     * @param[in] center The array representing the center of the gaussian.
+     * @param[in] std The standard deviation of the gaussian.
+     *
+     * @return The aforementioned random array.
+     */
     array<double, 2> sample(array<double, 2> center, double std)
     {
         const G4double X_MAX = MyDetectorConstruction::GetWorldDimensions()[0];
@@ -37,14 +46,18 @@ namespace charge_sharing
             G4double y = G4RandGauss::shoot(center[1], std);
         } while (abs(x) >= X_MAX && abs(y) >= Y_MAX);
 
-        array<double, 2> s = {x, y};
+        array<double, 2> point = {x, y};
 
-        return s;
+        return point;
     }
 
-    /*
-    Function for determining which pixel corresponds to a given point (x,y).
-    */
+    /**
+     * Function for determining which pixel corresponds to a given point (x,y).
+     *
+     * @param[in] position The array representing the point (x,y).
+     *
+     * @return The ID of the detector corresponding to (x,y).
+     */
     G4int which_pixel(array<G4double, 2> position)
     {
         G4double xWorld = MyDetectorConstruction::GetWorldDimensions()[0];
@@ -53,6 +66,7 @@ namespace charge_sharing
         G4double yDet = MyDetectorConstruction::GetPixelDimensions()[1];
         G4int nPixel = MyDetectorConstruction::GetNPixel();
 
+        //! @todo check for boundaries
         G4int j = ((position[0] + xWorld) / xDet - 1) * 0.5;
         G4int i = ((position[1] + yWorld) / yDet - 1) * 0.5;
         G4int ID = i * nPixel + j;
