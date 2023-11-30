@@ -67,7 +67,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     {
         outFile << "INFORMATION ABOUT SIMULATION" << endl;
         outFile << "----------------------------" << endl;
-        outFile << "Number of pixels: " << nPixel << endl;
+        outFile << "Number of pixels per side: " << nPixel << endl;
         outFile << "Pixel x-dimension (mm): " << 2 * xPixel << endl;
         outFile << "Pixel y-dimension (mm): " << 2 * yPixel << endl;
         outFile << "Pixel z-dimension (mm): " << 2 * zPixel << endl;
