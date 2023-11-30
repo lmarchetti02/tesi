@@ -4,75 +4,69 @@
 #include <vector>
 #include <memory>
 #include <array>
+#include <fstream>
 
 #include "TTree.h"
 #include "functions.hh"
-
-using std::array;
-using std::map;
-using std::pair;
-using std::vector;
 
 namespace data
 {
     double pixelSize = 50e-6;
 
-    map<int, double> read_hits(TTree *tree, const int N)
+    void read_simulation_info()
+    {
+        std::fstream infoFile;
+
+        infoFile.open("../results/info.txt", std::ios::in);
+        if (infoFile.is_open())
+        {
+        }
+    }
+
+    /**
+     * Function for reading the "Hits" tree.
+     *
+     * @param[in] tree The pointer to the TTree where the hits are stored.
+     * @param[in] N The number of pixel per side of the detector.
+     *
+     * @result An `std::map` with { detectorID, mean(energyDep) }.
+     */
+    std::map<int, double> read_hits_tree(TTree *Tree, int nPixel)
     {
         int ID;
         double Energy;
-        tree->SetBranchAddress("ID", &ID);
-        tree->SetBranchAddress("eVector", &Energy);
+        Tree->SetBranchAddress("ID", &ID);
+        Tree->SetBranchAddress("eVector", &Energy);
 
-        auto fMap = std::make_unique<map<int, vector<double>>>();
+        auto fMap = std::map<int, std::vector<double>>();
 
-        for (long int i = 0; i < (long int)tree->GetEntries(); i++)
+        for (long int i = 0; i < (long int)Tree->GetEntries(); i++)
         {
-            tree->GetEntry(i);
+            Tree->GetEntry(i);
 
-            if (fMap->count(ID) != 1)
+            if (fMap.count(ID) != 1)
             {
-                auto v = vector<double>(1, Energy);
+                auto v = std::vector<double>(1, Energy);
 
-                pair<int, vector<double>> p(ID, v);
-                fMap->insert(p);
+                std::pair<int, std::vector<double>> p(ID, v);
+                fMap.insert(p);
             }
             else
-                fMap->at(ID).push_back(Energy);
+                fMap.at(ID).push_back(Energy);
         }
 
-        // TODO: add energy deposition
-
-        return functions::get_mean(fMap, N);
+        return functions::map_mean(fMap, nPixel);
     }
 
-    std::unique_ptr<map<int, array<double, 2>>> read_first_hit(TTree *tree)
-    {
-        double x, y;
-        tree->SetBranchAddress("x", &x);
-        tree->SetBranchAddress("y", &y);
-
-        auto fhMap = std::make_unique<map<int, array<double, 2>>>();
-
-        for (long int i = 0; i < (long int)tree->GetEntries(); i++)
-        {
-            tree->GetEntry(i);
-
-            array<double, 2> xy = {x, y};
-            pair<int, array<double, 2>> p(i, xy);
-
-            fhMap->insert(p);
-        }
-
-        return fhMap;
-    }
-
-    map<int, array<double, 2>> reconstruct_grid(const int N)
+    /**
+     * Function for reconstructing
+     */
+    std::map<int, std::array<double, 2>> reconstruct_grid(const int N)
     {
         const double STEP = pixelSize / 2;
         const double DIM = STEP * N;
 
-        map<int, array<double, 2>> result;
+        std::map<int, std::array<double, 2>> result;
 
         // generate (x,y)
         for (int i = 0; i < N; i++)
@@ -82,9 +76,9 @@ namespace data
                 int ID = i * N + j;
                 double x = -DIM + (2 * j + 1) * STEP;
                 double y = -DIM + (2 * i + 1) * STEP;
-                array<double, 2> xy = {x, y};
+                std::array<double, 2> xy = {x, y};
 
-                pair<int, array<double, 2>> p(ID, xy);
+                std::pair<int, std::array<double, 2>> p(ID, xy);
                 result.insert(p);
             }
         }

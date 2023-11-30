@@ -16,7 +16,6 @@
 
 #include "include/data.hh"
 #include "include/functions.hh"
-#include "include/charge_sharing.hh"
 
 using std::array;
 using std::cout;
@@ -35,24 +34,21 @@ void analyze(const char *fileName, const int nPixel)
 
     // get trees from file
     TTree *hitsTree = (TTree *)resultsFile->Get("Hits");
-    TTree *energyTree = (TTree *)resultsFile->Get("Total Edep");
-    TTree *fhTree = (TTree *)resultsFile->Get("First Hit");
+    TTree *csTree = (TTree *)resultsFile->Get("CS");
     // **********************************************************
 
     // GET AVERAGE ENERGY DEPOSITION PER PIXEL (NO CHARGE SHARING)
     // ************************************************************
     map<int, double> hitsMap = data::read_hits(hitsTree, nPixel);
-    cout << "\nAVG ENERGY DEPOSITION PER PIXEL" << endl;
-    cout << "-------------------------------" << endl;
+    map<int, double> csMap = data::read_hits(csTree, nPixel);
+    cout << "\nAVG ENERGY DEPOSITION PER PIXEL (NO CHARGE SHARING)" << endl;
+    cout << "---------------------------------------------------" << endl;
+    functions::print_map(hitsMap);
+
+    cout << "\nAVG ENERGY DEPOSITION PER PIXEL (WITH CHARGE SHARING)" << endl;
+    cout << "-----------------------------------------------------" << endl;
     functions::print_map(hitsMap);
     // ************************************************************
-
-    // GET MAP WITH {#evt : (fh_x, fh_y, E_dep)}
-    // *******************************************************************************
-    map<int, array<double, 3>> csMap = charge_sharing::get_cs_map(fhTree, energyTree);
-    cout << "\nCHARGE SHARING MAP" << endl;
-    cout << "------------------" << endl;
-    functions::print_map(csMap);
 
     // close file
     resultsFile->Close();
@@ -68,7 +64,7 @@ void analyze(const char *fileName, const int nPixel)
 
     for (int i = 0; i < nPixel * nPixel; i++)
     {
-        graph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], hitsMap[i]);
+        graph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], csMap[i]);
     }
 
     gStyle->SetPalette(1);

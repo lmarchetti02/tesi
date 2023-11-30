@@ -9,34 +9,54 @@
 
 using std::cout;
 using std::endl;
-using std::map;
-using std::pair;
-using std::vector;
 
 namespace functions
 {
-    double sum(const vector<double> &data)
+    /**
+     * Template for getting the sum of all the elements inside an `std::vector`.
+     *
+     * @tparam T The type of the elements of the vector.
+     * @param[in] data The vector.
+     *
+     * @return The sum of the elements of the vector.
+     */
+    template <typename T>
+    T sum(std::vector<T> data)
     {
-        double sum = 0;
+        T result = 0;
 
         for (long int i = 0; i < (long int)data.size(); i++)
         {
-            sum += data.at(i);
+            result += data.at(i);
         }
 
-        return sum;
+        return result;
     }
 
-    double mean(const vector<double> &data)
+    /**
+     * Template for getting the mean of the elements in an `std::vector`.
+     *
+     * @tparam T The type of the elements of the vector.
+     * @param[in] data The vector.
+     *
+     * @return The mean of the elements of the vector.
+     */
+    template <typename T>
+    T mean(std::vector<T> data)
     {
-        double mean = 0;
+        T result = 0;
 
-        mean = sum(data) / data.size();
+        result = sum(data) / data.size();
 
-        return mean;
+        return result;
     }
 
-    void print_map(const map<int, double> &map)
+    /**
+     * Function for printing a (int, double) map.
+     *
+     * @param[in] map The map to be printed.
+     */
+    void print_map(std::map<int, double> map)
     {
         for (auto itr = map.begin(); itr != map.end(); itr++)
         {
@@ -44,7 +64,12 @@ namespace functions
         }
     }
 
-    void print_map(const map<int, array<double, 3>> &map)
+    /**
+     * Function for printing a (int, (double, double, double)) map.
+     *
+     * @param[in] map The map to be printed.
+     */
+    void print_map(std::map<int, std::array<double, 3>> map)
     {
         for (auto itr = map.begin(); itr != map.end(); itr++)
         {
@@ -53,7 +78,14 @@ namespace functions
         }
     }
 
-    void print_vector(const vector<double> &v)
+    /**
+     * Template for printing an `std::vector`.
+     *
+     * @tparam T the type of the element of the vector.
+     * @param[in] v
+     */
+    template <typename T>
+    void print_vector(std::vector<double> v)
     {
         cout << "[";
         for (double d : v)
@@ -63,13 +95,21 @@ namespace functions
         cout << "]" << endl;
     }
 
-    map<int, double> get_mean(const std::unique_ptr<map<int, vector<double>>> &inMap, const int N)
+    /**
+     * Function for getting the mean of the elements of the `std::vectors`
+     * inside an `std::map`.
+     *
+     * @param[in] Map The map containing the vectors.
+     *
+     * @return An (int, mean(vector)) map.
+     */
+    std::map<int, double> map_mean(std::map<int, std::vector<double>> Map, int N)
     {
-        map<int, double> result;
+        std::map<int, double> result;
 
-        for (auto itr = inMap->begin(); itr != inMap->end(); itr++)
+        for (auto itr = Map.begin(); itr != Map.end(); itr++)
         {
-            pair<int, double> p(itr->first, mean(itr->second));
+            std::pair<int, double> p(itr->first, mean(itr->second));
             result.insert(p);
         }
 
