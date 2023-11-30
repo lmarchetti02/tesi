@@ -36,14 +36,14 @@ namespace charge_sharing
     array<double, 2> sample(array<double, 2> center, double std)
     {
         const G4double X_MAX = MyDetectorConstruction::GetWorldDimensions()[0];
-        const G4double Y_MAX = MyDetectorConstruction::GetWorldDimensions()[0];
+        const G4double Y_MAX = MyDetectorConstruction::GetWorldDimensions()[1];
 
         // check for values outside the pixel array
         G4double x, y;
         do
         {
-            G4double x = G4RandGauss::shoot(center[0], std);
-            G4double y = G4RandGauss::shoot(center[1], std);
+            x = G4RandGauss::shoot(center[0], std);
+            y = G4RandGauss::shoot(center[1], std);
         } while (abs(x) >= X_MAX && abs(y) >= Y_MAX);
 
         array<double, 2> point = {x, y};

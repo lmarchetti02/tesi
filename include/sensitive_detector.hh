@@ -35,7 +35,4 @@ public:
     static void InitializeFirstHit();
     static void SetFirstHit(const G4ThreeVector &pos) { firstHit = pos; }
     static G4ThreeVector GetFirstHit() { return firstHit; }
-
-    static void SetPixelFirstHit(G4int ID) { pixelFirstHit = ID; }
-    static G4int GetPixelFirstHit() { return pixelFirstHit; }
 };

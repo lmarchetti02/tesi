@@ -5,7 +5,6 @@
 #include "G4SDManager.hh"
 
 G4ThreeVector MySensitiveDetector::firstHit = G4ThreeVector();
-G4int MySensitiveDetector::pixelFirstHit = G4int();
 
 /**
  * The constructor.
@@ -60,7 +59,6 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
 
         G4ThreeVector firstHit = G4ThreeVector(posPhoton[0], posPhoton[1], 0);
         SetFirstHit(firstHit);
-        SetPixelFirstHit(copyNo);
 
         ProcessHitsCounter++;
     }
