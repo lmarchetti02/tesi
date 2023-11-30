@@ -5,6 +5,8 @@
 #include <memory>
 #include <array>
 #include <fstream>
+#include <limits>
+#include <string>
 
 #include "TTree.h"
 #include "functions.hh"
@@ -12,16 +14,6 @@
 namespace data
 {
     double pixelSize = 50e-6;
-
-    void read_simulation_info()
-    {
-        std::fstream infoFile;
-
-        infoFile.open("../results/info.txt", std::ios::in);
-        if (infoFile.is_open())
-        {
-        }
-    }
 
     /**
      * Function for reading the "Hits" tree.
@@ -59,21 +51,25 @@ namespace data
     }
 
     /**
-     * Function for reconstructing
+     * Function for reconstructing the pixel array.
+     *
+     * @param[in] nPixel The number of pixels.
+     *
+     * @return A map with the ID of the pixel and an array with (x,y) of its center.
      */
-    std::map<int, std::array<double, 2>> reconstruct_grid(const int N)
+    std::map<int, std::array<double, 2>> reconstruct_grid(int nPixel)
     {
         const double STEP = pixelSize / 2;
-        const double DIM = STEP * N;
+        const double DIM = STEP * nPixel;
 
         std::map<int, std::array<double, 2>> result;
 
         // generate (x,y)
-        for (int i = 0; i < N; i++)
+        for (int i = 0; i < nPixel; i++)
         {
-            for (int j = 0; j < N; j++)
+            for (int j = 0; j < nPixel; j++)
             {
-                int ID = i * N + j;
+                int ID = i * nPixel + j;
                 double x = -DIM + (2 * j + 1) * STEP;
                 double y = -DIM + (2 * i + 1) * STEP;
                 std::array<double, 2> xy = {x, y};

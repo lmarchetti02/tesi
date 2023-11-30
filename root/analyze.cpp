@@ -39,8 +39,8 @@ void analyze(const char *fileName, const int nPixel)
 
     // GET AVERAGE ENERGY DEPOSITION PER PIXEL (NO CHARGE SHARING)
     // ************************************************************
-    map<int, double> hitsMap = data::read_hits(hitsTree, nPixel);
-    map<int, double> csMap = data::read_hits(csTree, nPixel);
+    map<int, double> hitsMap = data::read_hits_tree(hitsTree, nPixel);
+    map<int, double> csMap = data::read_hits_tree(csTree, nPixel);
     cout << "\nAVG ENERGY DEPOSITION PER PIXEL (NO CHARGE SHARING)" << endl;
     cout << "---------------------------------------------------" << endl;
     functions::print_map(hitsMap);
