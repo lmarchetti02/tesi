@@ -13,7 +13,37 @@
 
 namespace data
 {
-    double pixelSize = 50e-6;
+
+    /**
+     * Function for reading the info.txt file and extracting the
+     * pixel size from it.
+     *
+     * @return The pixel size in meters.
+     */
+    double get_pixel_size()
+    {
+        std::fstream infoFile;
+        double pixelSize = 0;
+
+        infoFile.open("results/info.txt", std::ios::in);
+        if (infoFile.is_open())
+        {
+            int counter = 0;
+            std::string line;
+            while (getline(infoFile, line))
+            {
+                if (counter >= 3 && counter < 4)
+                {
+                    std::string dim = line.substr(24, 4);
+                    pixelSize = std::stod(dim) * 1e-3;
+                }
+                counter++;
+            }
+        }
+        infoFile.close();
+
+        return pixelSize;
+    }
 
     /**
      * Function for reading the "Hits" tree.
@@ -59,7 +89,7 @@ namespace data
      */
     std::map<int, std::array<double, 2>> reconstruct_grid(int nPixel)
     {
-        const double STEP = pixelSize / 2;
+        const double STEP = get_pixel_size() / 2;
         const double DIM = STEP * nPixel;
 
         std::map<int, std::array<double, 2>> result;
