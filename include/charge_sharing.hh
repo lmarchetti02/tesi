@@ -85,7 +85,7 @@ namespace charge_sharing
      *
      * @return The vector containing the energy depositions after the charge sharing.
      */
-    vector<G4double> add_charge_sharing(const vector<G4double> &energyVector, G4int nParts)
+    vector<G4double> add_charge_sharing(vector<G4double> energyVector, G4int nParts)
     {
         G4int N = MyDetectorConstruction::GetNPixel();
         auto result = vector<G4double>(N * N, 0);

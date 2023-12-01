@@ -57,8 +57,10 @@ namespace data
     {
         int ID;
         double Energy;
+        int Event;
         Tree->SetBranchAddress("ID", &ID);
-        Tree->SetBranchAddress("eVector", &Energy);
+        Tree->SetBranchAddress("Energy", &Energy);
+        Tree->SetBranchAddress("Event", &Event);
 
         auto fMap = std::map<int, std::vector<double>>();
 
@@ -110,5 +112,31 @@ namespace data
         }
 
         return result;
+    }
+
+    /**
+     * Function for saving the results of the simulation in a file; in particular
+     * (xPixel, yPixel, Edep).
+     *
+     * @param[in] pixelMap The map containing the centers of the pixels.
+     * @param[in] hitsMap The map containing energy deposition of the pixels.
+     */
+    void save_results(std::map<int, std::array<double, 2>> pixelMap, std::map<int, double> hitsMap)
+    {
+        std::fstream dataFile;
+        dataFile.open("results/data.txt", std::ios::out);
+        if (dataFile.is_open())
+        {
+            dataFile << "RISULTATI DELLA SIMULAZIONE" << endl;
+            dataFile << "---------------------------" << endl;
+
+            unsigned long i = 0;
+            while (i < pixelMap.size())
+            {
+                dataFile << pixelMap[i][0] << "," << pixelMap[i][1] << "," << hitsMap[i] << endl;
+                i++;
+            }
+        }
+        dataFile.close();
     }
 }

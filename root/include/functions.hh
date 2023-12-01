@@ -56,12 +56,15 @@ namespace functions
      *
      * @param[in] map The map to be printed.
      */
-    void print_map(std::map<int, double> map)
+    void print_hits_map(std::map<int, double> map)
     {
+        cout << "\nAVG ENERGY DEPOSITION PER PIXEL\n";
+        cout << "-------------------------------\n";
         for (auto itr = map.begin(); itr != map.end(); itr++)
         {
             cout << itr->first << " : " << itr->second << endl;
         }
+        cout << "-------------------------------\n";
     }
 
     /**
