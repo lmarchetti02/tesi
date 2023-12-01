@@ -57,7 +57,4 @@ void analyze(const char *fileName, const int nPixel, const char *type = "")
     graph->Draw("surf1");
 
     data::save_results(pixelMap, hitsMap);
-
-    cin.get();
-    cout << "ciao\n";
 }
