@@ -18,13 +18,15 @@ MyRunAction::MyRunAction()
     // Ntuple for hits (no CS)
     man->CreateNtuple("Hits", "Hits");
     man->CreateNtupleIColumn("ID");
-    man->CreateNtupleDColumn("eVector");
+    man->CreateNtupleDColumn("Energy");
+    man->CreateNtupleIColumn("Event");
     man->FinishNtuple(0);
 
     // Ntuple for hits (with CS)
     man->CreateNtuple("CS", "CS");
     man->CreateNtupleIColumn("ID");
-    man->CreateNtupleDColumn("eVector");
+    man->CreateNtupleDColumn("Energy");
+    man->CreateNtupleIColumn("Event");
     man->FinishNtuple(1);
 
     // Ntuple for pixels

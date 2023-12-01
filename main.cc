@@ -41,12 +41,12 @@ int main(int argc, char **argv)
 	// START PROGRAM
 	// --------------------------------------------------------------------------------
 	// set number of pixels
-	G4int N;
-	while (N <= 0)
-	{
-		G4cout << "Number of pixels:" << G4endl;
-		G4cin >> N;
-	}
+	G4int N = 15;
+	// while (N <= 0)
+	// {
+	// 	G4cout << "Number of pixels:" << G4endl;
+	// 	G4cin >> N;
+	// }
 	MyDetectorConstruction::SetNPixel(N);
 
 	auto *uiManager = G4UImanager::GetUIpointer();

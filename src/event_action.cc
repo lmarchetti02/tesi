@@ -40,6 +40,8 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
  */
 void MyEventAction::EndOfEventAction(const G4Event *Event)
 {
+    G4cout << "Event ID: " << Event->GetEventID() << G4endl;
+
     readHitsCollection(Event);
 
     G4AnalysisManager *man = G4AnalysisManager::Instance();
@@ -50,6 +52,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
         {
             man->FillNtupleIColumn(0, 0, i);
             man->FillNtupleDColumn(0, 1, energyVector[i]);
+            man->FillNtupleIColumn(0, 2, Event->GetEventID());
             man->AddNtupleRow(0);
         }
     }
@@ -65,6 +68,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
         {
             man->FillNtupleIColumn(1, 0, i);
             man->FillNtupleDColumn(1, 1, energyVector[i]);
+            man->FillNtupleIColumn(1, 2, Event->GetEventID());
             man->AddNtupleRow(1);
         }
     }
