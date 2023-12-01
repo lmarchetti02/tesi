@@ -30,9 +30,11 @@ MyRunAction::MyRunAction()
     man->FinishNtuple(1);
 
     // Ntuple for pixels
-    man->CreateNtuple("First Hit", "First Hit");
-    man->CreateNtupleDColumn("x");
-    man->CreateNtupleDColumn("y");
+    man->CreateNtuple("Info", "Info");
+    man->CreateNtupleIColumn("Pixel N");
+    man->CreateNtupleDColumn("Pixels x-dim");
+    man->CreateNtupleDColumn("Pixels y-dim");
+    man->CreateNtupleDColumn("Pixels z-dim");
     man->FinishNtuple(2);
 }
 

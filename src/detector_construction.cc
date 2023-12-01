@@ -6,7 +6,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UImanager.hh"
 #include "G4SDManager.hh"
-#include "G4AnalysisManager.hh"
 
 #include <fstream>
 
@@ -56,23 +55,9 @@ void MyDetectorConstruction::DefineMaterials()
  */
 G4VPhysicalVolume *MyDetectorConstruction::Construct()
 {
-    // construct volumes
+    // generate volume
     ConstructWorld();
     ConstructPixels();
-
-    // save info about the detector in text file
-    std::fstream outFile;
-    outFile.open("../root/results/info.txt", std::ios::out);
-    if (outFile.is_open())
-    {
-        outFile << "INFORMATION ABOUT SIMULATION" << endl;
-        outFile << "----------------------------" << endl;
-        outFile << "Number of pixels per side: " << nPixel << endl;
-        outFile << "Pixel x-dimension (mm): " << 2 * xPixel << endl;
-        outFile << "Pixel y-dimension (mm): " << 2 * yPixel << endl;
-        outFile << "Pixel z-dimension (mm): " << 2 * zPixel << endl;
-    }
-    outFile.close();
 
     return physWorld;
 }

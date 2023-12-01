@@ -30,6 +30,17 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
 {
     G4int nPixel = MyDetectorConstruction::GetNPixel();
     energyVector = vector<G4double>(nPixel * nPixel, 0.);
+
+    // save info about the simulation
+    if (Event->GetEventID() == 0)
+    {
+        G4AnalysisManager *man = G4AnalysisManager::Instance();
+        man->FillNtupleIColumn(2, 0, MyDetectorConstruction::GetNPixel());
+        man->FillNtupleDColumn(2, 1, MyDetectorConstruction::GetPixelDimensions()[1]);
+        man->FillNtupleDColumn(2, 2, MyDetectorConstruction::GetPixelDimensions()[2]);
+        man->FillNtupleDColumn(2, 3, MyDetectorConstruction::GetPixelDimensions()[3]);
+        man->AddNtupleRow(2);
+    }
 }
 
 /**
@@ -40,8 +51,6 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
  */
 void MyEventAction::EndOfEventAction(const G4Event *Event)
 {
-    G4cout << "Event ID: " << Event->GetEventID() << G4endl;
-
     readHitsCollection(Event);
 
     G4AnalysisManager *man = G4AnalysisManager::Instance();
@@ -57,26 +66,33 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
         }
     }
 
-    // add charge sharing
-    G4int nPixel = MyDetectorConstruction::GetNPixel();
-    energyVector = charge_sharing::add_charge_sharing(energyVector, nPixel * 10);
-
-    // save energy depositions
-    for (int i = 0; i < energyVector.size(); i++)
+    // vector isn't empty (photon has interacted)
+    if (!IsVectorEmpty(energyVector))
     {
-        if (energyVector[i] != 0)
+        // add charge sharing
+        G4int nPixel = MyDetectorConstruction::GetNPixel();
+        energyVector = charge_sharing::add_charge_sharing(energyVector, nPixel * 10);
+
+        // save energy depositions
+        for (int i = 0; i < energyVector.size(); i++)
         {
-            man->FillNtupleIColumn(1, 0, i);
-            man->FillNtupleDColumn(1, 1, energyVector[i]);
-            man->FillNtupleIColumn(1, 2, Event->GetEventID());
-            man->AddNtupleRow(1);
+            if (energyVector[i] != 0)
+            {
+                man->FillNtupleIColumn(1, 0, i);
+                man->FillNtupleDColumn(1, 1, energyVector[i]);
+                man->FillNtupleIColumn(1, 2, Event->GetEventID());
+                man->AddNtupleRow(1);
+            }
         }
+
+        return;
     }
 
-    // save first hit
-    man->FillNtupleDColumn(2, 0, MySensitiveDetector::GetFirstHit()[0]);
-    man->FillNtupleDColumn(2, 1, MySensitiveDetector::GetFirstHit()[1]);
-    man->AddNtupleRow(2);
+    // vector is empty (photon hasn't interact)
+    man->FillNtupleIColumn(1, 0, -1);
+    man->FillNtupleDColumn(1, 1, 0);
+    man->FillNtupleIColumn(1, 2, Event->GetEventID());
+    man->AddNtupleRow(1);
 }
 
 /**
@@ -122,7 +138,7 @@ void MyEventAction::readHitsCollection(const G4Event *Event)
  * @tparam T the type of the elements inside the vector.
  */
 template <typename T>
-T MyEventAction::VectorSum(const std::vector<T> &vector)
+T MyEventAction::VectorSum(std::vector<T> vector)
 {
     T sum = 0;
 
@@ -132,4 +148,23 @@ T MyEventAction::VectorSum(const std::vector<T> &vector)
     }
 
     return sum;
+}
+
+/**
+ * Static template for checking if a vector has only zero values.
+ *
+ * @tparam T The type of the elements in the vector.
+ *
+ * @return `true` if the vector only contains 0, `false` otherwise.
+ */
+template <typename T>
+bool MyEventAction::IsVectorEmpty(std::vector<T> vector)
+{
+    for (T element : vector)
+    {
+        if (element != 0)
+            return false;
+    }
+
+    return true;
 }

@@ -35,5 +35,8 @@ public:
     void readHitsCollection(const G4Event *);
 
     template <typename T>
-    static T VectorSum(const std::vector<T> &);
+    static T VectorSum(std::vector<T>);
+
+    template <typename T>
+    static bool IsVectorEmpty(std::vector<T>);
 };
