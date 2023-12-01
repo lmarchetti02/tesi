@@ -47,7 +47,7 @@ void analyze(const char *fileName, const int nPixel)
 
     cout << "\nAVG ENERGY DEPOSITION PER PIXEL (WITH CHARGE SHARING)" << endl;
     cout << "-----------------------------------------------------" << endl;
-    functions::print_map(hitsMap);
+    functions::print_map(csMap);
     // ************************************************************
 
     // close file
@@ -64,7 +64,7 @@ void analyze(const char *fileName, const int nPixel)
 
     for (int i = 0; i < nPixel * nPixel; i++)
     {
-        graph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], csMap[i]);
+        graph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], hitsMap[i]);
     }
 
     gStyle->SetPalette(1);
