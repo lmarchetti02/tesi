@@ -1,4 +1,4 @@
-#include "event.hh"
+#include "event_action.hh"
 
 #include "hits.hh"
 #include "detector_construction.hh"

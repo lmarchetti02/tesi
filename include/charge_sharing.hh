@@ -12,7 +12,7 @@
 
 #include "detector_construction.hh"
 #include "sensitive_detector.hh"
-#include "event.hh"
+#include "event_action.hh"
 
 using std::array;
 using std::map;

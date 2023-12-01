@@ -2,7 +2,7 @@
 
 #include "generator.hh"
 #include "run_action.hh"
-#include "event.hh"
+#include "event_action.hh"
 
 /**
  * The default constructor.
