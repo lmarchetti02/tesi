@@ -7,91 +7,63 @@
 #include <fstream>
 #include <limits>
 #include <string>
+#include <tuple>
 
 #include "TTree.h"
+
 #include "functions.hh"
 
 namespace data
 {
-
-    /**
-     * Function for reading the info.txt file and extracting the
-     * pixel size from it.
-     *
-     * @return The pixel size in meters.
-     */
-    double get_pixel_size()
-    {
-        std::fstream infoFile;
-        double pixelSize = 0;
-
-        infoFile.open("results/info.txt", std::ios::in);
-        if (infoFile.is_open())
-        {
-            int counter = 0;
-            std::string line;
-            while (getline(infoFile, line))
-            {
-                if (counter >= 3 && counter < 4)
-                {
-                    std::string dim = line.substr(24, 4);
-                    pixelSize = std::stod(dim) * 1e-3;
-                }
-                counter++;
-            }
-        }
-        infoFile.close();
-
-        return pixelSize;
-    }
-
     /**
      * Function for reading the "Hits" tree.
      *
      * @param[in] tree The pointer to the TTree where the hits are stored.
-     * @param[in] N The number of pixel per side of the detector.
+     * @param[in] nPixel The number of pixel per side of the detector.
      *
      * @result An `std::map` with { detectorID, mean(energyDep) }.
      */
-    std::map<int, double> read_hits_tree(TTree *Tree, int nPixel)
+    std::map<int, double> read_hits_tree(TTree *Tree, int nPixel, bool mean = true)
     {
         int ID;
         double Energy;
-        int Event;
+        long int Event;
         Tree->SetBranchAddress("ID", &ID);
         Tree->SetBranchAddress("Energy", &Energy);
         Tree->SetBranchAddress("Event", &Event);
 
-        auto fMap = std::map<int, std::vector<double>>();
+        auto outMap = std::map<int, std::vector<double>>();
 
+        long int counter = 0;
         for (long int i = 0; i < (long int)Tree->GetEntries(); i++)
         {
             Tree->GetEntry(i);
 
-            if (fMap.count(ID) != 1)
+            if (counter == Event)
             {
-                auto v = std::vector<double>(1, Energy);
-
+                std::vector<double> v = {Energy};
                 std::pair<int, std::vector<double>> p(ID, v);
-                fMap.insert(p);
+
+                outMap.insert(p);
             }
-            else
-                fMap.at(ID).push_back(Energy);
+
+            counter = Event;
         }
 
-        return functions::map_mean(fMap, nPixel);
+        return functions::map_mean(outMap, nPixel);
     }
 
     /**
      * Function for reconstructing the pixel array.
      *
      * @param[in] nPixel The number of pixels.
+     * @param[in] dimPixel The dimensions of the pixel.
      *
      * @return A map with the ID of the pixel and an array with (x,y) of its center.
      */
-    std::map<int, std::array<double, 2>> reconstruct_grid(int nPixel)
+    std::map<int, std::array<double, 2>> reconstruct_grid(int nPixel, double dimPixel)
     {
-        const double STEP = get_pixel_size() / 2;
+        const double STEP = dimPixel / 2;
         const double DIM = STEP * nPixel;
 
         std::map<int, std::array<double, 2>> result;

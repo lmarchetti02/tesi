@@ -25,6 +25,9 @@ private:
     // hits map
     std::vector<G4double> energyVector;
 
+    // number of events
+    static G4int nEvents;
+
 public:
     MyEventAction(MyRunAction *);
     virtual ~MyEventAction() {}
@@ -39,4 +42,7 @@ public:
 
     template <typename T>
     static bool IsVectorEmpty(std::vector<T>);
+
+    static void SetNEvents(G4int N);
+    static G4int GetNEvents();
 };

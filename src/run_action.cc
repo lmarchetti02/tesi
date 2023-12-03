@@ -3,6 +3,7 @@
 #include "G4AnalysisManager.hh"
 
 #include "detector_construction.hh"
+#include "event_action.hh"
 
 /**
  * The default constructor.
@@ -29,12 +30,13 @@ MyRunAction::MyRunAction()
     man->CreateNtupleIColumn("Event");
     man->FinishNtuple(1);
 
-    // Ntuple for pixels
+    // Ntuple for info
     man->CreateNtuple("Info", "Info");
     man->CreateNtupleIColumn("Pixel N");
     man->CreateNtupleDColumn("Pixels x-dim");
     man->CreateNtupleDColumn("Pixels y-dim");
     man->CreateNtupleDColumn("Pixels z-dim");
+    man->CreateNtupleIColumn("Event N");
     man->FinishNtuple(2);
 }
 
@@ -51,6 +53,9 @@ void MyRunAction::BeginOfRunAction(const G4Run *run)
 
     G4String runNumber = to_string(run->GetRunID());
     man->OpenFile("../root/results/output" + runNumber + ".root");
+
+    // get total number of events
+    MyEventAction::SetNEvents(run->GetNumberOfEventToBeProcessed());
 }
 
 /**
@@ -66,4 +71,7 @@ void MyRunAction::EndOfRunAction(const G4Run *run)
 
     man->Write();
     man->CloseFile();
+
+    // reset number of events
+    MyEventAction::SetNEvents(0);
 }

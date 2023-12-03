@@ -9,16 +9,14 @@
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 
+G4int MyEventAction::nEvents = 0;
+
 /**
  * The constructor.
  *
  * @param[in] run Not used
  */
-MyEventAction::MyEventAction(MyRunAction *run)
-{
-    // index of HC
-    index = -1;
-}
+MyEventAction::MyEventAction(MyRunAction *run) : index(-1) {}
 
 /**
  * Geant4 function called at the beginning of the event.
@@ -39,6 +37,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
         man->FillNtupleDColumn(2, 1, MyDetectorConstruction::GetPixelDimensions()[1]);
         man->FillNtupleDColumn(2, 2, MyDetectorConstruction::GetPixelDimensions()[2]);
         man->FillNtupleDColumn(2, 3, MyDetectorConstruction::GetPixelDimensions()[3]);
+        man->FillNtupleIColumn(2, 4, MyEventAction::GetNEvents());
         man->AddNtupleRow(2);
     }
 }
@@ -130,6 +129,28 @@ void MyEventAction::readHitsCollection(const G4Event *Event)
             energyVector[stepData.first] += stepData.second;
         }
     }
+}
+
+/**
+ * Static function for setting the static variable `nEvents`,
+ * which represents the number of events processed in the run.
+ *
+ * @param[in] N The number of events.
+ */
+void MyEventAction::SetNEvents(G4int N)
+{
+    nEvents = N;
+}
+
+/**
+ * Static function for getting the static variable `nEvents`,
+ * which represents the number of events processed in the run.
+ *
+ * @return The number of events.
+ */
+G4int MyEventAction::GetNEvents()
+{
+    return nEvents;
 }
 
 /**
