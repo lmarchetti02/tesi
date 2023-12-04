@@ -23,7 +23,7 @@ namespace data
      * @param[in] nPixel The number of pixel per side of the detector.
      * @param[in] EventN The event number.
      *
-     * @result An `std::map` with { detectorID, mean(energyDep) }.
+     * @result An `std::map` with { detectorID, energyDep }.
      */
     std::map<int, double> read_hits_tree(TTree *Tree, int nPixel, int EventN)
     {
