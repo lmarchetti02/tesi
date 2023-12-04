@@ -53,7 +53,7 @@ void analyze(const char *fileName, const char *type = "")
     SimulationInfo si = get_simulation_info(infoTree);
 
     // get hits from tree
-    std::map<int, double> hitsMap = data::read_hits_tree(hitsTree, si.nPixel, si.nEvents);
+    std::map<int, double> hitsMap = data::read_hits_tree(hitsTree, si.nPixel, 0);
     functions::print_hits_map(hitsMap);
 
     // close file
