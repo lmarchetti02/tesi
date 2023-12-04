@@ -23,9 +23,9 @@ private:
 
 public:
     MyPrimaryGenerator();
-    ~MyPrimaryGenerator();
+    ~MyPrimaryGenerator() override;
 
-    virtual void GeneratePrimaries(G4Event *);
+    void GeneratePrimaries(G4Event *) override;
 
     G4ThreeVector randomDirVector(G4double);
 

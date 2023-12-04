@@ -46,13 +46,13 @@ private:
     G4Material *worldMat, *detectorMat;
     void DefineMaterials();
 
-    virtual void ConstructSDandField();
+    void ConstructSDandField() override;
 
 public:
     MyDetectorConstruction();
-    virtual ~MyDetectorConstruction() {}
+    ~MyDetectorConstruction() override = default;
 
-    virtual G4VPhysicalVolume *Construct();
+    G4VPhysicalVolume *Construct() override;
     void ConstructWorld();
     void ConstructPixels();
 

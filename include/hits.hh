@@ -21,7 +21,7 @@ class MyHit : public G4VHit
 {
 public:
     MyHit();
-    ~MyHit();
+    ~MyHit() override = default;
     MyHit(const MyHit &);
 
     const MyHit &operator=(const MyHit &);

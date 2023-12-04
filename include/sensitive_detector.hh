@@ -19,20 +19,14 @@ private:
     MyHitsCollection *hitsCollection;
     G4int HCID;
 
-    G4int ProcessHitsCounter;
     static G4ThreeVector firstHit;
     static G4int pixelFirstHit;
 
 public:
     MySensitiveDetector(G4String);
-    virtual ~MySensitiveDetector() {}
+    ~MySensitiveDetector() override = default;
 
-    virtual void Initialize(G4HCofThisEvent *);
-    virtual G4bool ProcessHits(G4Step *, G4TouchableHistory *);
-    virtual void EndOfEvent(G4HCofThisEvent *);
-
-    //! @todo SERVE??
-    static void InitializeFirstHit();
-    static void SetFirstHit(const G4ThreeVector &pos) { firstHit = pos; }
-    static G4ThreeVector GetFirstHit() { return firstHit; }
+    void Initialize(G4HCofThisEvent *) override;
+    G4bool ProcessHits(G4Step *, G4TouchableHistory *) override;
+    void EndOfEvent(G4HCofThisEvent *) override;
 };

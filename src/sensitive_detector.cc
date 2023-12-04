@@ -24,10 +24,6 @@ MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(n
  */
 void MySensitiveDetector::Initialize(G4HCofThisEvent *HCE)
 {
-    ProcessHitsCounter = 0;
-
-    InitializeFirstHit();
-
     hitsCollection = new MyHitsCollection(SensitiveDetectorName, collectionName[0]);
 
     if (HCID < 0)
@@ -50,18 +46,6 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
     // get the id of the detector that interacted w/ photon
     const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
     G4int copyNo = touchable->GetCopyNumber();
-
-    // update firstHit vector and pixel
-    if (ProcessHitsCounter == 0)
-    {
-        G4StepPoint *preStepPoint = aStep->GetPreStepPoint();
-        G4ThreeVector posPhoton = preStepPoint->GetPosition();
-
-        G4ThreeVector firstHit = G4ThreeVector(posPhoton[0], posPhoton[1], 0);
-        SetFirstHit(firstHit);
-
-        ProcessHitsCounter++;
-    }
 
     // energy deposition of the step
     G4double eDep = aStep->GetTotalEnergyDeposit();
@@ -89,12 +73,4 @@ void MySensitiveDetector::EndOfEvent(G4HCofThisEvent *HCE)
         HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
     }
     HCE->AddHitsCollection(HCID, hitsCollection);
-}
-
-/**
- * @todo SERVE?
- */
-void MySensitiveDetector::InitializeFirstHit()
-{
-    firstHit = G4ThreeVector();
 }

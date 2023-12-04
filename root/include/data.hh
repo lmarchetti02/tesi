@@ -20,34 +20,32 @@ namespace data
      *
      * @param[in] tree The pointer to the TTree where the hits are stored.
      * @param[in] nPixel The number of pixel per side of the detector.
+     * @param[in] nEvents The total number of events.
      *
      * @result An `std::map` with { detectorID, mean(energyDep) }.
      */
-    std::map<int, double> read_hits_tree(TTree *Tree, int nPixel, bool mean = true)
+    std::map<int, double> read_hits_tree(TTree *Tree, int nPixel, int nEvents)
     {
         int ID;
         double Energy;
-        long int Event;
+        int Event;
         Tree->SetBranchAddress("ID", &ID);
         Tree->SetBranchAddress("Energy", &Energy);
         Tree->SetBranchAddress("Event", &Event);
 
+        // initialize map
         auto outMap = std::map<int, std::vector<double>>();
+        for (int i = 0; i < nPixel * nPixel; i++)
+        {
+            auto v = std::vector<double>(nEvents, 0);
+            outMap.insert(std::make_pair(i, v));
+        }
 
-        long int counter = 0;
         for (long int i = 0; i < (long int)Tree->GetEntries(); i++)
         {
             Tree->GetEntry(i);
 
-            if (counter == Event)
-            {
-                std::vector<double> v = {Energy};
-                std::pair<int, std::vector<double>> p(ID, v);
-
-                outMap.insert(p);
-            }
-
-            counter = Event;
+            outMap.at(ID)[Event] += Energy;
         }
 
         return functions::map_mean(outMap, nPixel);

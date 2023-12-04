@@ -10,8 +10,6 @@ MyHit::MyHit()
     detectorID = 0;
 }
 
-MyHit::~MyHit() {}
-
 /**
  * The copy constructor.
  */

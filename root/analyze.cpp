@@ -40,7 +40,6 @@ SimulationInfo get_simulation_info(TTree *);
 
 void analyze(const char *fileName, const char *type = "")
 {
-
     TFile *resultsFile = new TFile(fileName, "READ");
 
     // get trees
@@ -54,7 +53,7 @@ void analyze(const char *fileName, const char *type = "")
     SimulationInfo si = get_simulation_info(infoTree);
 
     // get hits from tree
-    std::map<int, double> hitsMap = data::read_hits_tree(hitsTree, si.nPixel);
+    std::map<int, double> hitsMap = data::read_hits_tree(hitsTree, si.nPixel, si.nEvents);
     functions::print_hits_map(hitsMap);
 
     // close file
@@ -93,7 +92,7 @@ SimulationInfo get_simulation_info(TTree *Tree)
     double xPixel;
     double yPixel;
     double zPixel;
-    long int nEvents;
+    int nEvents;
 
     Tree->SetBranchAddress("Pixel N", &nPixel);
     Tree->SetBranchAddress("Pixels x-dim", &xPixel);

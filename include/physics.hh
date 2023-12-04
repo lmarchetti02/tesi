@@ -13,7 +13,7 @@ class MyPhysicsList : public G4VModularPhysicsList
 {
 public:
     explicit MyPhysicsList();
-    ~MyPhysicsList();
+    ~MyPhysicsList() override;
 
     void ConstructParticle() override;
     void ConstructProcess() override;

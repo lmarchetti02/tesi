@@ -34,9 +34,9 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
     {
         G4AnalysisManager *man = G4AnalysisManager::Instance();
         man->FillNtupleIColumn(2, 0, MyDetectorConstruction::GetNPixel());
-        man->FillNtupleDColumn(2, 1, MyDetectorConstruction::GetPixelDimensions()[1]);
-        man->FillNtupleDColumn(2, 2, MyDetectorConstruction::GetPixelDimensions()[2]);
-        man->FillNtupleDColumn(2, 3, MyDetectorConstruction::GetPixelDimensions()[3]);
+        man->FillNtupleDColumn(2, 1, MyDetectorConstruction::GetPixelDimensions()[0]);
+        man->FillNtupleDColumn(2, 2, MyDetectorConstruction::GetPixelDimensions()[1]);
+        man->FillNtupleDColumn(2, 3, MyDetectorConstruction::GetPixelDimensions()[2]);
         man->FillNtupleIColumn(2, 4, MyEventAction::GetNEvents());
         man->AddNtupleRow(2);
     }

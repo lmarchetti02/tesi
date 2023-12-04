@@ -30,10 +30,10 @@ private:
 
 public:
     MyEventAction(MyRunAction *);
-    virtual ~MyEventAction() {}
+    ~MyEventAction() override = default;
 
-    virtual void BeginOfEventAction(const G4Event *);
-    virtual void EndOfEventAction(const G4Event *);
+    void BeginOfEventAction(const G4Event *) override;
+    void EndOfEventAction(const G4Event *) override;
 
     void readHitsCollection(const G4Event *);
 

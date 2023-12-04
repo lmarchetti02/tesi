@@ -13,8 +13,8 @@ class MyActionInitialization : public G4VUserActionInitialization
 {
 public:
     MyActionInitialization();
-    virtual ~MyActionInitialization() {}
+    ~MyActionInitialization() override = default;
 
-    virtual void Build() const;
-    virtual void BuildForMaster() const;
+    void Build() const override;
+    void BuildForMaster() const override;
 };
