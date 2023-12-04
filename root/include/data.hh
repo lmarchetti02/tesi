@@ -49,14 +49,6 @@ namespace data
                 outMap[ID] = Energy;
             }
         }
-
-        for (auto &e : outMap)
-        {
-            cout << e.first << " : " << e.second;
-            cout << "\n";
-        }
-
-        return outMap;
     }
 
     /**
