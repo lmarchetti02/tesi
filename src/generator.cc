@@ -50,9 +50,9 @@ MyPrimaryGenerator::~MyPrimaryGenerator()
  */
 void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
-    G4ThreeVector momDir = randomDirVector(maxTheta);
-    fParticleGun->SetParticleMomentumDirection(momDir);
-    fParticleGun->SetParticleMomentum(momentum);
+    // G4ThreeVector momDir = randomDirVector(maxTheta);
+    // fParticleGun->SetParticleMomentumDirection(momDir);
+    // fParticleGun->SetParticleMomentum(momentum);
 
     // generate primary vertex
     fParticleGun->GeneratePrimaryVertex(anEvent);
