@@ -38,23 +38,25 @@ struct SimulationInfo
 
 SimulationInfo get_simulation_info(TTree *);
 
-void analyze(const char *fileName, const char *type = "")
+void analyze_3d(const char *fileName)
 {
     TFile *resultsFile = new TFile(fileName, "READ");
 
     // get trees
-    TTree *hitsTree, *infoTree;
-    if (strcmp(type, "-ncs") == 0)
-        hitsTree = static_cast<TTree *>(resultsFile->Get("Hits"));
-    hitsTree = static_cast<TTree *>(resultsFile->Get("CS"));
+    TTree *hitsTree, *csTree, *infoTree;
+    hitsTree = static_cast<TTree *>(resultsFile->Get("Hits"));
+    csTree = static_cast<TTree *>(resultsFile->Get("CS"));
     infoTree = static_cast<TTree *>(resultsFile->Get("Info"));
 
     // get info about the simulation
     SimulationInfo si = get_simulation_info(infoTree);
 
     // get hits from tree
-    std::map<int, double> hitsMap = data::read_hits_tree(hitsTree, si.nPixel, 0);
+    std::map<int, double> hitsMap = data::read_hits_tree_full(hitsTree, si.nPixel);
     functions::print_hits_map(hitsMap);
+
+    std::map<int, double> csMap = data::read_hits_tree_full(csTree, si.nPixel);
+    functions::print_hits_map(csMap);
 
     // close file
     resultsFile->Close();
@@ -64,16 +66,26 @@ void analyze(const char *fileName, const char *type = "")
     // get (x,y) of pixels center
     std::map<int, std::array<double, 2>> pixelMap = data::reconstruct_grid(si.nPixel, si.xPixel);
 
-    TCanvas *c = new TCanvas("c", "c", 800, 600);
-    TGraph2D *graph = new TGraph2D();
+    TCanvas *histCanvas = new TCanvas("hitsCanvas", "Energy Deposition (No Charge Sharing)", 800, 600);
+    TCanvas *csCanvas = new TCanvas("csCanvas", "Energy Deposition (Charge Sharing)", 800, 600);
+    TGraph2D *hitsGraph = new TGraph2D();
+    TGraph2D *csGraph = new TGraph2D();
 
     for (int i = 0; i < si.nPixel * si.nPixel; i++)
     {
-        graph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], hitsMap[i]);
+        hitsGraph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], hitsMap[i]);
+    }
+    for (int i = 0; i < si.nPixel * si.nPixel; i++)
+    {
+        csGraph->SetPoint(i, pixelMap[i][0], pixelMap[i][1], csMap[i]);
     }
 
     gStyle->SetPalette(1);
-    graph->Draw("surf1");
+    histCanvas->cd();
+    hitsGraph->Draw("surf1");
+
+    csCanvas->cd();
+    csGraph->Draw("surf1");
 
     data::save_results(pixelMap, hitsMap);
 }

@@ -103,6 +103,7 @@ namespace functions
      * inside an `std::map`.
      *
      * @param[in] Map The map containing the vectors.
+     * @param[in] N The number of pixels.
      *
      * @return An (int, mean(vector)) map.
      */

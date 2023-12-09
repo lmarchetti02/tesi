@@ -17,7 +17,7 @@ namespace data
 {
 
     /**
-     * Function for reading the "Hits" tree.
+     * Function for reading the "Hits" tree for a single event.
      *
      * @param[in] tree The pointer to the TTree where the hits are stored.
      * @param[in] nPixel The number of pixel per side of the detector.
@@ -25,7 +25,7 @@ namespace data
      *
      * @result An `std::map` with { detectorID, energyDep }.
      */
-    std::map<int, double> read_hits_tree(TTree *Tree, int nPixel, int EventN)
+    std::map<int, double> read_hits_tree_single(TTree *Tree, int nPixel, int EventN)
     {
         int ID;
         double Energy;
@@ -54,15 +54,14 @@ namespace data
     }
 
     /**
-     * Function for reading the "Hits" tree.
+     * Function for reading the full "Hits" tree.
      *
      * @param[in] tree The pointer to the TTree where the hits are stored.
      * @param[in] nPixel The number of pixel per side of the detector.
-     * @param[in] EventN The event number.
      *
-     * @result An `std::map` with { detectorID, energyDep }.
+     * @result An `std::map` with { detectorID, mean(energyDep) }.
      */
-    std::map<int, std::vector<double>> read_hits_tree_2(TTree *Tree, int nPixel, int EventN)
+    std::map<int, double> read_hits_tree_full(TTree *Tree, int nPixel)
     {
         int ID;
         double Energy;
@@ -91,7 +90,7 @@ namespace data
             }
         }
 
-        return outMap;
+        return functions::map_mean(outMap, nPixel);
     }
 
     /**
