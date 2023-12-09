@@ -49,6 +49,49 @@ namespace data
                 outMap[ID] = Energy;
             }
         }
+
+        return outMap;
+    }
+
+    /**
+     * Function for reading the "Hits" tree.
+     *
+     * @param[in] tree The pointer to the TTree where the hits are stored.
+     * @param[in] nPixel The number of pixel per side of the detector.
+     * @param[in] EventN The event number.
+     *
+     * @result An `std::map` with { detectorID, energyDep }.
+     */
+    std::map<int, std::vector<double>> read_hits_tree_2(TTree *Tree, int nPixel, int EventN)
+    {
+        int ID;
+        double Energy;
+        int Event;
+        Tree->SetBranchAddress("ID", &ID);
+        Tree->SetBranchAddress("Energy", &Energy);
+        Tree->SetBranchAddress("Event", &Event);
+
+        auto outMap = std::map<int, std::vector<double>>();
+        for (int i = 0; i < nPixel * nPixel; i++)
+        {
+            auto v = std::vector<double>();
+            outMap.insert(std::make_pair(i, v));
+        }
+
+        for (auto &elm : outMap)
+        {
+            for (int i = 0; i < Tree->GetEntries(); i++)
+            {
+                Tree->GetEntry(i);
+
+                if (Event == elm.first)
+                {
+                    elm.second.push_back(Energy);
+                }
+            }
+        }
+
+        return outMap;
     }
 
     /**
@@ -110,51 +153,3 @@ namespace data
         dataFile.close();
     }
 }
-
-/**
- * Function for reading the "Hits" tree.
- *
- * @param[in] tree The pointer to the TTree where the hits are stored.
- * @param[in] nPixel The number of pixel per side of the detector.
- * @param[in] nEvents The total number of events.
- *
- * @result An `std::map` with { detectorID, mean(energyDep) }.
- */
-// std::map<int, double> read_hits_tree(TTree *Tree, int nPixel, int nEvents)
-// {
-//     int ID;
-//     double Energy;
-//     int Event;
-//     Tree->SetBranchAddress("ID", &ID);
-//     Tree->SetBranchAddress("Energy", &Energy);
-//     Tree->SetBranchAddress("Event", &Event);
-
-//     // initialize map
-//     auto outMap = std::map<int, std::vector<double>>();
-//     for (int i = 0; i < nPixel * nPixel; i++)
-//     {
-//         auto v = std::vector<double>(nEvents, 0);
-//         outMap.insert(std::make_pair(i, v));
-//         v.clear();
-//     }
-
-//     for (int i = 0; i < Tree->GetEntries(); i++)
-//     {
-//         Tree->GetEntry(i);
-//         outMap[ID][Event] = Energy;
-
-//         // cout << ID << " " << Energy << " " << Event << endl;
-//     }
-
-//     // for (auto &e : outMap)
-//     // {
-//     //     cout << e.first << " : ";
-//     //     for (double d : e.second)
-//     //     {
-//     //         cout << d << " ";
-//     //     }
-//     //     cout << "\n";
-//     // }
-
-//     return functions::map_mean(outMap, nPixel);
-// }
