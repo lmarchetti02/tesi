@@ -64,7 +64,7 @@ public:
 
     static void setVisualization();
 
-    static void AddToPixelMap(const std::pair<G4int, std::array<G4double, 2>> &);
+    static void AddToPixelMap(std::pair<G4int, std::array<G4double, 2>>);
     static std::map<G4int, std::array<G4double, 2>> GetPixelMap();
     static void PrintPixelMap();
 };

@@ -228,7 +228,7 @@ void MyDetectorConstruction::PrintPixelMap()
  *
  * @param[in] newElement Reference to the `std::pair` containing the ID of the pixel and the coordinates of its center.
  */
-void MyDetectorConstruction::AddToPixelMap(const std::pair<G4int, std::array<G4double, 2>> &newElement)
+void MyDetectorConstruction::AddToPixelMap(std::pair<G4int, std::array<G4double, 2>> newElement)
 {
     pixelMap.insert(newElement);
 }

@@ -35,11 +35,30 @@ private:
     G4int detectorID;
 
 public:
-    void SetEnergy(G4double);
-    void SetID(G4int ID);
-
-    G4double GetEnergy();
-    G4int GetID();
+    /**
+     * Function for setting the `energyDep` data member.
+     *
+     * @param[in] eDep The energy deposition of the hit.
+     */
+    void SetEnergy(G4double eDep) { energyDep = eDep; }
+    /**
+     * Function for setting the `detectorID` data member.
+     *
+     * @param[in] IS The detector ID of the hit.
+     */
+    void SetID(G4int ID) { detectorID = ID; }
+    /**
+     * Function for accessing the `energyDep` data member.
+     *
+     * @return The energy deposition of the hit.
+     */
+    G4double GetEnergy() { return energyDep; }
+    /**
+     * Function for accessing the `detectorID` data member.
+     *
+     * @return The detector ID of the hit.
+     */
+    G4int GetID() { return detectorID; }
 };
 
 // Alias of the HitsCollection
