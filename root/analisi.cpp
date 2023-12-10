@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 #include "TH1F.h"
 #include "TCanvas.h"
@@ -9,13 +10,11 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-const char rootfilename[] = "./output0_8thread.root";
-
 TH1F *evn_vs_entry_t1;
 TH1F *evn_vs_entry_t2;
 TCanvas *c1;
 
-int ana_g4_2()
+int analisi(const char *rootfilename)
 {
   TFile *ff = new TFile(rootfilename, "r");
   if (ff == NULL)
@@ -74,7 +73,7 @@ int ana_g4_2()
   cout << "z-dim = " << pix_size[2] << endl;
   cout << "Event N = " << n_events << endl;
 
-  for (int i = 0; i < t2->GetEntries(); i++)
+  for (u_int32_t i = 0; i < t2->GetEntries(); i++)
   {
 
     t2->GetEntry(i);
@@ -83,7 +82,7 @@ int ana_g4_2()
     cout << endl
          << "n.pixels noCS = " << id_pixel_nocs->size() << " = " << NnoCS << endl;
     double ene_nocs_tot = 0;
-    for (int j = 0; j < id_pixel_nocs->size(); j++)
+    for (u_int32_t j = 0; j < id_pixel_nocs->size(); j++)
     {
       cout << j << " pixID=" << id_pixel_nocs->at(j) << " ene=" << ene_pixel_nocs->at(j) << endl;
       ene_nocs_tot += ene_pixel_nocs->at(j);
@@ -92,7 +91,7 @@ int ana_g4_2()
     cout << endl
          << "n.pixels CS = " << id_pixel_cs->size() << " = " << NCS << endl;
     double ene_cs_tot = 0;
-    for (int j = 0; j < id_pixel_cs->size(); j++)
+    for (u_int32_t j = 0; j < id_pixel_cs->size(); j++)
     {
       cout << j << " pixID=" << id_pixel_cs->at(j) << " ene=" << ene_pixel_cs->at(j) << endl;
       ene_cs_tot += ene_pixel_cs->at(j);
