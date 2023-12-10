@@ -14,9 +14,9 @@ G4int MyEventAction::nEvents = 0;
 /**
  * The constructor.
  *
- * @param[in] run Not used
+ * @param[in] run The pointer to the run action.
  */
-MyEventAction::MyEventAction(MyRunAction *run) : index(-1) {}
+MyEventAction::MyEventAction(MyRunAction *run) : index(-1), myRun(run) {}
 
 /**
  * Geant4 function called at the beginning of the event.
@@ -29,16 +29,18 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
     G4int nPixel = MyDetectorConstruction::GetNPixel();
     energyVector = vector<G4double>(nPixel * nPixel, 0.);
 
+    myRun->ClearVectors();
+
     // save info about the simulation
     if (Event->GetEventID() == 0)
     {
         G4AnalysisManager *man = G4AnalysisManager::Instance();
-        man->FillNtupleIColumn(2, 0, MyDetectorConstruction::GetNPixel());
-        man->FillNtupleDColumn(2, 1, MyDetectorConstruction::GetPixelDimensions()[0]);
-        man->FillNtupleDColumn(2, 2, MyDetectorConstruction::GetPixelDimensions()[1]);
-        man->FillNtupleDColumn(2, 3, MyDetectorConstruction::GetPixelDimensions()[2]);
-        man->FillNtupleIColumn(2, 4, MyEventAction::GetNEvents());
-        man->AddNtupleRow(2);
+        man->FillNtupleIColumn(0, 0, MyDetectorConstruction::GetNPixel());
+        man->FillNtupleDColumn(0, 1, MyDetectorConstruction::GetPixelDimensions()[0]);
+        man->FillNtupleDColumn(0, 2, MyDetectorConstruction::GetPixelDimensions()[1]);
+        man->FillNtupleDColumn(0, 3, MyDetectorConstruction::GetPixelDimensions()[2]);
+        man->FillNtupleIColumn(0, 4, MyEventAction::GetNEvents());
+        man->AddNtupleRow(0);
     }
 }
 
@@ -54,16 +56,12 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
 
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
+    man->FillNtupleIColumn(1, 0, Event->GetEventID());
     for (int i = 0; i < energyVector.size(); i++)
     {
-        if (energyVector[i] != 0)
-        {
-            man->FillNtupleIColumn(0, 0, i);
-            man->FillNtupleDColumn(0, 1, energyVector[i]);
-            man->FillNtupleIColumn(0, 2, Event->GetEventID());
-            man->AddNtupleRow(0);
-        }
+        myRun->AddEntry(i, energyVector[i]);
     }
+    man->FillNtupleIColumn(1, 1, myRun->GetIDVectorSize());
 
     // vector isn't empty (photon has interacted)
     if (!IsVectorEmpty(energyVector))
@@ -75,22 +73,10 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
         // save energy depositions
         for (int i = 0; i < energyVector.size(); i++)
         {
-            if (energyVector[i] != 0)
-            {
-                man->FillNtupleIColumn(1, 0, i);
-                man->FillNtupleDColumn(1, 1, energyVector[i]);
-                man->FillNtupleIColumn(1, 2, Event->GetEventID());
-                man->AddNtupleRow(1);
-            }
+            myRun->AddEntryCS(i, energyVector[i]);
         }
-
-        return;
+        man->FillNtupleIColumn(1, 4, myRun->GetIDVectorSizeCS());
     }
-
-    // vector is empty (photon hasn't interact)
-    man->FillNtupleIColumn(1, 0, -1);
-    man->FillNtupleDColumn(1, 1, 0);
-    man->FillNtupleIColumn(1, 2, Event->GetEventID());
     man->AddNtupleRow(1);
 }
 

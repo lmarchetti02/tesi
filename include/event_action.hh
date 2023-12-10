@@ -28,6 +28,9 @@ private:
     // number of events
     static G4int nEvents;
 
+    // run action
+    MyRunAction *myRun;
+
 public:
     MyEventAction(MyRunAction *);
     ~MyEventAction() override = default;

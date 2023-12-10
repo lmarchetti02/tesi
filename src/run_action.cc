@@ -16,20 +16,6 @@ MyRunAction::MyRunAction()
     G4AnalysisManager *man = G4AnalysisManager::Instance();
     man->SetNtupleMerging(true);
 
-    // Ntuple for hits (no CS)
-    man->CreateNtuple("Hits", "Hits");
-    man->CreateNtupleIColumn("ID");
-    man->CreateNtupleDColumn("Energy");
-    man->CreateNtupleIColumn("Event");
-    man->FinishNtuple(0);
-
-    // Ntuple for hits (with CS)
-    man->CreateNtuple("CS", "CS");
-    man->CreateNtupleIColumn("ID");
-    man->CreateNtupleDColumn("Energy");
-    man->CreateNtupleIColumn("Event");
-    man->FinishNtuple(1);
-
     // Ntuple for info
     man->CreateNtuple("Info", "Info");
     man->CreateNtupleIColumn("Pixel N");
@@ -37,7 +23,17 @@ MyRunAction::MyRunAction()
     man->CreateNtupleDColumn("Pixels y-dim");
     man->CreateNtupleDColumn("Pixels z-dim");
     man->CreateNtupleIColumn("Event N");
-    man->FinishNtuple(2);
+    man->FinishNtuple(0);
+
+    man->CreateNtuple("Event", "Event");
+    man->CreateNtupleIColumn("Event");
+    man->CreateNtupleIColumn("NnoCS");
+    man->CreateNtupleIColumn("Id_nocs", id_pixel_nocs);
+    man->CreateNtupleDColumn("Ene_nocs", ene_pixel_nocs);
+    man->CreateNtupleIColumn("NCS");
+    man->CreateNtupleIColumn("Id_cs", id_pixel_cs);
+    man->CreateNtupleDColumn("Ene_cs", ene_pixel_cs);
+    man->FinishNtuple(1);
 }
 
 /**
@@ -74,4 +70,48 @@ void MyRunAction::EndOfRunAction(const G4Run *run)
 
     // reset number of events
     MyEventAction::SetNEvents(0);
+}
+
+/**
+ * Function for clearing the vectors used for saving
+ * info into the ROOT file.
+ */
+void MyRunAction::ClearVectors()
+{
+    id_pixel_nocs.clear();
+    ene_pixel_nocs.clear();
+    id_pixel_cs.clear();
+    ene_pixel_cs.clear();
+}
+
+/**
+ * Function for adding ID and Energy the vectors used for saving
+ * info into the ROOT file.
+ *
+ * @param[in] ID The ID of the pixel.
+ * @param[in] Energy The energy deposition in the pixel.
+ */
+void MyRunAction::AddEntry(G4int ID, G4double Energy)
+{
+    if (Energy != 0)
+    {
+        id_pixel_nocs.push_back(ID);
+        ene_pixel_nocs.push_back(Energy);
+    }
+}
+
+/**
+ * Function for adding ID and Energy the vectors used for saving
+ * info into the ROOT file.
+ *
+ * @param[in] ID The ID of the pixel.
+ * @param[in] Energy The energy deposition in the pixel.
+ */
+void MyRunAction::AddEntryCS(G4int ID, G4double Energy)
+{
+    if (Energy != 0)
+    {
+        id_pixel_cs.push_back(ID);
+        ene_pixel_cs.push_back(Energy);
+    }
 }
