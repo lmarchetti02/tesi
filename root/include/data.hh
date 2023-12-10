@@ -93,6 +93,30 @@ namespace data
         return functions::map_mean(outMap, nPixel);
     }
 
+    std::vector<double> read_hits_pixel(TTree *Tree, int pixelN, int nEvents)
+    {
+        int ID;
+        double Energy;
+        int Event;
+        Tree->SetBranchAddress("ID", &ID);
+        Tree->SetBranchAddress("Energy", &Energy);
+        Tree->SetBranchAddress("Event", &Event);
+
+        std::vector<double> outVector = std::vector<double>(nEvents, 0);
+
+        for (int i = 0; i < Tree->GetEntries(); i++)
+        {
+            Tree->GetEntry(i);
+
+            if (ID == pixelN)
+            {
+                outVector[Event] = Energy;
+            }
+        }
+
+        return outVector;
+    }
+
     /**
      * Function for reconstructing the pixel array.
      *

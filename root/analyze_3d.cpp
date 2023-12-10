@@ -51,6 +51,8 @@ void analyze_3d(const char *fileName)
     // get info about the simulation
     SimulationInfo si = get_simulation_info(infoTree);
 
+    data::test(hitsTree);
+
     // get hits from tree
     std::map<int, double> hitsMap = data::read_hits_tree_full(hitsTree, si.nPixel);
     functions::print_hits_map(hitsMap);
