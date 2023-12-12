@@ -48,7 +48,7 @@ void MyRunAction::BeginOfRunAction(const G4Run *run)
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
     G4String runNumber = to_string(run->GetRunID());
-    man->OpenFile("../root/results/output" + runNumber + ".root");
+    man->OpenFile("../results/output" + runNumber + ".root");
 
     // get total number of events
     MyEventAction::SetNEvents(run->GetNumberOfEventToBeProcessed());

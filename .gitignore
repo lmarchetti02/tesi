@@ -33,7 +33,7 @@
 *.app
 
 # altro
-root/results
+/results
 /build
 /build_mt
 /.vscode
