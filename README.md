@@ -1,5 +1,5 @@
-## ARRAY OF CdTe PIXELS <br/> Geant4-based simulation
-Luca Marchetti <br/>  Università degli Studi di Torino <br/> A.A. 2023/2024
+## ARRAY OF CdTe PIXELS <br/> Geant4-based simulation <br/> B.Sc. final work
+Luca Marchetti <br/> Prof. Vincenzo Monaco (promoter) <br/>  Università degli Studi di Torino <br/> A.A. 2023/2024
 
 <br/>
 
