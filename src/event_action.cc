@@ -54,6 +54,9 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
 {
     readHitsCollection(Event);
 
+    if (!(Event->GetEventID() % 10000))
+        G4cout << Event->GetEventID() << " events processed." << G4endl;
+
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
     man->FillNtupleIColumn(1, 0, Event->GetEventID());
