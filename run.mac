@@ -1,7 +1,7 @@
 /control/verbose 1
 /run/verbose 1
 
-/run/numberOfThreads 1
+/run/numberOfThreads 10
 /run/initialize
 
 /beam/momentum 50 keV

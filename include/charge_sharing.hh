@@ -35,16 +35,10 @@ namespace charge_sharing
      */
     array<double, 2> sample(array<double, 2> center, double std)
     {
-        const G4double X_MAX = MyDetectorConstruction::GetWorldDimensions()[0];
-        const G4double Y_MAX = MyDetectorConstruction::GetWorldDimensions()[1];
-
         // check for values outside the pixel array
         G4double x, y;
-        do
-        {
-            x = G4RandGauss::shoot(center[0], std);
-            y = G4RandGauss::shoot(center[1], std);
-        } while (abs(x) >= X_MAX && abs(y) >= Y_MAX);
+        x = G4RandGauss::shoot(center[0], std);
+        y = G4RandGauss::shoot(center[1], std);
 
         array<double, 2> point = {x, y};
 
@@ -67,9 +61,13 @@ namespace charge_sharing
         G4int nPixel = MyDetectorConstruction::GetNPixel();
 
         //! @todo check for boundaries
-        G4int j = ((position[0] + xWorld) / xDet - 1) * 0.5;
-        G4int i = ((position[1] + yWorld) / yDet - 1) * 0.5;
-        G4int ID = i * nPixel + j;
+        G4int j = ((position[0] + xWorld) / xDet - 1) * 0.5 + 0.5;
+        G4int i = ((position[1] + yWorld) / yDet - 1) * 0.5 + 0.5;
+        G4int ID;
+        if ((i >= 0 && i < nPixel) && (j >= 0 && j < nPixel))
+            ID = i * nPixel + j;
+        else
+            ID = -1;
 
         return ID;
     }
@@ -105,7 +103,8 @@ namespace charge_sharing
                     array<G4double, 2> randomXY = sample(XY_CENTER, 11 * um);
                     G4int randomID = which_pixel(randomXY);
 
-                    result[randomID] += ENERGY;
+                    if (randomID != -1)
+                        result[randomID] += ENERGY;
                 }
             }
 
