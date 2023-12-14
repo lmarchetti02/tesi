@@ -26,13 +26,13 @@ MyRunAction::MyRunAction()
     man->FinishNtuple(0);
 
     man->CreateNtuple("Event", "Event");
-    man->CreateNtupleIColumn("Event");
-    man->CreateNtupleIColumn("NnoCS");
-    man->CreateNtupleIColumn("Id_nocs", id_pixel_nocs);
-    man->CreateNtupleDColumn("Ene_nocs", ene_pixel_nocs);
-    man->CreateNtupleIColumn("NCS");
-    man->CreateNtupleIColumn("Id_cs", id_pixel_cs);
-    man->CreateNtupleDColumn("Ene_cs", ene_pixel_cs);
+    man->CreateNtupleIColumn("Event ID");
+    man->CreateNtupleIColumn("N Elements");
+    man->CreateNtupleIColumn("ID", pixelIDVector);
+    man->CreateNtupleDColumn("Energy", pixelEnergyVector);
+    man->CreateNtupleIColumn("N Elements CS");
+    man->CreateNtupleIColumn("ID CS", pixelIDVectorCS);
+    man->CreateNtupleDColumn("Energy CS", pixelEnergyVectorCS);
     man->FinishNtuple(1);
 }
 
@@ -78,10 +78,10 @@ void MyRunAction::EndOfRunAction(const G4Run *run)
  */
 void MyRunAction::ClearVectors()
 {
-    id_pixel_nocs.clear();
-    ene_pixel_nocs.clear();
-    id_pixel_cs.clear();
-    ene_pixel_cs.clear();
+    pixelIDVector.clear();
+    pixelEnergyVector.clear();
+    pixelIDVectorCS.clear();
+    pixelEnergyVectorCS.clear();
 }
 
 /**
@@ -95,8 +95,8 @@ void MyRunAction::AddEntry(G4int ID, G4double Energy)
 {
     if (Energy != 0)
     {
-        id_pixel_nocs.push_back(ID);
-        ene_pixel_nocs.push_back(Energy);
+        pixelIDVector.push_back(ID);
+        pixelEnergyVector.push_back(Energy);
     }
 }
 
@@ -111,7 +111,7 @@ void MyRunAction::AddEntryCS(G4int ID, G4double Energy)
 {
     if (Energy != 0)
     {
-        id_pixel_cs.push_back(ID);
-        ene_pixel_cs.push_back(Energy);
+        pixelIDVectorCS.push_back(ID);
+        pixelEnergyVectorCS.push_back(Energy);
     }
 }

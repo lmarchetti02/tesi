@@ -25,12 +25,12 @@ public:
     void ClearVectors();
     void AddEntry(G4int ID, G4double Energy);
     void AddEntryCS(G4int ID, G4double Energy);
-    G4int GetIDVectorSize() const { return id_pixel_nocs.size(); }
-    G4int GetIDVectorSizeCS() const { return id_pixel_cs.size(); }
+    G4int GetVectorsSize() const { return pixelIDVector.size(); }
+    G4int GetVectorsSizeCS() const { return pixelIDVectorCS.size(); }
 
 private:
-    std::vector<int> id_pixel_nocs;
-    std::vector<double> ene_pixel_nocs;
-    std::vector<int> id_pixel_cs;
-    std::vector<double> ene_pixel_cs;
+    std::vector<int> pixelIDVector;
+    std::vector<double> pixelEnergyVector;
+    std::vector<int> pixelIDVectorCS;
+    std::vector<double> pixelEnergyVectorCS;
 };

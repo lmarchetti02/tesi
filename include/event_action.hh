@@ -46,6 +46,6 @@ public:
     template <typename T>
     static bool IsVectorEmpty(std::vector<T>);
 
-    static void SetNEvents(G4int N);
-    static G4int GetNEvents();
+    static void SetNEvents(G4int N) { nEvents = N; }
+    static G4int GetNEvents() { return nEvents; }
 };

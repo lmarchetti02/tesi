@@ -64,7 +64,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
     {
         myRun->AddEntry(i, energyVector[i]);
     }
-    man->FillNtupleIColumn(1, 1, myRun->GetIDVectorSize());
+    man->FillNtupleIColumn(1, 1, myRun->GetVectorsSize());
 
     // vector isn't empty (photon has interacted)
     if (!IsVectorEmpty(energyVector))
@@ -78,7 +78,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
         {
             myRun->AddEntryCS(i, energyVector[i]);
         }
-        man->FillNtupleIColumn(1, 4, myRun->GetIDVectorSizeCS());
+        man->FillNtupleIColumn(1, 4, myRun->GetVectorsSizeCS());
     }
     man->AddNtupleRow(1);
 }
@@ -118,28 +118,6 @@ void MyEventAction::readHitsCollection(const G4Event *Event)
             energyVector[stepData.first] += stepData.second;
         }
     }
-}
-
-/**
- * Static function for setting the static variable `nEvents`,
- * which represents the number of events processed in the run.
- *
- * @param[in] N The number of events.
- */
-void MyEventAction::SetNEvents(G4int N)
-{
-    nEvents = N;
-}
-
-/**
- * Static function for getting the static variable `nEvents`,
- * which represents the number of events processed in the run.
- *
- * @return The number of events.
- */
-G4int MyEventAction::GetNEvents()
-{
-    return nEvents;
 }
 
 /**
