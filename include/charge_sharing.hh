@@ -100,7 +100,7 @@ namespace charge_sharing
 
                 for (G4int i = 0; i < nParts; i++)
                 {
-                    array<G4double, 2> randomXY = sample(XY_CENTER, 11 * um);
+                    array<G4double, 2> randomXY = sample(XY_CENTER, 30 * um);
                     G4int randomID = which_pixel(randomXY);
 
                     if (randomID != -1)
