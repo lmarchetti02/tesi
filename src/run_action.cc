@@ -27,10 +27,8 @@ MyRunAction::MyRunAction()
 
     man->CreateNtuple("Event", "Event");
     man->CreateNtupleIColumn("Event ID");
-    man->CreateNtupleIColumn("N Elements");
     man->CreateNtupleIColumn("ID", pixelIDVector);
     man->CreateNtupleDColumn("Energy", pixelEnergyVector);
-    man->CreateNtupleIColumn("N Elements CS");
     man->CreateNtupleIColumn("ID CS", pixelIDVectorCS);
     man->CreateNtupleDColumn("Energy CS", pixelEnergyVectorCS);
     man->FinishNtuple(1);

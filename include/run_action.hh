@@ -25,8 +25,6 @@ public:
     void ClearVectors();
     void AddEntry(G4int ID, G4double Energy);
     void AddEntryCS(G4int ID, G4double Energy);
-    G4int GetVectorsSize() const { return pixelIDVector.size(); }
-    G4int GetVectorsSizeCS() const { return pixelIDVectorCS.size(); }
 
 private:
     std::vector<int> pixelIDVector;

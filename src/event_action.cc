@@ -64,7 +64,6 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
     {
         myRun->AddEntry(i, energyVector[i]);
     }
-    man->FillNtupleIColumn(1, 1, myRun->GetVectorsSize());
 
     // vector isn't empty (photon has interacted)
     if (!IsVectorEmpty(energyVector))
@@ -78,7 +77,6 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
         {
             myRun->AddEntryCS(i, energyVector[i]);
         }
-        man->FillNtupleIColumn(1, 4, myRun->GetVectorsSizeCS());
     }
     man->AddNtupleRow(1);
 }
