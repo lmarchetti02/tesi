@@ -37,14 +37,14 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
     {
         G4AnalysisManager *man = G4AnalysisManager::Instance();
         // pixels
-        man->FillNtupleIColumn(0, 0, MyDetectorConstruction::GetNPixel());
-        man->FillNtupleDColumn(0, 1, MyDetectorConstruction::GetPixelDimensions()[0]);
-        man->FillNtupleDColumn(0, 2, MyDetectorConstruction::GetPixelDimensions()[2]);
-        // subpixels
         G4int ratio = PIXEL_RATIO;
-        man->FillNtupleIColumn(0, 3, MyDetectorConstruction::GetNPixel() * ratio);
-        man->FillNtupleDColumn(0, 4, MyDetectorConstruction::GetPixelDimensions()[0] / ratio);
-        man->FillNtupleDColumn(0, 5, MyDetectorConstruction::GetPixelDimensions()[2] / ratio);
+        man->FillNtupleIColumn(0, 0, MyDetectorConstruction::GetNPixel() / ratio);
+        man->FillNtupleDColumn(0, 1, MyDetectorConstruction::GetPixelDimensions()[0] * ratio);
+        man->FillNtupleDColumn(0, 2, MyDetectorConstruction::GetPixelDimensions()[2] * ratio);
+        // subpixels
+        man->FillNtupleIColumn(0, 3, MyDetectorConstruction::GetNPixel());
+        man->FillNtupleDColumn(0, 4, MyDetectorConstruction::GetPixelDimensions()[0]);
+        man->FillNtupleDColumn(0, 5, MyDetectorConstruction::GetPixelDimensions()[2]);
         // number of events
         man->FillNtupleIColumn(0, 6, MyEventAction::GetNEvents());
         man->AddNtupleRow(0);

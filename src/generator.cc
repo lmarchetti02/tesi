@@ -15,10 +15,6 @@ MyPrimaryGenerator::MyPrimaryGenerator() : momentum(50 * keV), maxTheta(0.)
 {
     fParticleGun = new G4ParticleGun(1); // 1 particles per event
 
-    /* By putting the gun info in the constructor,
-    it can be overwritten by the macro file during
-    execution. */
-
     // fetch particle
     G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName = "gamma";
@@ -50,9 +46,10 @@ MyPrimaryGenerator::~MyPrimaryGenerator()
  */
 void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
-    // G4ThreeVector momDir = randomDirVector(maxTheta);
-    // fParticleGun->SetParticleMomentumDirection(momDir);
-    // fParticleGun->SetParticleMomentum(momentum);
+    G4double max = MyDetectorConstruction::GetWorldDimensions()[0];
+    G4ThreeVector positionVector = randomPositionVector(max, max);
+    fParticleGun->SetParticleMomentum(momentum);
+    fParticleGun->SetParticlePosition(positionVector);
 
     // generate primary vertex
     fParticleGun->GeneratePrimaryVertex(anEvent);
@@ -64,18 +61,12 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
  * @param[in] maxTheta The angle that defines the cone.
  * @return A random unit vector inside the cone defined by `maxTheta`.
  */
-G4ThreeVector MyPrimaryGenerator::randomDirVector(G4double maxTheta)
+G4ThreeVector MyPrimaryGenerator::randomPositionVector(G4double xMax, G4double yMax)
 {
-    maxTheta = maxTheta * (M_PI / 180);
-    G4double theta = 2 * maxTheta * G4UniformRand() - maxTheta;
-    G4double phi = 2 * M_PI * G4UniformRand();
-    G4double u = std::cos(theta);
+    G4double x = -xMax + G4UniformRand() * 2 * xMax;
+    G4double y = -yMax + G4UniformRand() * 2 * yMax;
 
-    G4double x = std::sqrt(1 - u * u) * std::cos(phi);
-    G4double y = std::sqrt(1 - u * u) * std::sin(phi);
-    G4double z = u;
-
-    return G4ThreeVector(x, y, z);
+    return G4ThreeVector(x, y, -MyDetectorConstruction::GetWorldDimensions()[2]);
 }
 
 /**

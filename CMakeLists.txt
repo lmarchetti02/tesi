@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 project(Rivelatore)
 
 # delete root files
-set(results_path ${PROJECT_SOURCE_DIR}/root/results/)
+set(results_path ${PROJECT_SOURCE_DIR}/results/)
 file(GLOB results "${results_path}/*.root")
 
 if(NOT results)

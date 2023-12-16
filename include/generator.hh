@@ -27,7 +27,7 @@ public:
 
     void GeneratePrimaries(G4Event *) override;
 
-    G4ThreeVector randomDirVector(G4double);
+    G4ThreeVector randomPositionVector(G4double, G4double);
 
     void DefineCommands();
 };
