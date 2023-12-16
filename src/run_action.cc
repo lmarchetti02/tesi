@@ -19,9 +19,11 @@ MyRunAction::MyRunAction()
     // Ntuple for info
     man->CreateNtuple("Info", "Info");
     man->CreateNtupleIColumn("Pixel N");
-    man->CreateNtupleDColumn("Pixels x-dim");
-    man->CreateNtupleDColumn("Pixels y-dim");
+    man->CreateNtupleDColumn("Pixels xy-dim");
     man->CreateNtupleDColumn("Pixels z-dim");
+    man->CreateNtupleIColumn("Subpixel N");
+    man->CreateNtupleDColumn("Subpixels xy-dim");
+    man->CreateNtupleDColumn("Subpixels z-dim");
     man->CreateNtupleIColumn("Event N");
     man->FinishNtuple(0);
 

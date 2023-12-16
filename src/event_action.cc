@@ -4,6 +4,7 @@
 #include "detector_construction.hh"
 #include "sensitive_detector.hh"
 #include "charge_sharing.hh"
+#include "constants.hh"
 
 #include "G4AnalysisManager.hh"
 #include "G4SDManager.hh"
@@ -35,11 +36,17 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
     if (Event->GetEventID() == 0)
     {
         G4AnalysisManager *man = G4AnalysisManager::Instance();
+        // pixels
         man->FillNtupleIColumn(0, 0, MyDetectorConstruction::GetNPixel());
         man->FillNtupleDColumn(0, 1, MyDetectorConstruction::GetPixelDimensions()[0]);
-        man->FillNtupleDColumn(0, 2, MyDetectorConstruction::GetPixelDimensions()[1]);
-        man->FillNtupleDColumn(0, 3, MyDetectorConstruction::GetPixelDimensions()[2]);
-        man->FillNtupleIColumn(0, 4, MyEventAction::GetNEvents());
+        man->FillNtupleDColumn(0, 2, MyDetectorConstruction::GetPixelDimensions()[2]);
+        // subpixels
+        G4int ratio = PIXEL_RATIO;
+        man->FillNtupleIColumn(0, 3, MyDetectorConstruction::GetNPixel() * ratio);
+        man->FillNtupleDColumn(0, 4, MyDetectorConstruction::GetPixelDimensions()[0] / ratio);
+        man->FillNtupleDColumn(0, 5, MyDetectorConstruction::GetPixelDimensions()[2] / ratio);
+        // number of events
+        man->FillNtupleIColumn(0, 6, MyEventAction::GetNEvents());
         man->AddNtupleRow(0);
     }
 }
