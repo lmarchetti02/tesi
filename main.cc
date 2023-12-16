@@ -6,12 +6,14 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4RunManagerFactory.hh"
+#include "G4SystemOfUnits.hh"
 
 // my scripts
 #include "physics.hh"
 #include "detector_construction.hh"
 #include "action_initialization.hh"
 #include "sensitive_detector.hh"
+#include "constants.hh"
 
 int main(int argc, char **argv)
 {
@@ -40,13 +42,10 @@ int main(int argc, char **argv)
 
 	// START PROGRAM
 	// --------------------------------------------------------------------------------
-	// set number of pixels
-	G4int N = 15;
-	// while (N <= 0)
-	// {
-	// 	G4cout << "Number of pixels:" << G4endl;
-	// 	G4cin >> N;
-	// }
+	// set simulation parameters
+	G4int N = N_SUBPIXEL;
+	G4double XY = XY_SUBPIXEL;
+	MyDetectorConstruction::SetPixelDimensions(XY);
 	MyDetectorConstruction::SetNPixel(N);
 
 	auto *uiManager = G4UImanager::GetUIpointer();

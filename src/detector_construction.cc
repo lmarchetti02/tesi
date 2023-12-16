@@ -1,5 +1,6 @@
 #include "detector_construction.hh"
 #include "sensitive_detector.hh"
+#include "constants.hh"
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -16,14 +17,15 @@ using std::endl;
 G4int MyDetectorConstruction::nPixel = 0;
 
 // half dimensions of pixels
-G4double MyDetectorConstruction::xPixel = 25 * um;
-G4double MyDetectorConstruction::yPixel = 25 * um;
+G4double MyDetectorConstruction::xPixel = 0;
+G4double MyDetectorConstruction::yPixel = 0;
 G4double MyDetectorConstruction::zPixel = 0.5 * mm;
 
 // world dimensions
 G4double MyDetectorConstruction::xWorld = 0;
 G4double MyDetectorConstruction::yWorld = 0;
-G4double MyDetectorConstruction::zWorld = 0;
+G4double Z = Z_WORLD;
+G4double MyDetectorConstruction::zWorld = Z;
 
 // pixel map
 auto MyDetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
@@ -164,6 +166,20 @@ std::array<G4double, 3> MyDetectorConstruction::GetPixelDimensions()
 }
 
 /**
+ * Function for setting the dimensions of the pixels in the array at runtime.
+ * *
+ * @param[in] XY The dimensions of the pixels along x and y.
+ */
+void MyDetectorConstruction::SetPixelDimensions(G4double XY)
+{
+    if (XY > 0)
+    {
+        xPixel = XY;
+        yPixel = XY;
+    }
+}
+
+/**
  * Function for modifying the visualization macro at runtime.
  *
  */
@@ -189,16 +205,12 @@ void MyDetectorConstruction::setVisualization()
  */
 void MyDetectorConstruction::SetNPixel(G4int N)
 {
-    nPixel += N;
-
-    // update world dim
-    xWorld += N * xPixel;
-    yWorld += N * yPixel;
-
-    if (xWorld < zPixel)
-        zWorld += zPixel * 2;
-    else
-        zWorld += xWorld * 2;
+    if (N > 0)
+    {
+        nPixel = N;
+        xWorld = N * xPixel;
+        yWorld = N * yPixel;
+    }
 }
 
 /**

@@ -70,7 +70,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
     {
         // add charge sharing
         G4int nPixel = MyDetectorConstruction::GetNPixel();
-        energyVector = charge_sharing::add_charge_sharing(energyVector, 100);
+        energyVector = charge_sharing::add_charge_sharing(energyVector, 50);
 
         // save energy depositions
         for (int i = 0; i < energyVector.size(); i++)
