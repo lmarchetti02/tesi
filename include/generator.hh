@@ -17,7 +17,8 @@ private:
     G4ParticleGun *fParticleGun;
 
     G4double maxTheta;
-    G4double momentum;
+    G4double energy;
+    G4int beamWidth;
 
     G4GenericMessenger *fMessenger;
 
