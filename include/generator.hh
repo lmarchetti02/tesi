@@ -18,7 +18,7 @@ private:
 
     G4double maxTheta;
     G4double energy;
-    G4int beamWidth;
+    static G4int beamWidth;
 
     G4GenericMessenger *fMessenger;
 
@@ -27,8 +27,9 @@ public:
     ~MyPrimaryGenerator() override;
 
     void GeneratePrimaries(G4Event *) override;
-
     G4ThreeVector randomPositionVector(G4double, G4double);
 
     void DefineCommands();
+
+    static G4int getBeamWidth() { return beamWidth; }
 };

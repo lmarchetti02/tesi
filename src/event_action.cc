@@ -4,6 +4,7 @@
 #include "detector_construction.hh"
 #include "sensitive_detector.hh"
 #include "charge_sharing.hh"
+#include "generator.hh"
 #include "constants.hh"
 
 #include "G4AnalysisManager.hh"
@@ -47,6 +48,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
         man->FillNtupleDColumn(0, 5, MyDetectorConstruction::GetPixelDimensions()[2]);
         // number of events
         man->FillNtupleIColumn(0, 6, MyEventAction::GetNEvents());
+        man->FillNtupleIColumn(0, 7, MyPrimaryGenerator::getBeamWidth());
         man->AddNtupleRow(0);
     }
 }

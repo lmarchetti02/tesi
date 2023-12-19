@@ -4,7 +4,7 @@
 /run/numberOfThreads 10
 /run/initialize
 
-/beam/momentum 50 keV
+/beam/energy 50 keV
 /run/beamOn 100000
 
 #/beam/momentum 50 keV
