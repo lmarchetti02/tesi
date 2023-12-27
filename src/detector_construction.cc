@@ -19,13 +19,12 @@ G4int MyDetectorConstruction::nPixel = 0;
 // half dimensions of pixels
 G4double MyDetectorConstruction::xPixel = 0;
 G4double MyDetectorConstruction::yPixel = 0;
-G4double MyDetectorConstruction::zPixel = 0.5 * mm;
+G4double MyDetectorConstruction::zPixel = Z_PIXEL;
 
 // world dimensions
 G4double MyDetectorConstruction::xWorld = 0;
 G4double MyDetectorConstruction::yWorld = 0;
-G4double Z = Z_WORLD;
-G4double MyDetectorConstruction::zWorld = Z;
+G4double MyDetectorConstruction::zWorld = Z_WORLD;
 
 // pixel map
 auto MyDetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
@@ -176,7 +175,10 @@ void MyDetectorConstruction::SetPixelDimensions(G4double XY)
     {
         xPixel = XY;
         yPixel = XY;
+        return;
     }
+
+    G4cout << "Pixels xy-dimensions must be positive!" << G4endl;
 }
 
 /**

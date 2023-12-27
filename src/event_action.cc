@@ -41,7 +41,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
         G4int ratio = PIXEL_RATIO;
         man->FillNtupleIColumn(0, 0, MyDetectorConstruction::GetNPixel() / ratio);
         man->FillNtupleDColumn(0, 1, MyDetectorConstruction::GetPixelDimensions()[0] * ratio);
-        man->FillNtupleDColumn(0, 2, MyDetectorConstruction::GetPixelDimensions()[2] * ratio);
+        man->FillNtupleDColumn(0, 2, MyDetectorConstruction::GetPixelDimensions()[2]);
         // subpixels
         man->FillNtupleIColumn(0, 3, MyDetectorConstruction::GetNPixel());
         man->FillNtupleDColumn(0, 4, MyDetectorConstruction::GetPixelDimensions()[0]);
@@ -63,7 +63,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
 {
     readHitsCollection(Event);
 
-    if (!(Event->GetEventID() % 10000))
+    if (!(Event->GetEventID() % 10000) && Event->GetEventID() != 0)
         G4cout << Event->GetEventID() << " events processed." << G4endl;
 
     G4AnalysisManager *man = G4AnalysisManager::Instance();
@@ -118,11 +118,8 @@ void MyEventAction::readHitsCollection(const G4Event *Event)
         {
             MyHit *hit = (*hitsColl)[i];
 
-            // pair (ID, eDep) of the step
-            std::pair<G4int, G4double> stepData(hit->GetID(), hit->GetEnergy());
-
             // add step info to `energyVector`
-            energyVector[stepData.first] += stepData.second;
+            energyVector[hit->GetID()] += hit->GetEnergy();
         }
     }
 }

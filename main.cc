@@ -43,10 +43,8 @@ int main(int argc, char **argv)
 	// START PROGRAM
 	// --------------------------------------------------------------------------------
 	// set simulation parameters
-	G4int N = N_SUBPIXEL;
-	G4double XY = XY_SUBPIXEL;
-	MyDetectorConstruction::SetPixelDimensions(XY);
-	MyDetectorConstruction::SetNPixel(N);
+	MyDetectorConstruction::SetPixelDimensions(XY_SUBPIXEL);
+	MyDetectorConstruction::SetNPixel(N_SUBPIXEL);
 
 	auto *uiManager = G4UImanager::GetUIpointer();
 

@@ -61,7 +61,7 @@ public:
 
     static std::array<G4double, 3> GetWorldDimensions();
     static std::array<G4double, 3> GetPixelDimensions();
-    static void SetPixelDimensions(G4double XY);
+    static void SetPixelDimensions(G4double);
 
     static void setVisualization();
 
