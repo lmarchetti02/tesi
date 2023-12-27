@@ -7,12 +7,3 @@
 /beam/beam_width 1
 /beam/energy 50 keV
 /run/beamOn 100000
-
-#/beam/momentum 50 keV
-#/run/beamOn 1000000
-
-#/beam/momentum 75 keV
-#/run/beamOn 1000000
-
-#/beam/momentum 100 keV
-#/run/beamOn 1000000

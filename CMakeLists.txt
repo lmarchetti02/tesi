@@ -27,7 +27,7 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 # copy macro files to build directory
-set(SCRIPTS vis.mac run.mac det.mac scandet.mac compile.sh)
+set(SCRIPTS vis.mac run.mac compile.sh)
 
 foreach(_script ${SCRIPTS})
   configure_file(
