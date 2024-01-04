@@ -32,4 +32,5 @@ public:
     void DefineCommands();
 
     static G4int getBeamWidth() { return beamWidth; }
+    static void setBeamWidth(G4int);
 };

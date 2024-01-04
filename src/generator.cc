@@ -105,3 +105,14 @@ void MyPrimaryGenerator::DefineCommands()
     beamWidthCmd.SetRange("beam_width>=0");
     beamWidthCmd.SetDefaultValue("0");
 }
+
+/**
+ * Function for setting the width of the photon beam.
+ *
+ * @param[in] value The int representing the beam width (see constants.hh).
+ */
+void MyPrimaryGenerator::setBeamWidth(G4int value)
+{
+    if (value < 3)
+        beamWidth = value;
+}
