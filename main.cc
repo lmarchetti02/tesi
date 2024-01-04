@@ -7,6 +7,7 @@
 #include "G4VisExecutive.hh"
 #include "G4RunManagerFactory.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4SteppingVerbose.hh"
 
 // my scripts
 #include "physics.hh"
@@ -23,6 +24,9 @@ int main(int argc, char **argv)
 	G4UIExecutive *ui = nullptr;
 	if (argc == 1)
 		ui = new G4UIExecutive(argc, argv);
+
+	G4int precision = 4;
+	G4SteppingVerbose::UseBestUnit(precision);
 
 // for running simulation
 #ifndef G4MULTITHREADED
