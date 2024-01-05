@@ -46,7 +46,7 @@ void MyDetectorConstruction::DefineMaterials()
     worldMat = nist->FindOrBuildMaterial("G4_Galactic");
 
     // detector material
-    detectorMat = nist->FindOrBuildMaterial("G4_CADMIUM_TELLURIDE");
+    detectorMat = nist->FindOrBuildMaterial(TGT_MATERIAL);
 }
 
 /**
