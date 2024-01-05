@@ -22,7 +22,7 @@ MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), maxTheta(0.), beamW
     G4ParticleDefinition *particle = particleTable->FindParticle(particleName);
 
     // set position and momentum vectors
-    G4ThreeVector pos(0., 0., -MyDetectorConstruction::GetWorldDimensions()[2]);
+    G4ThreeVector pos(0., 0., -Z_WORLD - TOLL_WORLD);
 
     // generate particle
     fParticleGun->SetParticlePosition(pos);
@@ -52,17 +52,17 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     // all the photons in the center of the array
     if (beamWidth > 1)
     {
-        fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -MyDetectorConstruction::GetWorldDimensions()[2]));
+        fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -Z_WORLD - TOLL_WORLD));
         fParticleGun->GeneratePrimaryVertex(anEvent);
     }
 
     G4double max;
     // all the photons in the central pixel
     if (beamWidth == 0)
-        max = MyDetectorConstruction::GetWorldDimensions()[0];
+        max = XY_PIXEL;
     // photons distributed uniformly across the array
     else if (beamWidth == 1)
-        max = MyDetectorConstruction::GetPixelDimensions()[0] * PIXEL_RATIO;
+        max = XY_WORLD;
 
     G4ThreeVector positionVector = randomPositionVector(max, max);
     fParticleGun->SetParticleEnergy(energy);
@@ -83,7 +83,7 @@ G4ThreeVector MyPrimaryGenerator::randomPositionVector(G4double xMax, G4double y
     G4double x = -xMax + G4UniformRand() * 2 * xMax;
     G4double y = -yMax + G4UniformRand() * 2 * yMax;
 
-    return G4ThreeVector(x, y, -MyDetectorConstruction::GetWorldDimensions()[2]);
+    return G4ThreeVector(x, y, -Z_WORLD - TOLL_WORLD);
 }
 
 /**

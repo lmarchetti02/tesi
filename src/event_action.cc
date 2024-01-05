@@ -26,12 +26,11 @@ MyEventAction::MyEventAction(MyRunAction *run) : index(-1), myRun(run) {}
  * Geant4 function called at the beginning of the event.
  * It creates the vector containing the energy deposition of each pixel (per event).
  *
- * @param Event Not used.
+ * @param Event The pointer to the current event.
  */
 void MyEventAction::BeginOfEventAction(const G4Event *Event)
 {
-    G4int nPixel = MyDetectorConstruction::GetNPixel();
-    energyVector = std::vector<G4double>(nPixel * nPixel, 0.);
+    energyVector = std::vector<G4double>(N_SUBPIXEL * N_SUBPIXEL, 0.);
 
     myRun->ClearVectors();
 
@@ -40,14 +39,13 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
     {
         G4AnalysisManager *man = G4AnalysisManager::Instance();
         // pixels
-        G4int ratio = PIXEL_RATIO;
-        man->FillNtupleIColumn(0, 0, MyDetectorConstruction::GetNPixel() / ratio);
-        man->FillNtupleDColumn(0, 1, MyDetectorConstruction::GetPixelDimensions()[0] * ratio);
-        man->FillNtupleDColumn(0, 2, MyDetectorConstruction::GetPixelDimensions()[2]);
+        man->FillNtupleIColumn(0, 0, N_PIXEL);
+        man->FillNtupleDColumn(0, 1, XY_PIXEL);
+        man->FillNtupleDColumn(0, 2, Z_PIXEL);
         // subpixels
-        man->FillNtupleIColumn(0, 3, MyDetectorConstruction::GetNPixel());
-        man->FillNtupleDColumn(0, 4, MyDetectorConstruction::GetPixelDimensions()[0]);
-        man->FillNtupleDColumn(0, 5, MyDetectorConstruction::GetPixelDimensions()[2]);
+        man->FillNtupleIColumn(0, 3, N_SUBPIXEL);
+        man->FillNtupleDColumn(0, 4, XY_SUBPIXEL);
+        man->FillNtupleDColumn(0, 5, Z_PIXEL);
         // number of events
         man->FillNtupleIColumn(0, 6, MyEventAction::GetNEvents());
         man->FillNtupleIColumn(0, 7, BEAM_WIDTH);
@@ -80,7 +78,6 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
     if (!IsVectorEmpty(energyVector))
     {
         // add charge sharing
-        G4int nPixel = MyDetectorConstruction::GetNPixel();
         energyVector = charge_sharing::add_charge_sharing(energyVector, 50);
 
         // save energy depositions

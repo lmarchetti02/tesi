@@ -3,17 +3,18 @@
 #include "G4SystemOfUnits.hh"
 #include "globals.hh"
 
-constexpr G4int N_PIXELS = 15;
+constexpr G4int N_PIXEL = 15;
 constexpr G4int PIXEL_RATIO = 5;
-constexpr G4int N_SUBPIXEL = N_PIXELS * PIXEL_RATIO;
+constexpr G4int N_SUBPIXEL = N_PIXEL * PIXEL_RATIO;
 
 constexpr G4double XY_PIXEL = 22.5 * um;
-constexpr G4double Z_PIXEL = 0.5 * mm;
 constexpr G4double XY_SUBPIXEL = XY_PIXEL / PIXEL_RATIO;
+constexpr G4double Z_PIXEL = 0.5 * mm;
 
 constexpr const char *TGT_MATERIAL = "G4_CADMIUM_TELLURIDE";
 
 constexpr G4double TOLL_WORLD = 10 * um;
+constexpr G4double XY_WORLD = XY_SUBPIXEL * N_SUBPIXEL;
 constexpr G4double Z_WORLD = Z_PIXEL * 2;
 
 /**

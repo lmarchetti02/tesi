@@ -13,6 +13,7 @@
 #include "detector_construction.hh"
 #include "sensitive_detector.hh"
 #include "event_action.hh"
+#include "constants.hh"
 
 /**
  * Library containing the necessary methods for adding the
@@ -50,17 +51,11 @@ namespace charge_sharing
      */
     G4int which_pixel(const std::array<G4double, 2> position)
     {
-        const G4double xWorld = MyDetectorConstruction::GetWorldDimensions()[0];
-        const G4double yWorld = MyDetectorConstruction::GetWorldDimensions()[1];
-        const G4double xDet = MyDetectorConstruction::GetPixelDimensions()[0];
-        const G4double yDet = MyDetectorConstruction::GetPixelDimensions()[1];
-        const G4int nPixel = MyDetectorConstruction::GetNPixel();
-
-        const G4int j = ((position[0] + xWorld) / xDet - 1) * 0.5 + 0.5;
-        const G4int i = ((position[1] + yWorld) / yDet - 1) * 0.5 + 0.5;
+        const G4int j = ((position[0] + XY_WORLD) / XY_SUBPIXEL - 1) * 0.5 + 0.5;
+        const G4int i = ((position[1] + XY_WORLD) / XY_SUBPIXEL - 1) * 0.5 + 0.5;
         G4int ID;
-        if ((i >= 0 && i < nPixel) && (j >= 0 && j < nPixel))
-            ID = i * nPixel + j;
+        if ((i >= 0 && i < N_SUBPIXEL) && (j >= 0 && j < N_SUBPIXEL))
+            ID = i * N_SUBPIXEL + j;
         else
             ID = -1;
 
@@ -80,8 +75,7 @@ namespace charge_sharing
      */
     std::vector<G4double> add_charge_sharing(std::vector<G4double> energyVector, const G4int nParts)
     {
-        G4int N = MyDetectorConstruction::GetNPixel();
-        auto result = std::vector<G4double>(N * N, 0);
+        auto result = std::vector<G4double>(N_SUBPIXEL * N_SUBPIXEL, 0);
 
         for (G4int ID = 0; ID < energyVector.size(); ID++)
         {
@@ -93,7 +87,7 @@ namespace charge_sharing
 
                 for (G4int i = 0; i < nParts; i++)
                 {
-                    std::array<G4double, 2> randomXY = sample(XY_CENTER, 10 * um);
+                    std::array<G4double, 2> randomXY = sample(XY_CENTER, SMEAR_WIDTH);
                     G4int randomID = which_pixel(randomXY);
 
                     if (randomID != -1)

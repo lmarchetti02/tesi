@@ -1,6 +1,6 @@
 #include "detector_construction.hh"
-#include "sensitive_detector.hh"
-#include "constants.hh"
+
+#include <fstream>
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
@@ -8,28 +8,24 @@
 #include "G4UImanager.hh"
 #include "G4SDManager.hh"
 
-#include <fstream>
+#include "sensitive_detector.hh"
+#include "constants.hh"
 
 using std::cout;
 using std::endl;
 
-// number of pixels
-G4int MyDetectorConstruction::nPixel = 0;
-
-// half dimensions of pixels
-G4double MyDetectorConstruction::xPixel = 0;
-G4double MyDetectorConstruction::yPixel = 0;
-G4double MyDetectorConstruction::zPixel = Z_PIXEL;
-
-// world dimensions
-G4double MyDetectorConstruction::xWorld = 0;
-G4double MyDetectorConstruction::yWorld = 0;
-G4double MyDetectorConstruction::zWorld = Z_WORLD;
-
 // pixel map
 auto MyDetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
 
-MyDetectorConstruction::MyDetectorConstruction()
+MyDetectorConstruction::MyDetectorConstruction() : nPixel(N_SUBPIXEL),
+                                                   xWorld(XY_WORLD),
+                                                   yWorld(XY_WORLD),
+                                                   zWorld(Z_WORLD),
+                                                   xPixel(XY_SUBPIXEL),
+                                                   yPixel(XY_SUBPIXEL),
+                                                   zPixel(Z_PIXEL),
+                                                   fScoringVolume(nullptr),
+                                                   fScoringPlane(nullptr)
 {
     DefineMaterials();
 }
@@ -59,6 +55,7 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
     // generate volume
     ConstructWorld();
     ConstructPixels();
+    ConstructPlanes();
 
     return physWorld;
 }
@@ -69,10 +66,10 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 void MyDetectorConstruction::ConstructWorld()
 {
     // size of volume
-    solidWorld = new G4Box("solidWorld", // name
-                           xWorld,       // half lenght (meters)
-                           yWorld,       // half width (meters)
-                           zWorld);      // half lenght (meters)
+    solidWorld = new G4Box("solidWorld",         // name
+                           xWorld,               // half lenght (meters)
+                           yWorld,               // half width (meters)
+                           zWorld + TOLL_WORLD); // half lenght (meters)
 
     // volume material
     logicWorld = new G4LogicalVolume(solidWorld,    // solid volume
@@ -88,7 +85,6 @@ void MyDetectorConstruction::ConstructWorld()
                                   false,                     // bool operations
                                   0,                         // copy number
                                   true);                     // overlapping
-    // ---------------------------------------------------------------------------------------------
 }
 
 /**
@@ -120,11 +116,42 @@ void MyDetectorConstruction::ConstructPixels()
 
             // add to pixel map
             std::array<G4double, 2> xy = {x, y};
-            std::pair<G4int, std::array<G4double, 2>> p(ID, xy);
-            AddToPixelMap(p);
+            AddToPixelMap(std::make_pair(ID, xy));
         }
     }
-    // ---------------------------------------------------------------------------------------------
+
+    fScoringVolume = logicDetector;
+}
+
+/**
+ * Function for constructing the volume used to track the photons
+ * escaping from the detector.
+ */
+void MyDetectorConstruction::ConstructPlanes()
+{
+    solidPlane = new G4Box("solidPlane", xWorld, yWorld, TOLL_WORLD / 4.);
+
+    logicPlane = new G4LogicalVolume(solidPlane, worldMat, "logicPlane");
+
+    physPlane1 = new G4PVPlacement(nullptr,
+                                   G4ThreeVector(0., 0., zWorld - zPixel - TOLL_WORLD / 2.),
+                                   logicPlane,
+                                   "physPlane",
+                                   logicWorld,
+                                   false,
+                                   1,
+                                   true);
+
+    physPlane2 = new G4PVPlacement(nullptr,
+                                   G4ThreeVector(0., 0., zWorld + TOLL_WORLD / 2.),
+                                   logicPlane,
+                                   "physPlane",
+                                   logicWorld,
+                                   false,
+                                   2,
+                                   true);
+
+    fScoringPlane = logicPlane;
 }
 
 /**
@@ -141,88 +168,20 @@ void MyDetectorConstruction::ConstructSDandField()
 }
 
 /**
- * Static function for accessing the dimensions of the world volume.
- *
- * @return `std::array(xWorld, yWorld, zWorld)`
- */
-std::array<G4double, 3> MyDetectorConstruction::GetWorldDimensions()
-{
-    std::array<G4double, 3> worldDim = {xWorld, yWorld, zWorld};
-
-    return worldDim;
-}
-
-/**
- * Static function for accessing the dimensions of the pixels.
- *
- * @return `std::array(xPixel, yPixel, zPixel)`
- */
-std::array<G4double, 3> MyDetectorConstruction::GetPixelDimensions()
-{
-    std::array<G4double, 3> detDim = {xPixel, yPixel, zPixel};
-
-    return detDim;
-}
-
-/**
- * Function for setting the dimensions of the pixels in the array at runtime.
- * *
- * @param[in] XY The dimensions of the pixels along x and y.
- */
-void MyDetectorConstruction::SetPixelDimensions(G4double XY)
-{
-    if (XY > 0)
-    {
-        xPixel = XY;
-        yPixel = XY;
-        return;
-    }
-
-    G4cout << "Pixels xy-dimensions must be positive!" << G4endl;
-}
-
-/**
  * Function for modifying the visualization macro at runtime.
  *
  */
-void MyDetectorConstruction::setVisualization()
+void MyDetectorConstruction::SetVisualization()
 {
     auto *uiManager = G4UImanager::GetUIpointer();
 
     // number of pixels
     uiManager->ApplyCommand("/vis/set/textColour white");
     uiManager->ApplyCommand("/vis/set/textLayout right");
-    uiManager->ApplyCommand("/vis/scene/add/text2D 0.9 -0.8 18 ! ! Number of pixels: " + std::to_string(nPixel) + " x " + std::to_string(nPixel));
+    uiManager->ApplyCommand("/vis/scene/add/text2D 0.9 -0.8 18 ! ! Number of pixels: " + std::to_string(N_SUBPIXEL) + " x " + std::to_string(N_SUBPIXEL));
 
     // scale
-    uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * zPixel) + " mm z 1 0.75 0 manual " + std::to_string(xWorld) + " " + std::to_string(yWorld) + " " + std::to_string(zWorld - zPixel) + " mm");
-}
-
-/**
- * Function for setting the number of pixels in the array at runtime.
- *
- * It also modifies the world dimensions according to the number of pixels.
- *
- * @param[in] N The number of pixel along x and y, so the square root of the total number of pixels.
- */
-void MyDetectorConstruction::SetNPixel(G4int N)
-{
-    if (N > 0)
-    {
-        nPixel = N;
-        xWorld = N * xPixel;
-        yWorld = N * yPixel;
-    }
-}
-
-/**
- * Static function for accessing the number of pixels in the array.
- *
- * @return The number of pixel along x and y, so the square root of the total number of pixels.
- */
-G4int MyDetectorConstruction::GetNPixel()
-{
-    return nPixel;
+    uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * Z_PIXEL) + " mm z 1 0.75 0 manual " + std::to_string(XY_WORLD) + " " + std::to_string(XY_WORLD) + " " + std::to_string(Z_WORLD + TOLL_WORLD - Z_PIXEL) + " mm");
 }
 
 /**

@@ -9,10 +9,6 @@
 #include "G4Material.hh"
 #include "G4Box.hh"
 
-// using std::std::array;
-// using std::std::map;
-// using std::pair;
-
 /**
  * Detector Construction Class
  * ---
@@ -24,23 +20,26 @@ class MyDetectorConstruction : public G4VUserDetectorConstruction
 {
 private:
     // dimensions
-    static G4int nPixel;
+    G4int nPixel;
 
-    static G4double xWorld;
-    static G4double yWorld;
-    static G4double zWorld;
+    G4double xWorld;
+    G4double yWorld;
+    G4double zWorld;
 
-    static G4double xPixel;
-    static G4double yPixel;
-    static G4double zPixel;
+    G4double xPixel;
+    G4double yPixel;
+    G4double zPixel;
 
     // map with centers of pixels
     static std::map<G4int, std::array<G4double, 2>> pixelMap;
 
     // volumes
-    G4Box *solidWorld, *solidDetector;
-    G4LogicalVolume *logicWorld, *logicDetector;
-    G4VPhysicalVolume *physWorld, *physDetector;
+    G4Box *solidWorld, *solidDetector, *solidPlane;
+    G4LogicalVolume *logicWorld, *logicDetector, *logicPlane;
+    G4VPhysicalVolume *physWorld, *physDetector, *physPlane1, *physPlane2;
+
+    G4LogicalVolume *fScoringVolume;
+    G4LogicalVolume *fScoringPlane;
 
     // materials
     G4Material *worldMat, *detectorMat;
@@ -55,17 +54,14 @@ public:
     G4VPhysicalVolume *Construct() override;
     void ConstructWorld();
     void ConstructPixels();
+    void ConstructPlanes();
 
-    static void SetNPixel(G4int);
-    static G4int GetNPixel();
-
-    static std::array<G4double, 3> GetWorldDimensions();
-    static std::array<G4double, 3> GetPixelDimensions();
-    static void SetPixelDimensions(G4double);
-
-    static void setVisualization();
+    static void SetVisualization();
 
     static void AddToPixelMap(std::pair<G4int, std::array<G4double, 2>>);
     static std::map<G4int, std::array<G4double, 2>> GetPixelMap();
     static void PrintPixelMap();
+
+    G4LogicalVolume *GetScoringVolume() const { return fScoringVolume; }
+    G4LogicalVolume *GetScoringPlane() const { return fScoringPlane; }
 };

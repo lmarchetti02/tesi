@@ -46,10 +46,6 @@ int main(int argc, char **argv)
 
 	// START PROGRAM
 	// --------------------------------------------------------------------------------
-	// set simulation parameters
-	MyDetectorConstruction::SetPixelDimensions(XY_SUBPIXEL);
-	MyDetectorConstruction::SetNPixel(N_SUBPIXEL);
-
 	auto *uiManager = G4UImanager::GetUIpointer();
 
 	/* If no interactive mode, just execute in
@@ -65,7 +61,7 @@ int main(int argc, char **argv)
 	else
 	{
 		uiManager->ApplyCommand("/control/execute vis.mac");
-		MyDetectorConstruction::setVisualization();
+		MyDetectorConstruction::SetVisualization();
 		ui->SessionStart();
 
 		delete ui;
