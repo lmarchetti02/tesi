@@ -7,14 +7,12 @@
 #include "detector_construction.hh"
 #include "constants.hh"
 
-G4int MyPrimaryGenerator::beamWidth = BEAM_WIDTH;
-
 /**
  * Constructor.
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), maxTheta(0.)
+MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), maxTheta(0.), beamWidth(BEAM_WIDTH)
 {
     fParticleGun = new G4ParticleGun(1); // 1 particles per event
 
@@ -104,15 +102,4 @@ void MyPrimaryGenerator::DefineCommands()
     beamWidthCmd.SetParameterName("beam_width", true);
     beamWidthCmd.SetRange("beam_width>=0");
     beamWidthCmd.SetDefaultValue("0");
-}
-
-/**
- * Function for setting the width of the photon beam.
- *
- * @param[in] value The int representing the beam width (see constants.hh).
- */
-void MyPrimaryGenerator::setBeamWidth(G4int value)
-{
-    if (value < 3)
-        beamWidth = value;
 }

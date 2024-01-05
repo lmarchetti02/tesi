@@ -18,7 +18,7 @@ private:
 
     G4double maxTheta;
     G4double energy;
-    static G4int beamWidth;
+    G4int beamWidth;
 
     G4GenericMessenger *fMessenger;
 
@@ -30,7 +30,4 @@ public:
     G4ThreeVector randomPositionVector(G4double, G4double);
 
     void DefineCommands();
-
-    static G4int getBeamWidth() { return beamWidth; }
-    static void setBeamWidth(G4int);
 };

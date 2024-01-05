@@ -48,7 +48,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
         man->FillNtupleDColumn(0, 5, MyDetectorConstruction::GetPixelDimensions()[2]);
         // number of events
         man->FillNtupleIColumn(0, 6, MyEventAction::GetNEvents());
-        man->FillNtupleIColumn(0, 7, MyPrimaryGenerator::getBeamWidth());
+        man->FillNtupleIColumn(0, 7, BEAM_WIDTH);
         man->AddNtupleRow(0);
     }
 }
