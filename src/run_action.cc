@@ -18,22 +18,25 @@ MyRunAction::MyRunAction()
 
     // Ntuple for info
     man->CreateNtuple("Info", "Info");
-    man->CreateNtupleIColumn("Pixel N");
-    man->CreateNtupleDColumn("Pixels xy-dim");
-    man->CreateNtupleDColumn("Pixels z-dim");
-    man->CreateNtupleIColumn("Subpixel N");
-    man->CreateNtupleDColumn("Subpixels xy-dim");
-    man->CreateNtupleDColumn("Subpixels z-dim");
-    man->CreateNtupleIColumn("Event N");
-    man->CreateNtupleIColumn("Beam Width");
+    man->CreateNtupleIColumn("Pixel_N");
+    man->CreateNtupleDColumn("Pixels_xy_dim");
+    man->CreateNtupleDColumn("Pixels_z_dim");
+    man->CreateNtupleIColumn("Subpixel_N");
+    man->CreateNtupleDColumn("Subpixels_xy_dim");
+    man->CreateNtupleDColumn("Subpixels_z_dim");
+    man->CreateNtupleIColumn("Event_N");
+    man->CreateNtupleIColumn("Beam_Width");
     man->FinishNtuple(0);
 
     man->CreateNtuple("Event", "Event");
-    man->CreateNtupleIColumn("Event ID");
+    man->CreateNtupleIColumn("Event_ID");
     man->CreateNtupleIColumn("ID", pixelIDVector);
     man->CreateNtupleDColumn("Energy", pixelEnergyVector);
-    man->CreateNtupleIColumn("ID CS", pixelIDVectorCS);
-    man->CreateNtupleDColumn("Energy CS", pixelEnergyVectorCS);
+    man->CreateNtupleIColumn("ID_CS", pixelIDVectorCS);
+    man->CreateNtupleDColumn("Energy_CS", pixelEnergyVectorCS);
+    man->CreateNtupleIColumn("ID_Merge", pixelIDVectorMerge);
+    man->CreateNtupleDColumn("Energy_Merge", pixelEnergyVectorMerge);
+    man->CreateNtupleDColumn("Energy_Escape", energyEscape);
     man->FinishNtuple(1);
 }
 
@@ -83,11 +86,14 @@ void MyRunAction::ClearVectors()
     pixelEnergyVector.clear();
     pixelIDVectorCS.clear();
     pixelEnergyVectorCS.clear();
+    pixelIDVectorMerge.clear();
+    pixelEnergyVectorMerge.clear();
+    energyEscape.clear();
 }
 
 /**
- * Function for adding ID and Energy the vectors used for saving
- * info into the ROOT file.
+ * Function for adding ID and Energy to the vectors used for saving
+ * info into the ROOT file (no charge sharing and no merge).
  *
  * @param[in] ID The ID of the pixel.
  * @param[in] Energy The energy deposition in the pixel.
@@ -102,8 +108,8 @@ void MyRunAction::AddEntry(G4int ID, G4double Energy)
 }
 
 /**
- * Function for adding ID and Energy the vectors used for saving
- * info into the ROOT file.
+ * Function for adding ID and Energy to the vectors used for saving
+ * info into the ROOT file (with charge sharing and no merge).
  *
  * @param[in] ID The ID of the pixel.
  * @param[in] Energy The energy deposition in the pixel.
@@ -115,4 +121,32 @@ void MyRunAction::AddEntryCS(G4int ID, G4double Energy)
         pixelIDVectorCS.push_back(ID);
         pixelEnergyVectorCS.push_back(Energy);
     }
+}
+
+/**
+ * Function for adding ID and Energy to the vectors used for saving
+ * info into the ROOT file (with charge sharing and merge).
+ *
+ * @param[in] ID The ID of the pixel.
+ * @param[in] Energy The energy deposition in the pixel.
+ */
+void MyRunAction::AddEntryMerge(G4int ID, G4double Energy)
+{
+    if (Energy != 0)
+    {
+        pixelIDVectorMerge.push_back(ID);
+        pixelEnergyVectorMerge.push_back(Energy);
+    }
+}
+
+/**
+ * Function for adding the energy escaped from the
+ * detector to the `energyEscape` vector.
+ *
+ * @param[in] Energy The energy deposition in the pixel.
+ */
+void MyRunAction::AddEnergyEscape(G4double Energy)
+{
+    if (Energy != 0)
+        energyEscape.push_back(Energy);
 }
