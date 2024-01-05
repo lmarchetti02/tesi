@@ -14,10 +14,6 @@
 #include "sensitive_detector.hh"
 #include "event_action.hh"
 
-using std::array;
-using std::map;
-using std::vector;
-
 /**
  * Library containing the necessary methods for adding the
  * charge sharing to the results of the simulation.
@@ -33,14 +29,14 @@ namespace charge_sharing
      *
      * @return The aforementioned random array.
      */
-    array<double, 2> sample(array<double, 2> center, double std)
+    std::array<double, 2> sample(std::array<double, 2> center, const double std)
     {
         // check for values outside the pixel array
         G4double x, y;
         x = G4RandGauss::shoot(center[0], std);
         y = G4RandGauss::shoot(center[1], std);
 
-        array<double, 2> point = {x, y};
+        std::array<double, 2> point = {x, y};
 
         return point;
     }
@@ -52,17 +48,16 @@ namespace charge_sharing
      *
      * @return The ID of the detector corresponding to (x,y).
      */
-    G4int which_pixel(array<G4double, 2> position)
+    G4int which_pixel(const std::array<G4double, 2> position)
     {
-        G4double xWorld = MyDetectorConstruction::GetWorldDimensions()[0];
-        G4double yWorld = MyDetectorConstruction::GetWorldDimensions()[1];
-        G4double xDet = MyDetectorConstruction::GetPixelDimensions()[0];
-        G4double yDet = MyDetectorConstruction::GetPixelDimensions()[1];
-        G4int nPixel = MyDetectorConstruction::GetNPixel();
+        const G4double xWorld = MyDetectorConstruction::GetWorldDimensions()[0];
+        const G4double yWorld = MyDetectorConstruction::GetWorldDimensions()[1];
+        const G4double xDet = MyDetectorConstruction::GetPixelDimensions()[0];
+        const G4double yDet = MyDetectorConstruction::GetPixelDimensions()[1];
+        const G4int nPixel = MyDetectorConstruction::GetNPixel();
 
-        //! @todo check for boundaries
-        G4int j = ((position[0] + xWorld) / xDet - 1) * 0.5 + 0.5;
-        G4int i = ((position[1] + yWorld) / yDet - 1) * 0.5 + 0.5;
+        const G4int j = ((position[0] + xWorld) / xDet - 1) * 0.5 + 0.5;
+        const G4int i = ((position[1] + yWorld) / yDet - 1) * 0.5 + 0.5;
         G4int ID;
         if ((i >= 0 && i < nPixel) && (j >= 0 && j < nPixel))
             ID = i * nPixel + j;
@@ -83,32 +78,28 @@ namespace charge_sharing
      *
      * @return The vector containing the energy depositions after the charge sharing.
      */
-    vector<G4double> add_charge_sharing(vector<G4double> energyVector, G4int nParts)
+    std::vector<G4double> add_charge_sharing(std::vector<G4double> energyVector, const G4int nParts)
     {
         G4int N = MyDetectorConstruction::GetNPixel();
-        auto result = vector<G4double>(N * N, 0);
+        auto result = std::vector<G4double>(N * N, 0);
 
-        G4int ID = 0;
-        for (G4double d : energyVector)
+        for (G4int ID = 0; ID < energyVector.size(); ID++)
         {
-
-            if (d != 0)
+            if (energyVector[ID] != 0)
             {
-                const G4double PIXEL_ENERGY = d;
+                const G4double PIXEL_ENERGY = energyVector[ID];
                 const G4double ENERGY = PIXEL_ENERGY / nParts;
-                const array<G4double, 2> XY_CENTER = MyDetectorConstruction::GetPixelMap()[ID];
+                const std::array<G4double, 2> XY_CENTER = MyDetectorConstruction::GetPixelMap()[ID];
 
                 for (G4int i = 0; i < nParts; i++)
                 {
-                    array<G4double, 2> randomXY = sample(XY_CENTER, 10 * um);
+                    std::array<G4double, 2> randomXY = sample(XY_CENTER, 10 * um);
                     G4int randomID = which_pixel(randomXY);
 
                     if (randomID != -1)
                         result[randomID] += ENERGY;
                 }
             }
-
-            ID++;
         }
 
         return result;

@@ -1,5 +1,7 @@
 #include "event_action.hh"
 
+#include <vector>
+
 #include "hits.hh"
 #include "detector_construction.hh"
 #include "sensitive_detector.hh"
@@ -29,7 +31,7 @@ MyEventAction::MyEventAction(MyRunAction *run) : index(-1), myRun(run) {}
 void MyEventAction::BeginOfEventAction(const G4Event *Event)
 {
     G4int nPixel = MyDetectorConstruction::GetNPixel();
-    energyVector = vector<G4double>(nPixel * nPixel, 0.);
+    energyVector = std::vector<G4double>(nPixel * nPixel, 0.);
 
     myRun->ClearVectors();
 
