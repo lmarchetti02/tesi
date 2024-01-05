@@ -10,7 +10,8 @@
  * Stepping Action Class
  * ---
  *
- *
+ * It is used for analyzing the steps generated
+ * during each event of the simulation.
  */
 class SteppingAction : public G4UserSteppingAction
 {
