@@ -22,8 +22,10 @@ private:
     // HC index
     G4int index;
 
-    // hits map
+    // hits
     std::vector<G4double> energyVector;
+    std::vector<G4double> energyVectorMerge;
+    std::vector<G4double> escapeVector;
 
     // number of events
     static G4int nEvents;
@@ -48,4 +50,7 @@ public:
 
     static void SetNEvents(G4int N) { nEvents = N; }
     static G4int GetNEvents() { return nEvents; }
+
+    void AddEnergyEscape(G4double energy) { escapeVector.push_back(energy); }
+    void MergePixels() {}
 };
