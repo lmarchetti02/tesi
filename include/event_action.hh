@@ -52,5 +52,5 @@ public:
     static G4int GetNEvents() { return nEvents; }
 
     void AddEnergyEscape(G4double energy) { escapeVector.push_back(energy); }
-    void MergePixels() {}
+    void MergePixels();
 };
