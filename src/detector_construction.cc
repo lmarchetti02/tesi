@@ -134,7 +134,7 @@ void MyDetectorConstruction::ConstructPlanes()
     logicPlane = new G4LogicalVolume(solidPlane, worldMat, "logicPlane");
 
     physPlane1 = new G4PVPlacement(nullptr,
-                                   G4ThreeVector(0., 0., zWorld - zPixel - TOLL_WORLD / 2.),
+                                   G4ThreeVector(0., 0., -TOLL_WORLD / 2.),
                                    logicPlane,
                                    "physPlane",
                                    logicWorld,
