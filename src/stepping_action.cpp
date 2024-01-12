@@ -15,9 +15,9 @@
  *
  * @param[in] eventAction The pointer to the event action instance.
  */
-SteppingAction::SteppingAction(MyEventAction *eventAction) : eventAction(eventAction),
-                                                             scoringVolume(nullptr),
-                                                             scoringPlane(nullptr)
+MySteppingAction::MySteppingAction(MyEventAction *eventAction) : eventAction(eventAction),
+                                                                 scoringVolume(nullptr),
+                                                                 scoringPlane(nullptr)
 {
 }
 
@@ -26,7 +26,7 @@ SteppingAction::SteppingAction(MyEventAction *eventAction) : eventAction(eventAc
  *
  * @param[in] step The pointer to the current step.
  */
-void SteppingAction::UserSteppingAction(const G4Step *step)
+void MySteppingAction::UserSteppingAction(const G4Step *step)
 {
     // get scoring volumes
     if (!scoringVolume)

@@ -23,7 +23,7 @@ include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
 # compile every source and header file in project directory
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cpp)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 # copy macro files to build directory
@@ -38,7 +38,7 @@ foreach(_script ${SCRIPTS})
 endforeach()
 
 # create executable and link it to Geant4 libraries
-add_executable(rivelatore main.cc ${sources} ${headers})
+add_executable(rivelatore main.cpp ${sources} ${headers})
 target_link_libraries(rivelatore ${Geant4_LIBRARIES})
 
 # install executable

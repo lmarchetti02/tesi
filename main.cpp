@@ -15,6 +15,7 @@
 #include "action_initialization.hh"
 #include "sensitive_detector.hh"
 #include "constants.hh"
+#include "stepping_action.hh"
 
 int main(int argc, char **argv)
 {

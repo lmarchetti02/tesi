@@ -51,8 +51,8 @@ namespace charge_sharing
      */
     G4int which_pixel(const std::array<G4double, 2> position)
     {
-        const G4int j = ((position[0] + XY_WORLD) / XY_SUBPIXEL - 1) * 0.5 + 0.5;
-        const G4int i = ((position[1] + XY_WORLD) / XY_SUBPIXEL - 1) * 0.5 + 0.5;
+        const G4int j = ((position[0] + XY_WORLD) / XY_SUBPIXEL) * 0.5 + 0.5;
+        const G4int i = ((position[1] + XY_WORLD) / XY_SUBPIXEL) * 0.5 + 0.5;
         G4int ID;
         if ((i >= 0 && i < N_SUBPIXEL) && (j >= 0 && j < N_SUBPIXEL))
             ID = i * N_SUBPIXEL + j;
@@ -68,7 +68,7 @@ namespace charge_sharing
      *  2. each part is moved around in the detector plane, following a 2D symmetrical gaussian distribution;
      *  3. each random (x,y) is converted into an ID and the energy is added to that pixel.
      *
-     * @param[in] energyVector Constant reference to the vector containing the energy depositions before the charge sharing.
+     * @param[in] energyVector The vector containing the energy depositions before the charge sharing.
      * @param[in] nParts The number of parts the energy has to be divided into.
      *
      * @return The vector containing the energy depositions after the charge sharing.
