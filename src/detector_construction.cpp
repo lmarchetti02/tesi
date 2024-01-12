@@ -1,7 +1,5 @@
 #include "detector_construction.hh"
 
-#include <fstream>
-
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
@@ -10,9 +8,6 @@
 
 #include "sensitive_detector.hh"
 #include "constants.hh"
-
-using std::cout;
-using std::endl;
 
 // pixel map
 auto MyDetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
