@@ -4,6 +4,6 @@
 /run/numberOfThreads 10
 /run/initialize
 
-/beam/beam_width 1
+/beam/beam_width 0
 /beam/energy 50 keV
 /run/beamOn 100000

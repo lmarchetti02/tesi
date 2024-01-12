@@ -29,11 +29,11 @@ public:
     void AddEnergyEscape(G4double);
 
 private:
-    std::vector<G4int> pixelIDVector;
-    std::vector<G4double> pixelEnergyVector;
-    std::vector<G4int> pixelIDVectorCS;
-    std::vector<G4double> pixelEnergyVectorCS;
-    std::vector<G4int> pixelIDVectorMerge;
-    std::vector<G4double> pixelEnergyVectorMerge;
-    std::vector<G4double> energyEscape;
+    std::vector<G4int> pixelIDVector{};
+    std::vector<G4double> pixelEnergyVector{};
+    std::vector<G4int> pixelIDVectorCS{};
+    std::vector<G4double> pixelEnergyVectorCS{};
+    std::vector<G4int> pixelIDVectorMerge{};
+    std::vector<G4double> pixelEnergyVectorMerge{};
+    std::vector<G4double> energyEscape{};
 };

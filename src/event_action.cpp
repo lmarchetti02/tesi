@@ -34,7 +34,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
     energyVectorMerge = std::vector<G4double>(N_PIXEL * N_PIXEL, 0.);
 
     myRun->ClearVectors();
-    escapeVector.clear();
+    escapeVector = {};
 
     // save info about the simulation
     if (Event->GetEventID() == 0)
@@ -71,22 +71,20 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
     man->FillNtupleIColumn(1, 0, Event->GetEventID());
+
+    // no charge sharing and no merge
     for (int i = 0; i < energyVector.size(); i++)
-    {
         myRun->AddEntry(i, energyVector[i]);
-    }
 
     // vector isn't empty (photon has interacted)
     if (!IsVectorEmpty(energyVector))
     {
         // add charge sharing
-        energyVector = charge_sharing::add_charge_sharing(energyVector, 50);
+        energyVector = charge_sharing::add_charge_sharing(energyVector, N_PARTS_ENERGY);
 
         // save energy depositions
         for (int i = 0; i < energyVector.size(); i++)
-        {
             myRun->AddEntryCS(i, energyVector[i]);
-        }
     }
 
     MergePixels();
@@ -96,9 +94,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
         for (int i = 0; i < energyVectorMerge.size(); i++)
         {
             if (energyVectorMerge[i] > 0)
-            {
                 myRun->AddEntryMerge(i, energyVectorMerge[i]);
-            }
         }
     }
 
@@ -191,9 +187,6 @@ bool MyEventAction::IsVectorEmpty(std::vector<T> vector)
  */
 void MyEventAction::MergePixels()
 {
-    G4double sum = 0;
-    G4double sum_merge = 0;
-
     for (int i = 0; i < N_SUBPIXEL; i++)
     {
         for (int j = 0; j < N_SUBPIXEL; j++)
