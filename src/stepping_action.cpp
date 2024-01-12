@@ -39,14 +39,14 @@ void MySteppingAction::UserSteppingAction(const G4Step *step)
     // get volume of the current step
     G4LogicalVolume *volume = step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->GetLogicalVolume();
 
+    // check if we are in scoring volume
+    if (volume != scoringVolume)
+        return;
+
     if (volume == scoringPlane)
     {
         G4Track *track = step->GetTrack();
         if (track->GetParticleDefinition()->GetParticleName() == "gamma" && track->GetTrackID() != 1)
             eventAction->AddEnergyEscape(track->GetTotalEnergy() / MeV);
     }
-
-    // check if we are in scoring volume
-    if (volume != scoringVolume)
-        return;
 }

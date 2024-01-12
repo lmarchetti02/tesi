@@ -76,7 +76,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
     for (int i = 0; i < energyVector.size(); i++)
         myRun->AddEntry(i, energyVector[i]);
 
-    // vector isn't empty (photon has interacted)
+    // energy vector isn't empty (photon has interacted)
     if (!IsVectorEmpty(energyVector))
     {
         // add charge sharing
@@ -85,12 +85,9 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
         // save energy depositions
         for (int i = 0; i < energyVector.size(); i++)
             myRun->AddEntryCS(i, energyVector[i]);
-    }
 
-    MergePixels();
+        MergePixels();
 
-    if (!IsVectorEmpty(energyVectorMerge))
-    {
         for (int i = 0; i < energyVectorMerge.size(); i++)
         {
             if (energyVectorMerge[i] > 0)
