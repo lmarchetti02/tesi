@@ -49,24 +49,25 @@ MyPrimaryGenerator::~MyPrimaryGenerator()
  */
 void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
-    // all the photons in the center of the array
-    if (beamWidth > 1)
+    if (beamWidth < 0)
     {
-        fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -Z_WORLD - TOLL_WORLD));
-        fParticleGun->GeneratePrimaryVertex(anEvent);
+        G4cout << "MyPrimaryGenerator::GeneratePrimaries(G4event) : Invalid 'beamWidth'" << G4endl;
+        return;
     }
 
-    G4double max;
-    // all the photons in the central pixel
-    if (beamWidth == 0)
-        max = XY_PIXEL;
-    // photons distributed uniformly across the array
-    else if (beamWidth == 1)
-        max = XY_WORLD;
+    // set position
+    if (beamWidth > 1)
+        fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -Z_WORLD - TOLL_WORLD));
+    else
+    {
+        // 0 for central pixel, 1 for whole array (see constants.hh)
+        G4double max = (beamWidth == 0) ? XY_PIXEL : XY_WORLD;
+        G4ThreeVector positionVector = randomPositionVector(max, max);
+        fParticleGun->SetParticlePosition(positionVector);
+    }
 
-    G4ThreeVector positionVector = randomPositionVector(max, max);
+    // set energy
     fParticleGun->SetParticleEnergy(energy);
-    fParticleGun->SetParticlePosition(positionVector);
 
     // generate primary vertex
     fParticleGun->GeneratePrimaryVertex(anEvent);
