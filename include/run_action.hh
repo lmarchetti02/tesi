@@ -26,7 +26,11 @@ public:
     void AddEntry(G4int, G4double);
     void AddEntryCS(G4int, G4double);
     void AddEntryMerge(G4int, G4double);
-    void AddEnergyEscape(G4double);
+    void AddEntryMergeCS(G4int, G4double);
+    void AddFluorescence(G4int, G4double, G4double);
+
+    void ClearOriginal();
+    void ClearCS();
 
 private:
     std::vector<G4int> pixelIDVector{};
@@ -35,5 +39,9 @@ private:
     std::vector<G4double> pixelEnergyVectorCS{};
     std::vector<G4int> pixelIDVectorMerge{};
     std::vector<G4double> pixelEnergyVectorMerge{};
-    std::vector<G4double> energyEscape{};
+    std::vector<G4int> pixelIDVectorMergeCS{};
+    std::vector<G4double> pixelEnergyVectorMergeCS{};
+    std::vector<G4int> pixelIDFluorescence{};
+    std::vector<G4double> energyFluorescence{};
+    std::vector<G4double> energyLossFluorescence{};
 };

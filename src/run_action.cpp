@@ -30,13 +30,25 @@ MyRunAction::MyRunAction()
 
     man->CreateNtuple("Event", "Event");
     man->CreateNtupleIColumn("Event_ID");
+    man->CreateNtupleDColumn("Photon_Energy");
+    man->CreateNtupleIColumn("Photon_ID");
+    man->CreateNtupleIColumn("Photon_NoInt");
+    man->CreateNtupleDColumn("Compton_Energy");
+    man->CreateNtupleIColumn("Compton_ID_Primary");
+    man->CreateNtupleDColumn("Compton_ELoss_Primary");
+    man->CreateNtupleIColumn("Compton_ID_Interaction"); // <0 escaped
+    man->CreateNtupleDColumn("Compton_ELoss_Interaction");
     man->CreateNtupleIColumn("ID", pixelIDVector);
     man->CreateNtupleDColumn("Energy", pixelEnergyVector);
     man->CreateNtupleIColumn("ID_CS", pixelIDVectorCS);
     man->CreateNtupleDColumn("Energy_CS", pixelEnergyVectorCS);
     man->CreateNtupleIColumn("ID_Merge", pixelIDVectorMerge);
     man->CreateNtupleDColumn("Energy_Merge", pixelEnergyVectorMerge);
-    man->CreateNtupleDColumn("Energy_Escape", energyEscape);
+    man->CreateNtupleIColumn("ID_Merge_CS", pixelIDVectorMergeCS);
+    man->CreateNtupleDColumn("Energy_Merge_CS", pixelEnergyVectorMergeCS);
+    man->CreateNtupleDColumn("Energy_Fluorescence", energyFluorescence);
+    man->CreateNtupleIColumn("ID_Fluorescence", pixelIDFluorescence); // -1 escape else id interaction fluorescence
+    man->CreateNtupleDColumn("ELoss_Fluorescence", energyLossFluorescence);
     man->FinishNtuple(1);
 }
 
@@ -88,7 +100,11 @@ void MyRunAction::ClearVectors()
     pixelEnergyVectorCS.clear();
     pixelIDVectorMerge.clear();
     pixelEnergyVectorMerge.clear();
-    energyEscape.clear();
+    pixelIDVectorMergeCS.clear();
+    pixelEnergyVectorMergeCS.clear();
+    energyFluorescence.clear();
+    pixelIDFluorescence.clear();
+    energyLossFluorescence.clear();
 }
 
 /**
@@ -125,7 +141,7 @@ void MyRunAction::AddEntryCS(G4int ID, G4double Energy)
 
 /**
  * Function for adding ID and Energy to the vectors used for saving
- * info into the ROOT file (with charge sharing and merge).
+ * info into the ROOT file (without charge sharing and merge).
  *
  * @param[in] ID The ID of the pixel.
  * @param[in] Energy The energy deposition in the pixel.
@@ -140,13 +156,44 @@ void MyRunAction::AddEntryMerge(G4int ID, G4double Energy)
 }
 
 /**
- * Function for adding the energy escaped from the
- * detector to the `energyEscape` vector.
+ * Function for adding ID and Energy to the vectors used for saving
+ * info into the ROOT file (with charge sharing and merge).
  *
+ * @param[in] ID The ID of the pixel.
  * @param[in] Energy The energy deposition in the pixel.
  */
-void MyRunAction::AddEnergyEscape(G4double Energy)
+void MyRunAction::AddEntryMergeCS(G4int ID, G4double Energy)
 {
     if (Energy != 0)
-        energyEscape.push_back(Energy);
+    {
+        pixelIDVectorMergeCS.push_back(ID);
+        pixelEnergyVectorMergeCS.push_back(Energy);
+    }
+}
+
+void MyRunAction::AddFluorescence(G4int ID, G4double Energy, G4double energyLoss)
+{
+    pixelIDFluorescence.push_back(ID);
+    energyFluorescence.push_back(Energy);
+    energyLossFluorescence.push_back(energyLoss);
+}
+
+/**
+ * Function for clearing the subpixels
+ * energies (before charge sharing).
+ */
+void MyRunAction::ClearOriginal()
+{
+    pixelIDVector.clear();
+    pixelEnergyVector.clear();
+}
+
+/**
+ * Function for clearing the subpixels
+ * energies (after charge sharing).
+ */
+void MyRunAction::ClearCS()
+{
+    pixelIDVectorCS.clear();
+    pixelEnergyVectorCS.clear();
 }
