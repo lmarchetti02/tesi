@@ -24,14 +24,15 @@ void MyActionInitialization::BuildForMaster() const
 void MyActionInitialization::Build() const
 {
     // particle gun action
-    SetUserAction(new MyPrimaryGenerator);
+    MyPrimaryGenerator *generator = new MyPrimaryGenerator();
+    SetUserAction(generator);
 
     // run action
     MyRunAction *runAction = new MyRunAction;
     SetUserAction(runAction);
 
     // event action
-    MyEventAction *eventAction = new MyEventAction(runAction);
+    MyEventAction *eventAction = new MyEventAction(runAction, generator);
     SetUserAction(new MyEventAction(runAction));
 
     // stepping action
