@@ -1,11 +1,7 @@
 #pragma once
 
 #include <array>
-#include <ctime>
-#include <memory>
 #include <vector>
-#include <map>
-#include <cmath>
 
 #include "Randomize.hh"
 #include "G4SystemOfUnits.hh"
@@ -51,8 +47,8 @@ namespace charge_sharing
      */
     G4int which_pixel(const std::array<G4double, 2> position)
     {
-        const G4int j = ((position[0] + XY_WORLD) / XY_SUBPIXEL) * 0.5 + 0.5;
-        const G4int i = ((position[1] + XY_WORLD) / XY_SUBPIXEL) * 0.5 + 0.5;
+        const G4int j = ((position[0] + XY_WORLD) / XY_SUBPIXEL) * 0.5;
+        const G4int i = ((position[1] + XY_WORLD) / XY_SUBPIXEL) * 0.5;
         G4int ID;
         if ((i >= 0 && i < N_SUBPIXEL) && (j >= 0 && j < N_SUBPIXEL))
             ID = i * N_SUBPIXEL + j;

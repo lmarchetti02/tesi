@@ -43,3 +43,4 @@ compile.sh
 *.DS_store
 include/.DS_Store
 src/.DS_Store
+/.cache
