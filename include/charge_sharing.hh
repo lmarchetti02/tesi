@@ -7,8 +7,6 @@
 #include "G4SystemOfUnits.hh"
 
 #include "detector_construction.hh"
-#include "sensitive_detector.hh"
-#include "event_action.hh"
 #include "constants.hh"
 
 /**
