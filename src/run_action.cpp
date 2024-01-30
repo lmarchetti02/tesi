@@ -64,7 +64,7 @@ void MyRunAction::BeginOfRunAction(const G4Run *run)
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
     G4String runNumber = to_string(run->GetRunID());
-    man->OpenFile("../results/output" + runNumber + ".root");
+    man->OpenFile("../results/output" + runNumber + ".root"); // VM
 
     // get total number of events
     MyEventAction::SetNEvents(run->GetNumberOfEventToBeProcessed());
@@ -171,6 +171,10 @@ void MyRunAction::AddEntryMergeCS(G4int ID, G4double Energy)
     }
 }
 
+/**
+ * Function for adding the energy of the fluorescence photons
+ * to the vector used for saving info into the ROOT file.
+ */
 void MyRunAction::AddFluorescence(G4int ID, G4double Energy, G4double energyLoss)
 {
     pixelIDFluorescence.push_back(ID);
