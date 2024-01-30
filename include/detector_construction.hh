@@ -26,6 +26,8 @@ private:
     G4double yWorld;
     G4double zWorld;
 
+    G4double zPlanes;
+
     G4double xPixel;
     G4double yPixel;
     G4double zPixel;
@@ -38,8 +40,12 @@ private:
     G4LogicalVolume *logicWorld, *logicDetector, *logicPlane;
     G4VPhysicalVolume *physWorld, *physDetector, *physPlane1, *physPlane2;
 
-    G4LogicalVolume *fScoringVolume;
-    G4LogicalVolume *fScoringPlane;
+    G4LogicalVolume *scoringVolume;
+    G4LogicalVolume *scoringPlane;
+
+    void ConstructWorld();
+    void ConstructPixels();
+    void ConstructPlanes();
 
     // materials
     G4Material *worldMat, *detectorMat;
@@ -52,16 +58,12 @@ public:
     ~MyDetectorConstruction() override = default;
 
     G4VPhysicalVolume *Construct() override;
-    void ConstructWorld();
-    void ConstructPixels();
-    void ConstructPlanes();
 
     static void SetVisualization();
 
     static void AddToPixelMap(std::pair<G4int, std::array<G4double, 2>>);
-    static std::map<G4int, std::array<G4double, 2>> GetPixelMap();
-    static void PrintPixelMap();
+    static std::map<G4int, std::array<G4double, 2>> GetPixelMap() { return pixelMap; }
 
-    G4LogicalVolume *GetScoringVolume() const { return fScoringVolume; }
-    G4LogicalVolume *GetScoringPlane() const { return fScoringPlane; }
+    G4LogicalVolume *GetScoringVolume() const { return scoringVolume; }
+    G4LogicalVolume *GetScoringPlane() const { return scoringPlane; }
 };
