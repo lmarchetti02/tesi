@@ -14,20 +14,22 @@
 class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
 private:
-    G4ParticleGun *fParticleGun;
+  G4ParticleGun *particleGun;
 
-    G4double maxTheta;
-    G4double energy;
-    G4int beamWidth;
+  G4double energy;
+  G4int beamWidth;
 
-    G4GenericMessenger *fMessenger;
+  G4GenericMessenger *fMessenger;
 
 public:
-    MyPrimaryGenerator();
-    ~MyPrimaryGenerator() override;
+  MyPrimaryGenerator();
+  ~MyPrimaryGenerator() override;
 
-    void GeneratePrimaries(G4Event *) override;
-    G4ThreeVector randomPositionVector(G4double, G4double);
+  void GeneratePrimaries(G4Event *) override;
+  G4ThreeVector randomPositionVector(G4double, G4double);
 
-    void DefineCommands();
+  void DefineCommands();
+
+  G4int GetBeamWidth() { return beamWidth; }
+  G4double GetEnergy() { return energy; }
 };

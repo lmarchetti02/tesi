@@ -12,9 +12,9 @@
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), maxTheta(0.), beamWidth(BEAM_WIDTH)
+MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), beamWidth(BEAM_WIDTH)
 {
-    fParticleGun = new G4ParticleGun(1); // 1 particles per event
+    particleGun = new G4ParticleGun(1); // 1 particles per event
 
     // fetch particle
     G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
@@ -22,13 +22,13 @@ MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), maxTheta(0.), beamW
     G4ParticleDefinition *particle = particleTable->FindParticle(particleName);
 
     // set position and momentum vectors
-    G4ThreeVector pos(0., 0., -Z_WORLD - TOLL_WORLD);
+    G4ThreeVector pos(0., 0., -Z_WORLD);
 
     // generate particle
-    fParticleGun->SetParticlePosition(pos);
-    fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
-    fParticleGun->SetParticleEnergy(energy);
-    fParticleGun->SetParticleDefinition(particle);
+    particleGun->SetParticlePosition(pos);
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+    particleGun->SetParticleEnergy(energy);
+    particleGun->SetParticleDefinition(particle);
 
     // messenger
     DefineCommands();
@@ -39,7 +39,7 @@ MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), maxTheta(0.), beamW
  */
 MyPrimaryGenerator::~MyPrimaryGenerator()
 {
-    delete fParticleGun;
+    delete particleGun;
 }
 
 /**
@@ -51,26 +51,26 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
     if (beamWidth < 0)
     {
-        G4cout << "MyPrimaryGenerator::GeneratePrimaries(G4event) : Invalid 'beamWidth'" << G4endl;
+        G4cout << "MyPrimaryGenerator::GeneratePrimaries(G4event): Invalid 'beamWidth'" << G4endl;
         return;
     }
 
     // set position
     if (beamWidth > 1)
-        fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, -Z_WORLD - TOLL_WORLD));
+        particleGun->SetParticlePosition(G4ThreeVector(0, 0, -Z_WORLD));
     else
     {
         // 0 for central pixel, 1 for whole array (see constants.hh)
         G4double max = (beamWidth == 0) ? XY_PIXEL : XY_WORLD;
         G4ThreeVector positionVector = randomPositionVector(max, max);
-        fParticleGun->SetParticlePosition(positionVector);
+        particleGun->SetParticlePosition(positionVector);
     }
 
     // set energy
-    fParticleGun->SetParticleEnergy(energy);
+    particleGun->SetParticleEnergy(energy);
 
     // generate primary vertex
-    fParticleGun->GeneratePrimaryVertex(anEvent);
+    particleGun->GeneratePrimaryVertex(anEvent);
 }
 
 /**
@@ -84,7 +84,7 @@ G4ThreeVector MyPrimaryGenerator::randomPositionVector(G4double xMax, G4double y
     G4double x = -xMax + G4UniformRand() * 2 * xMax;
     G4double y = -yMax + G4UniformRand() * 2 * yMax;
 
-    return G4ThreeVector(x, y, -Z_WORLD - TOLL_WORLD);
+    return G4ThreeVector(x, y, -Z_WORLD);
 }
 
 /**
