@@ -33,7 +33,7 @@ void MyActionInitialization::Build() const
 
     // event action
     MyEventAction *eventAction = new MyEventAction(runAction, generator);
-    SetUserAction(new MyEventAction(runAction));
+    SetUserAction(eventAction);
 
     // stepping action
     SetUserAction(new MySteppingAction(eventAction));
