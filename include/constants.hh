@@ -22,9 +22,9 @@ constexpr G4double XY_PIXEL = 100 * um;
 constexpr G4double XY_SUBPIXEL = XY_PIXEL / PIXEL_RATIO;
 constexpr G4double Z_PIXEL = 0.5 * mm;
 
-constexpr G4double TOLL_WORLD = 10 * um;
+constexpr G4double Z_PLANES = 5 * um;
 constexpr G4double XY_WORLD = XY_SUBPIXEL * N_SUBPIXEL;
-constexpr G4double Z_WORLD = Z_PIXEL * 2;
+constexpr G4double Z_WORLD = Z_PIXEL * 4;
 
 // The material of which the pixels are made.
 constexpr const char TGT_MATERIAL[] = "G4_CADMIUM_TELLURIDE";
