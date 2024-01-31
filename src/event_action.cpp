@@ -24,7 +24,7 @@ MyEventAction::MyEventAction(MyRunAction *run, MyPrimaryGenerator *generator) : 
                                                                                 myRun(run),
                                                                                 myGenerator(generator),
                                                                                 stepInfo(new SaveStepInfo),
-                                                                                saveCompton(new save_compton) {}
+                                                                                saveCompton(new SaveCompton) {}
 
 /**
  * Geant4 function called at the beginning of the event.
@@ -43,7 +43,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
     fluorescenceEnergyVector.clear();
     fluorescenceIDVector.clear();
     stepInfo->Clear();
-    saveCompton->clear();
+    saveCompton->Clear();
 
     eventID = Event->GetEventID();
 
@@ -259,7 +259,7 @@ void MyEventAction::AddStepInfo(G4int partID, G4int parentID, G4int partType, G4
 void MyEventAction::AddComptonInfo(G4int partID, G4int parentID, G4int partType, G4int volID, G4double ene,
                                    G4double eneloss, G4String processname)
 {
-    saveCompton->add_step(partID, parentID, partType, volID, ene, eneloss, eventID, processname);
+    saveCompton->AddStep(partID, parentID, partType, volID, ene, eneloss, eventID, processname);
 }
 
 void MyEventAction::SetInitialPhoton(G4int copyNo, G4double ene)

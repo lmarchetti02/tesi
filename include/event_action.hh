@@ -7,7 +7,6 @@
 
 #include "run_action.hh"
 #include "generator.hh"
-// VM added
 #include "save_step_info.hh"
 #include "save_compton.hh"
 
@@ -41,7 +40,7 @@ private:
 
   G4int eventID;
   SaveStepInfo *stepInfo;
-  save_compton *saveCompton;
+  SaveCompton *saveCompton;
 
   const G4double minEnergy = 0.1 * keV;
 
