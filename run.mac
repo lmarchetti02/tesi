@@ -5,5 +5,5 @@
 /run/initialize
 
 /beam/beam_width 0
-/beam/energy 50 keV
-/run/beamOn 100000
+/beam/energy 100 keV
+/run/beamOn 10000
