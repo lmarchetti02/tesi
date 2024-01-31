@@ -6,6 +6,10 @@
 #include "G4Event.hh"
 
 #include "run_action.hh"
+#include "generator.hh"
+// VM added
+#include "save_step_info.hh"
+#include "save_compton.hh"
 
 /**
  * Event Action Class
@@ -19,38 +23,57 @@
 class MyEventAction : public G4UserEventAction
 {
 private:
-    // HC index
-    G4int index;
+  // HC index
+  G4int index;
 
-    // hits
-    std::vector<G4double> energyVector;
-    std::vector<G4double> energyVectorMerge;
-    std::vector<G4double> escapeVector;
+  // hits
+  std::vector<G4double> energyVector;
+  std::vector<G4double> energyVectorMerge;
+  std::vector<G4double> energyVectorMergeCS;
+  std::vector<G4int> fluorescenceIDVector;
+  std::vector<G4double> fluorescenceEnergyVector;
 
-    // number of events
-    static G4int nEvents;
+  // number of events
+  static G4int nEvents;
 
-    // run action
-    MyRunAction *myRun;
+  MyRunAction *myRun;
+  MyPrimaryGenerator *myGenerator;
+
+  G4int eventID;
+  save_step_info *stepInfo;
+  save_compton *saveCompton;
+
+  const G4double minEnergy = 0.1 * keV;
+
+  G4int photonID;
+  G4double photonEnergy;
+  G4int initialPhotonSet;
+  G4int initialPhotonNoIter;
+
+  void ReadHitsCollection(const G4Event *);
+  void SaveEnergies();
+
+  void MergePixels(std::vector<G4double>, std::vector<G4double> &);
+
+  template <typename T>
+  bool IsVectorEmpty(std::vector<T>);
 
 public:
-    MyEventAction(MyRunAction *);
-    ~MyEventAction() override = default;
+  MyEventAction(MyRunAction *, MyPrimaryGenerator *);
+  ~MyEventAction() override = default;
 
-    void BeginOfEventAction(const G4Event *) override;
-    void EndOfEventAction(const G4Event *) override;
+  void BeginOfEventAction(const G4Event *) override;
+  void EndOfEventAction(const G4Event *) override;
 
-    void readHitsCollection(const G4Event *);
+  static void SetNEvents(G4int N) { nEvents = N; }
+  static G4int GetNEvents() { return nEvents; }
 
-    template <typename T>
-    static T VectorSum(std::vector<T>);
+  G4int GetEventID() { return eventID; }
 
-    template <typename T>
-    static bool IsVectorEmpty(std::vector<T>);
+  void AddStepInfo(G4int, G4int, G4int, G4int, G4double, G4double);
+  void SetInitialPhoton(G4int, G4double);
 
-    static void SetNEvents(G4int N) { nEvents = N; }
-    static G4int GetNEvents() { return nEvents; }
+  G4double GetEnergy() { return myGenerator->GetEnergy(); }
 
-    void AddEnergyEscape(G4double energy) { escapeVector.push_back(energy); }
-    void MergePixels();
+  void AddComptonInfo(G4int, G4int, G4int, G4int, G4double, G4double, G4String);
 };
