@@ -23,7 +23,7 @@ G4int MyEventAction::nEvents = 0;
 MyEventAction::MyEventAction(MyRunAction *run, MyPrimaryGenerator *generator) : index(-1),
                                                                                 myRun(run),
                                                                                 myGenerator(generator),
-                                                                                stepInfo(new save_step_info),
+                                                                                stepInfo(new SaveStepInfo),
                                                                                 saveCompton(new save_compton) {}
 
 /**
@@ -42,7 +42,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
     myRun->ClearVectors();
     fluorescenceEnergyVector.clear();
     fluorescenceIDVector.clear();
-    stepInfo->clear();
+    stepInfo->Clear();
     saveCompton->clear();
 
     eventID = Event->GetEventID();
@@ -250,10 +250,10 @@ void MyEventAction::AddStepInfo(G4int partID, G4int parentID, G4int partType, G4
     }
     else if (partType == -1)
     {
-        stepInfo->add_step(partID, parentID, partType, partType, ene, 0);
+        stepInfo->AddStep(partID, parentID, partType, partType, ene, 0);
     }
     else if (partType >= 0)
-        stepInfo->add_step(partID, parentID, partType, volID, ene, eneloss);
+        stepInfo->AddStep(partID, parentID, partType, volID, ene, eneloss);
 }
 
 void MyEventAction::AddComptonInfo(G4int partID, G4int parentID, G4int partType, G4int volID, G4double ene,

@@ -40,7 +40,7 @@ private:
   MyPrimaryGenerator *myGenerator;
 
   G4int eventID;
-  save_step_info *stepInfo;
+  SaveStepInfo *stepInfo;
   save_compton *saveCompton;
 
   const G4double minEnergy = 0.1 * keV;
