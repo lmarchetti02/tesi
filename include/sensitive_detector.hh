@@ -19,9 +19,6 @@ private:
     MyHitsCollection *hitsCollection;
     G4int HCID;
 
-    static G4ThreeVector firstHit;
-    static G4int pixelFirstHit;
-
 public:
     MySensitiveDetector(G4String);
     ~MySensitiveDetector() override = default;

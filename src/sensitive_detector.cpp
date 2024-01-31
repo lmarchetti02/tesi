@@ -4,8 +4,6 @@
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
 
-G4ThreeVector MySensitiveDetector::firstHit = G4ThreeVector();
-
 /**
  * The constructor.
  *

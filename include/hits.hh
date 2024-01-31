@@ -44,7 +44,7 @@ public:
     /**
      * Function for setting the `detectorID` data member.
      *
-     * @param[in] IS The detector ID of the hit.
+     * @param[in] ID The detector ID of the hit.
      */
     void SetID(G4int ID) { detectorID = ID; }
     /**
