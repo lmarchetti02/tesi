@@ -7,6 +7,7 @@
 #include "G4SDManager.hh"
 
 #include "sensitive_detector.hh"
+#include "planes_sd.hh"
 #include "constants.hh"
 
 /**
@@ -175,6 +176,10 @@ void MyDetectorConstruction::ConstructSDandField()
     MySensitiveDetector *sensDet = new MySensitiveDetector("/Pixels");
     sdManager->AddNewDetector(sensDet);
     logicDetector->SetSensitiveDetector(sensDet);
+
+    PlanesSD *planesSD = new PlanesSD("/Planes");
+    sdManager->AddNewDetector(planesSD);
+    logicPlane->SetSensitiveDetector(planesSD);
 }
 
 /**
