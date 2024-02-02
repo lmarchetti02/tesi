@@ -1,0 +1,32 @@
+
+"Info"
+Pixel_N             number of pixels (after merge)
+Pixels_xy_dim       pixel transversal size (in cm, after merge)
+Pixels_z_dim        pixel longitudinal size (in cm)
+Subpixel_N          number of sub-pixels 
+Subpixels_xy_dim    pixel transversal size (in cm)
+Subpixels_z_dim     pixel longitudinal size (in cm)
+Event_N             number of events
+Beam_Width          0=beam spread on central pixel 1=beam spread on the whole detector 2=central position
+
+"Event"
+(I) Event_ID                            event number
+(D) Photon_energy                       photon energy
+(I) Photon_ID                           pixel ID of the primary photon
+(I) Photon_NoInt                        =0 photon interacted in the sensitive volume =1 photon has not interacted
+(D) Compton_energy                      energy of compton photon (if >=0)
+(I) Compton_ID_primary                  pixel ID where the compton photon was created (if >=0)
+(D) Compton_eneloss_primary             energy released in the production of the compton photon
+(I) Compton_ID_interaction              pixel ID where the compton photon has interacted (if -1 escaped)
+(D) Compton_eneloss_interactio          energy lost in the interaction of the compton photon
+(I *) pixelIDVector                     vector of the sub-pixel IDs with energy loss (no CS, no merge, it could be empty)
+(D *) pixelEnergyVector                 vector with energy loss in each sub-pixel (no CS, no merge, it could be empty)
+(I *) pixelIDVectorCS                   vector of the sub-pixel IDs with energy loss (CS, no merge, it could be empty)
+(D *) pixelEnergyVectorCS               vector with energy loss in each sub-pixel (CS, no merge, it could be empty)
+(I *) pixelIDVectorMerge                vector of pixel IDs with energy loss (after CS and merge)
+(D *) pixelEnergyVectorMerge            vector with energy loss in each pixel (after CS and merge)
+(I *) pixelIDVectorMergeNOCS            vector of pixel IDs with energy loss (before CS - merged)
+(D *) pixelEnergyVectorMergeNOCS        vector with energy loss in each pixel (before CS - merged)
+(D *) energyFluoro                      vector with energies of fluorescent photons
+(I *) pixelIDFluoro;                    vector with pixel IDs where the fluorescent photons interact (-1 if escaped)
+(D *) energyLossFluoro                  vector with energy loss in the interaction of the fluorescent photon
