@@ -19,7 +19,7 @@
  *
  * @param[in] eventAction The pointer to the event action instance.
  */
-MySteppingAction::MySteppingAction(MyEventAction *eventAction) : eventAction(eventAction),
+MySteppingAction::MySteppingAction(EventAction *eventAction) : eventAction(eventAction),
                                                                  scoringVolume(nullptr),
                                                                  scoringPlane(nullptr) {}
 
@@ -34,7 +34,7 @@ void MySteppingAction::UserSteppingAction(const G4Step *step)
     // get scoring volumes
     if (!scoringVolume)
     {
-        const auto detConstruction = static_cast<const MyDetectorConstruction *>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+        const auto detConstruction = static_cast<const DetectorConstruction *>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
         scoringVolume = detConstruction->GetScoringVolume();
         scoringPlane = detConstruction->GetScoringPlane();
     }

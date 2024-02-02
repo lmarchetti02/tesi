@@ -19,11 +19,12 @@
  * data from the HitsCollection, operate on it, and save the results
  * in the NTuple.
  */
-class MyEventAction : public G4UserEventAction
+class EventAction : public G4UserEventAction
 {
 private:
   // HC index
   G4int index;
+  G4int iPlanes;
 
   // hits
   std::vector<G4double> energyVector;
@@ -35,8 +36,8 @@ private:
   // number of events
   static G4int nEvents;
 
-  MyRunAction *myRun;
-  MyPrimaryGenerator *myGenerator;
+  RunAction *myRun;
+  PrimaryGenerator *myGenerator;
 
   G4int eventID;
   SaveStepInfo *stepInfo;
@@ -50,6 +51,7 @@ private:
   G4int initialPhotonNoIter;
 
   void ReadHitsCollection(const G4Event *);
+  void ReadHitsCollectionPlanes(const G4Event *);
   void SaveEnergies();
 
   void MergePixels(std::vector<G4double>, std::vector<G4double> &);
@@ -58,8 +60,8 @@ private:
   bool IsVectorEmpty(std::vector<T>);
 
 public:
-  MyEventAction(MyRunAction *, MyPrimaryGenerator *);
-  ~MyEventAction() override = default;
+  EventAction(RunAction *, PrimaryGenerator *);
+  ~EventAction() override = default;
 
   void BeginOfEventAction(const G4Event *) override;
   void EndOfEventAction(const G4Event *) override;

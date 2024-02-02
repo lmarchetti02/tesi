@@ -16,12 +16,12 @@
 class MySteppingAction : public G4UserSteppingAction
 {
 public:
-    MySteppingAction(MyEventAction *);
+    MySteppingAction(EventAction *);
     ~MySteppingAction() override = default;
 
     void UserSteppingAction(const G4Step *) override;
 
 private:
-    MyEventAction *eventAction;
+    EventAction *eventAction;
     G4LogicalVolume *scoringVolume, *scoringPlane;
 };

@@ -11,7 +11,7 @@
  * It creates all the NTuples necessary for saving
  * the results of the simulation.
  */
-MyRunAction::MyRunAction()
+RunAction::RunAction()
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
     man->SetNtupleMerging(true);
@@ -59,7 +59,7 @@ MyRunAction::MyRunAction()
  *
  * @param run A pointer to the current `G4Run` object.
  */
-void MyRunAction::BeginOfRunAction(const G4Run *run)
+void RunAction::BeginOfRunAction(const G4Run *run)
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance();
 
@@ -67,7 +67,7 @@ void MyRunAction::BeginOfRunAction(const G4Run *run)
     man->OpenFile("../results/output" + runNumber + ".root"); // VM
 
     // get total number of events
-    MyEventAction::SetNEvents(run->GetNumberOfEventToBeProcessed());
+    EventAction::SetNEvents(run->GetNumberOfEventToBeProcessed());
 }
 
 /**
@@ -77,7 +77,7 @@ void MyRunAction::BeginOfRunAction(const G4Run *run)
  *
  * @param run Not used.
  */
-void MyRunAction::EndOfRunAction(const G4Run *run)
+void RunAction::EndOfRunAction(const G4Run *run)
 {
     G4AnalysisManager *man = G4AnalysisManager::Instance(); // singleton
 
@@ -85,14 +85,14 @@ void MyRunAction::EndOfRunAction(const G4Run *run)
     man->CloseFile();
 
     // reset number of events
-    MyEventAction::SetNEvents(0);
+    EventAction::SetNEvents(0);
 }
 
 /**
  * Function for clearing the vectors used for saving
  * info into the ROOT file.
  */
-void MyRunAction::ClearVectors()
+void RunAction::ClearVectors()
 {
     pixelIDVector.clear();
     pixelEnergyVector.clear();
@@ -114,7 +114,7 @@ void MyRunAction::ClearVectors()
  * @param[in] ID The ID of the pixel.
  * @param[in] Energy The energy deposition in the pixel.
  */
-void MyRunAction::AddEntry(G4int ID, G4double Energy)
+void RunAction::AddEntry(G4int ID, G4double Energy)
 {
     if (Energy != 0)
     {
@@ -130,7 +130,7 @@ void MyRunAction::AddEntry(G4int ID, G4double Energy)
  * @param[in] ID The ID of the pixel.
  * @param[in] Energy The energy deposition in the pixel.
  */
-void MyRunAction::AddEntryCS(G4int ID, G4double Energy)
+void RunAction::AddEntryCS(G4int ID, G4double Energy)
 {
     if (Energy != 0)
     {
@@ -146,7 +146,7 @@ void MyRunAction::AddEntryCS(G4int ID, G4double Energy)
  * @param[in] ID The ID of the pixel.
  * @param[in] Energy The energy deposition in the pixel.
  */
-void MyRunAction::AddEntryMerge(G4int ID, G4double Energy)
+void RunAction::AddEntryMerge(G4int ID, G4double Energy)
 {
     if (Energy != 0)
     {
@@ -162,7 +162,7 @@ void MyRunAction::AddEntryMerge(G4int ID, G4double Energy)
  * @param[in] ID The ID of the pixel.
  * @param[in] Energy The energy deposition in the pixel.
  */
-void MyRunAction::AddEntryMergeCS(G4int ID, G4double Energy)
+void RunAction::AddEntryMergeCS(G4int ID, G4double Energy)
 {
     if (Energy != 0)
     {
@@ -175,7 +175,7 @@ void MyRunAction::AddEntryMergeCS(G4int ID, G4double Energy)
  * Function for adding the energy of the fluorescence photons
  * to the vector used for saving info into the ROOT file.
  */
-void MyRunAction::AddFluorescence(G4int ID, G4double Energy, G4double energyLoss)
+void RunAction::AddFluorescence(G4int ID, G4double Energy, G4double energyLoss)
 {
     pixelIDFluorescence.push_back(ID);
     energyFluorescence.push_back(Energy);
@@ -186,7 +186,7 @@ void MyRunAction::AddFluorescence(G4int ID, G4double Energy, G4double energyLoss
  * Function for clearing the subpixels
  * energies (before charge sharing).
  */
-void MyRunAction::ClearOriginal()
+void RunAction::ClearOriginal()
 {
     pixelIDVector.clear();
     pixelEnergyVector.clear();
@@ -196,7 +196,7 @@ void MyRunAction::ClearOriginal()
  * Function for clearing the subpixels
  * energies (after charge sharing).
  */
-void MyRunAction::ClearCS()
+void RunAction::ClearCS()
 {
     pixelIDVectorCS.clear();
     pixelEnergyVectorCS.clear();

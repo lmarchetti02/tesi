@@ -12,7 +12,7 @@
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), beamWidth(BEAM_WIDTH)
+PrimaryGenerator::PrimaryGenerator() : energy(50 * keV), beamWidth(BEAM_WIDTH)
 {
     particleGun = new G4ParticleGun(1); // 1 particles per event
 
@@ -37,7 +37,7 @@ MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), beamWidth(BEAM_WIDT
 /**
  * The destructor.
  */
-MyPrimaryGenerator::~MyPrimaryGenerator()
+PrimaryGenerator::~PrimaryGenerator()
 {
     delete particleGun;
 }
@@ -47,7 +47,7 @@ MyPrimaryGenerator::~MyPrimaryGenerator()
  *
  * @param[in] anEvent The pointer to the event in which the particle has to be created.
  */
-void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
+void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
     if (beamWidth < 0)
     {
@@ -79,7 +79,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
  * @param[in] maxTheta The angle that defines the cone.
  * @return A random unit vector inside the cone defined by `maxTheta`.
  */
-G4ThreeVector MyPrimaryGenerator::randomPositionVector(G4double xMax, G4double yMax)
+G4ThreeVector PrimaryGenerator::randomPositionVector(G4double xMax, G4double yMax)
 {
     G4double x = -xMax + G4UniformRand() * 2 * xMax;
     G4double y = -yMax + G4UniformRand() * 2 * yMax;
@@ -90,7 +90,7 @@ G4ThreeVector MyPrimaryGenerator::randomPositionVector(G4double xMax, G4double y
 /**
  * Function for defining the messenger commands.
  */
-void MyPrimaryGenerator::DefineCommands()
+void PrimaryGenerator::DefineCommands()
 {
     fMessenger = new G4GenericMessenger(this, "/beam/", "X ray beam customization");
 

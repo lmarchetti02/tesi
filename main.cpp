@@ -36,9 +36,9 @@ int main(int argc, char **argv)
 	auto *runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MT);
 #endif
 
-	runManager->SetUserInitialization(new MyDetectorConstruction); // detector
-	runManager->SetUserInitialization(new MyPhysicsList);		   // physics
-	runManager->SetUserInitialization(new MyActionInitialization); // particles
+	runManager->SetUserInitialization(new DetectorConstruction); // detector
+	runManager->SetUserInitialization(new PhysicsList);			 // physics
+	runManager->SetUserInitialization(new ActionInitialization); // particles
 
 	// for visualization
 	auto *visManager = new G4VisExecutive;
@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 	else
 	{
 		uiManager->ApplyCommand("/control/execute vis.mac");
-		MyDetectorConstruction::SetVisualization();
+		DetectorConstruction::SetVisualization();
 		ui->SessionStart();
 
 		delete ui;

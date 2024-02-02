@@ -11,7 +11,7 @@
  * Creates the particle gun and defines the properties
  * of the particles to be shot (position and momentum).
  */
-class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
+class PrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
 private:
   G4ParticleGun *particleGun;
@@ -22,8 +22,8 @@ private:
   G4GenericMessenger *fMessenger;
 
 public:
-  MyPrimaryGenerator();
-  ~MyPrimaryGenerator() override;
+  PrimaryGenerator();
+  ~PrimaryGenerator() override;
 
   void GeneratePrimaries(G4Event *) override;
   G4ThreeVector randomPositionVector(G4double, G4double);

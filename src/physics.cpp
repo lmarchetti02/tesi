@@ -18,7 +18,7 @@
 /**
  * The default constructor.
  */
-MyPhysicsList::MyPhysicsList()
+PhysicsList::PhysicsList()
 {
     SetVerboseLevel(1);
 
@@ -37,7 +37,7 @@ MyPhysicsList::MyPhysicsList()
 /**
  * The destructor.
  */
-MyPhysicsList::~MyPhysicsList()
+PhysicsList::~PhysicsList()
 {
     delete fDecPhysicsList;
     delete fRadDecayPhysicsList;
@@ -47,7 +47,7 @@ MyPhysicsList::~MyPhysicsList()
 /**
  * Geant4 function for constructing the particles used in the simulation.
  */
-void MyPhysicsList::ConstructParticle()
+void PhysicsList::ConstructParticle()
 {
     fDecPhysicsList->ConstructParticle();
 }
@@ -55,7 +55,7 @@ void MyPhysicsList::ConstructParticle()
 /**
  * Geant4 function for constructing the physical processes used in the simulation.
  */
-void MyPhysicsList::ConstructProcess()
+void PhysicsList::ConstructProcess()
 {
     AddTransportation();
     fEmPhysicsList->ConstructProcess();

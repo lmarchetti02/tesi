@@ -8,31 +8,31 @@
 /**
  * The default constructor.
  */
-MyActionInitialization::MyActionInitialization() {}
+ActionInitialization::ActionInitialization() {}
 
 /**
  * Geant4 function for initializing the user action in the master thread.
  */
-void MyActionInitialization::BuildForMaster() const
+void ActionInitialization::BuildForMaster() const
 {
-    SetUserAction(new MyRunAction);
+    SetUserAction(new RunAction);
 }
 
 /**
  * Geant4 function for initializing the user action in the worker threads.
  */
-void MyActionInitialization::Build() const
+void ActionInitialization::Build() const
 {
     // particle gun action
-    MyPrimaryGenerator *generator = new MyPrimaryGenerator();
+    PrimaryGenerator *generator = new PrimaryGenerator();
     SetUserAction(generator);
 
     // run action
-    MyRunAction *runAction = new MyRunAction;
+    RunAction *runAction = new RunAction;
     SetUserAction(runAction);
 
     // event action
-    MyEventAction *eventAction = new MyEventAction(runAction, generator);
+    EventAction *eventAction = new EventAction(runAction, generator);
     SetUserAction(eventAction);
 
     // stepping action

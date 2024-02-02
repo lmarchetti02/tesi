@@ -9,11 +9,11 @@
  * Defines all the physics necessary for the simulation. In particular,
  * it defines al the particles and physical processes needed.
  */
-class MyPhysicsList : public G4VModularPhysicsList
+class PhysicsList : public G4VModularPhysicsList
 {
 public:
-    explicit MyPhysicsList();
-    ~MyPhysicsList() override;
+    explicit PhysicsList();
+    ~PhysicsList() override;
 
     void ConstructParticle() override;
     void ConstructProcess() override;

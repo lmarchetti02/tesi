@@ -20,9 +20,9 @@
  */
 
 // pixel map
-auto MyDetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
+auto DetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
 
-MyDetectorConstruction::MyDetectorConstruction() : nPixel(N_SUBPIXEL),
+DetectorConstruction::DetectorConstruction() : nPixel(N_SUBPIXEL),
                                                    xWorld(XY_WORLD),
                                                    yWorld(XY_WORLD),
                                                    zWorld(Z_WORLD),
@@ -39,7 +39,7 @@ MyDetectorConstruction::MyDetectorConstruction() : nPixel(N_SUBPIXEL),
 /**
  * Function for constructing the solid, logical and physical volumes of the world volume.
  */
-void MyDetectorConstruction::ConstructWorld()
+void DetectorConstruction::ConstructWorld()
 {
     // size of volume
     solidWorld = new G4Box("solidWorld", // name
@@ -66,7 +66,7 @@ void MyDetectorConstruction::ConstructWorld()
 /**
  * Function for constructing the solid, logical and physical volumes of the array of pixels.
  */
-void MyDetectorConstruction::ConstructPixels()
+void DetectorConstruction::ConstructPixels()
 {
     solidDetector = new G4Box("solidDetector", xPixel, yPixel, zPixel);
 
@@ -105,7 +105,7 @@ void MyDetectorConstruction::ConstructPixels()
  * Function for constructing the volume used to track the photons
  * escaping from the detector.
  */
-void MyDetectorConstruction::ConstructPlanes()
+void DetectorConstruction::ConstructPlanes()
 {
     solidPlane = new G4Box("solidPlane", xWorld, yWorld, zPlanes);
 
@@ -138,7 +138,7 @@ void MyDetectorConstruction::ConstructPlanes()
 /**
  * Function for defining the material of the world and detector volumes.
  */
-void MyDetectorConstruction::DefineMaterials()
+void DetectorConstruction::DefineMaterials()
 {
     // manager of G4 materials database
     G4NistManager *nist = G4NistManager::Instance();
@@ -155,7 +155,7 @@ void MyDetectorConstruction::DefineMaterials()
  *
  * @return The physical volume of the world volume containing the detector.
  */
-G4VPhysicalVolume *MyDetectorConstruction::Construct()
+G4VPhysicalVolume *DetectorConstruction::Construct()
 {
     // generate volume
     ConstructWorld();
@@ -168,12 +168,12 @@ G4VPhysicalVolume *MyDetectorConstruction::Construct()
 /**
  * Geant4 function for making the array of pixel a sensitive detector.
  */
-void MyDetectorConstruction::ConstructSDandField()
+void DetectorConstruction::ConstructSDandField()
 {
     // create detector
     G4SDManager *sdManager = G4SDManager::GetSDMpointer();
 
-    MySensitiveDetector *sensDet = new MySensitiveDetector("/Pixels");
+    PixelsSD *sensDet = new PixelsSD("/Pixels");
     sdManager->AddNewDetector(sensDet);
     logicDetector->SetSensitiveDetector(sensDet);
 
@@ -186,7 +186,7 @@ void MyDetectorConstruction::ConstructSDandField()
  * Function for modifying the visualization macro at runtime.
  *
  */
-void MyDetectorConstruction::SetVisualization()
+void DetectorConstruction::SetVisualization()
 {
     auto *uiManager = G4UImanager::GetUIpointer();
 
@@ -208,7 +208,7 @@ void MyDetectorConstruction::SetVisualization()
  *
  * @param[in] newElement Reference to the `std::pair` containing the ID of the pixel and the coordinates of its center.
  */
-void MyDetectorConstruction::AddToPixelMap(std::pair<G4int, std::array<G4double, 2>> newElement)
+void DetectorConstruction::AddToPixelMap(std::pair<G4int, std::array<G4double, 2>> newElement)
 {
     pixelMap.insert(newElement);
 }

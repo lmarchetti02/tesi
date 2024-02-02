@@ -77,7 +77,7 @@ namespace charge_sharing
             {
                 const G4double PIXEL_ENERGY = energyVector[ID];
                 const G4double ENERGY = PIXEL_ENERGY / nParts;
-                const std::array<G4double, 2> XY_CENTER = MyDetectorConstruction::GetPixelMap()[ID];
+                const std::array<G4double, 2> XY_CENTER = DetectorConstruction::GetPixelMap()[ID];
 
                 for (G4int i = 0; i < nParts; i++)
                 {
