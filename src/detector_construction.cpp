@@ -172,7 +172,7 @@ void MyDetectorConstruction::ConstructSDandField()
     // create detector
     G4SDManager *sdManager = G4SDManager::GetSDMpointer();
 
-    MySensitiveDetector *sensDet = new MySensitiveDetector("/SensitiveDetector");
+    MySensitiveDetector *sensDet = new MySensitiveDetector("/Pixels");
     sdManager->AddNewDetector(sensDet);
     logicDetector->SetSensitiveDetector(sensDet);
 }

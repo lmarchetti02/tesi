@@ -140,7 +140,7 @@ void MyEventAction::ReadHitsCollection(const G4Event *Event)
 {
     // find index of HC
     if (index < 0)
-        index = G4SDManager::GetSDMpointer()->GetCollectionID("SensitiveDetector/MyHitsCollection");
+        index = G4SDManager::GetSDMpointer()->GetCollectionID("Pixels/PixelsHC");
 
     // get HC of the current event
     G4HCofThisEvent *HCE = Event->GetHCofThisEvent();

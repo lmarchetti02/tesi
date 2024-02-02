@@ -12,7 +12,7 @@
 MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name), HCID(-1)
 {
     // SensitiveDetectorName and collectionName are data members of G4VSensitiveDetector
-    collectionName.insert("MyHitsCollection");
+    collectionName.insert("PixelsHC");
 }
 
 /**
