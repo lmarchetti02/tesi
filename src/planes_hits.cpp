@@ -2,20 +2,21 @@
 
 #include "G4SystemOfUnits.hh"
 
+#include "generator.hh"
+
 G4ThreadLocal G4Allocator<PlanesHits> *PlanesHitsAllocator;
 
 /**
  * The default constructor.
  */
-PlanesHits::PlanesHits() : energyDep(0.), detectorID(0) {}
+PlanesHits::PlanesHits() : escaped(false) {}
 
 /**
  * The copy constructor.
  */
 PlanesHits::PlanesHits(const PlanesHits &otherHit) : G4VHit()
 {
-    energyDep = otherHit.energyDep;
-    detectorID = otherHit.detectorID;
+    escaped = otherHit.escaped;
 }
 
 /**
@@ -23,8 +24,7 @@ PlanesHits::PlanesHits(const PlanesHits &otherHit) : G4VHit()
  */
 const PlanesHits &PlanesHits::operator=(const PlanesHits &otherHit)
 {
-    energyDep = otherHit.energyDep;
-    detectorID = otherHit.detectorID;
+    escaped = otherHit.escaped;
 
     return *this;
 }
@@ -53,4 +53,10 @@ void *PlanesHits::operator new(size_t)
 void PlanesHits::operator delete(void *aHit)
 {
     PlanesHitsAllocator->FreeSingle((PlanesHits *)aHit);
+}
+
+void PlanesHits::SetEscaped(G4int planeID, G4int parentID, G4double energy)
+{
+    if (planeID == 2 && !parentID && energy == PrimaryGenerator::GetEnergy())
+        escaped = true;
 }

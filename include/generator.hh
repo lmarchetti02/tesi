@@ -16,7 +16,7 @@ class PrimaryGenerator : public G4VUserPrimaryGeneratorAction
 private:
   G4ParticleGun *particleGun;
 
-  G4double energy;
+  static G4double energy;
   G4int beamWidth;
 
   G4GenericMessenger *fMessenger;
@@ -31,5 +31,5 @@ public:
   void DefineCommands();
 
   G4int GetBeamWidth() { return beamWidth; }
-  G4double GetEnergy() { return energy; }
+  static G4double GetEnergy() { return energy; }
 };

@@ -3,6 +3,7 @@
 #include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
+#include "G4SystemOfUnits.hh"
 
 /**
  * The constructor.
@@ -43,15 +44,13 @@ G4bool PlanesSD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
 {
     // get the id of the detector that interacted w/ photon
     const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
-    G4int copyNo = touchable->GetCopyNumber();
-
-    // energy deposition of the step
-    G4double eDep = aStep->GetTotalEnergyDeposit();
+    G4int planeID = touchable->GetCopyNumber();
+    G4int parentID = aStep->GetTrack()->GetParentID();
+    G4double photonEnergy = aStep->GetTrack()->GetTotalEnergy();
 
     // save step in HC
     PlanesHits *hit = new PlanesHits();
-    hit->SetEnergy(eDep);
-    hit->SetID(copyNo);
+    hit->SetEscaped(planeID, parentID, photonEnergy);
 
     hitsCollection->insert(hit);
 

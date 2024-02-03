@@ -23,8 +23,8 @@ class EventAction : public G4UserEventAction
 {
 private:
   // HC index
-  G4int index;
-  G4int iPlanes;
+  G4int indexPixelsHC;
+  G4int indexPlanesHC;
 
   // hits
   std::vector<G4double> energyVector;
@@ -32,6 +32,9 @@ private:
   std::vector<G4double> energyVectorMergeCS;
   std::vector<G4int> fluorescenceIDVector;
   std::vector<G4double> fluorescenceEnergyVector;
+
+  // refactoring
+  G4bool escapedPhoton;
 
   // number of events
   static G4int nEvents;

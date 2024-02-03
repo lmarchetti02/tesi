@@ -7,12 +7,14 @@
 #include "detector_construction.hh"
 #include "constants.hh"
 
+G4double PrimaryGenerator::energy = 50. * keV;
+
 /**
  * Constructor.
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-PrimaryGenerator::PrimaryGenerator() : energy(50 * keV), beamWidth(BEAM_WIDTH)
+PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH)
 {
     particleGun = new G4ParticleGun(1); // 1 particles per event
 

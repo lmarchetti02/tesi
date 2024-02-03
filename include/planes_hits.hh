@@ -31,34 +31,11 @@ public:
     void operator delete(void *);
 
 private:
-    G4double energyDep;
-    G4int detectorID;
+    G4bool escaped;
 
 public:
-    /**
-     * Function for setting the `energyDep` data member.
-     *
-     * @param[in] eDep The energy deposition of the hit.
-     */
-    void SetEnergy(G4double eDep) { energyDep = eDep; }
-    /**
-     * Function for setting the `detectorID` data member.
-     *
-     * @param[in] ID The detector ID of the hit.
-     */
-    void SetID(G4int ID) { detectorID = ID; }
-    /**
-     * Function for accessing the `energyDep` data member.
-     *
-     * @return The energy deposition of the hit.
-     */
-    G4double GetEnergy() { return energyDep; }
-    /**
-     * Function for accessing the `detectorID` data member.
-     *
-     * @return The detector ID of the hit.
-     */
-    G4int GetID() { return detectorID; }
+    G4bool GetEscaped() const { return escaped; }
+    void SetEscaped(G4int planeID, G4int parentID, G4double energy);
 };
 
 // Alias of the HitsCollection

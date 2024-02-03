@@ -50,6 +50,11 @@ RunAction::RunAction()
     man->CreateNtupleIColumn("ID_Fluorescence", pixelIDFluorescence); // -1 escape else id interaction fluorescence
     man->CreateNtupleDColumn("ELoss_Fluorescence", energyLossFluorescence);
     man->FinishNtuple(1);
+
+    // refactoring
+    man->CreateNtuple("Refactoring", "Refactoring");
+    man->CreateNtupleIColumn("Photon_NoInt");
+    man->FinishNtuple(2);
 }
 
 /**

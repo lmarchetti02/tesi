@@ -21,12 +21,12 @@ G4int EventAction::nEvents = 0;
  *
  * @param[in] run The pointer to the run action.
  */
-EventAction::EventAction(RunAction *run, PrimaryGenerator *generator) : index(-1),
-                                                                                iPlanes(-1),
-                                                                                myRun(run),
-                                                                                myGenerator(generator),
-                                                                                stepInfo(new SaveStepInfo),
-                                                                                saveCompton(new SaveCompton) {}
+EventAction::EventAction(RunAction *run, PrimaryGenerator *generator) : indexPixelsHC(-1),
+                                                                        indexPlanesHC(-1),
+                                                                        myRun(run),
+                                                                        myGenerator(generator),
+                                                                        stepInfo(new SaveStepInfo),
+                                                                        saveCompton(new SaveCompton) {}
 
 /**
  * Geant4 function called at the beginning of the event.
@@ -50,7 +50,7 @@ void EventAction::BeginOfEventAction(const G4Event *Event)
     eventID = Event->GetEventID();
 
     // save info about the simulation
-    if (Event->GetEventID() == 0)
+    if (!Event->GetEventID())
     {
         G4AnalysisManager *man = G4AnalysisManager::Instance();
         // pixels
@@ -68,6 +68,9 @@ void EventAction::BeginOfEventAction(const G4Event *Event)
     }
 
     initialPhotonSet = 0;
+
+    // refactoring
+    escapedPhoton = false;
 }
 
 /**
@@ -131,26 +134,30 @@ void EventAction::EndOfEventAction(const G4Event *Event)
         myRun->ClearCS();
 
     man->AddNtupleRow(1);
+
+    // refactoring
+    man->FillNtupleIColumn(2, 0, static_cast<int>(escapedPhoton));
+    man->AddNtupleRow(2);
 }
 
 /**
- * Function for reading the HitsCollection and saving its data
- * inside the `energyVector`.
+ * Function for reading the HitsCollection relative to
+ * the pixels and saving its data.
  *
  * @param[in] Event The pointer to the current event.
  */
 void EventAction::ReadHitsCollection(const G4Event *Event)
 {
     // find index of HC
-    if (index < 0)
-        index = G4SDManager::GetSDMpointer()->GetCollectionID("Pixels/PixelsHC");
+    if (indexPixelsHC < 0)
+        indexPixelsHC = G4SDManager::GetSDMpointer()->GetCollectionID("Pixels/PixelsHC");
 
     // get HC of the current event
     G4HCofThisEvent *HCE = Event->GetHCofThisEvent();
 
     MyHitsCollection *hitsColl;
     if (HCE)
-        hitsColl = (MyHitsCollection *)(HCE->GetHC(index));
+        hitsColl = (MyHitsCollection *)(HCE->GetHC(indexPixelsHC));
 
     // get values inside HC
     if (hitsColl)
@@ -168,23 +175,23 @@ void EventAction::ReadHitsCollection(const G4Event *Event)
 }
 
 /**
- * Function for reading the HitsCollection and saving its data
- * inside the `energyVector`.
+ * Function for reading the HitsCollection relative to
+ * the planes and saving its data.
  *
  * @param[in] Event The pointer to the current event.
  */
 void EventAction::ReadHitsCollectionPlanes(const G4Event *Event)
 {
     // find index of HC
-    if (iPlanes < 0)
-        iPlanes = G4SDManager::GetSDMpointer()->GetCollectionID("Planes/PlanesHC");
+    if (indexPlanesHC < 0)
+        indexPlanesHC = G4SDManager::GetSDMpointer()->GetCollectionID("Planes/PlanesHC");
 
     // get HC of the current event
     G4HCofThisEvent *HCE = Event->GetHCofThisEvent();
 
     PlanesHitsCollection *hitsColl;
     if (HCE)
-        hitsColl = (PlanesHitsCollection *)(HCE->GetHC(iPlanes));
+        hitsColl = (PlanesHitsCollection *)(HCE->GetHC(indexPlanesHC));
 
     // get values inside HC
     if (hitsColl)
@@ -195,9 +202,7 @@ void EventAction::ReadHitsCollectionPlanes(const G4Event *Event)
         {
             PlanesHits *hit = (*hitsColl)[i];
 
-            // add step info to `energyVector`
-            G4cout << "\033[38:5:160m"
-                   << "ID = " << hit->GetID() << " Energy= " << hit->GetEnergy() << "\033[0m" << G4endl;
+            escapedPhoton = hit->GetEscaped();
         }
     }
 }
@@ -295,7 +300,7 @@ void EventAction::AddStepInfo(G4int partID, G4int parentID, G4int partType, G4in
 }
 
 void EventAction::AddComptonInfo(G4int partID, G4int parentID, G4int partType, G4int volID, G4double ene,
-                                   G4double eneloss, G4String processname)
+                                 G4double eneloss, G4String processname)
 {
     saveCompton->AddStep(partID, parentID, partType, volID, ene, eneloss, eventID, processname);
 }
