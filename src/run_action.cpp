@@ -53,6 +53,7 @@ RunAction::RunAction()
 
     // refactoring
     man->CreateNtuple("Refactoring", "Refactoring");
+    man->CreateNtupleIColumn("Photon_ID");
     man->CreateNtupleIColumn("Photon_NoInt");
     man->FinishNtuple(2);
 }

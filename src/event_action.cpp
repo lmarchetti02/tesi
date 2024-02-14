@@ -136,7 +136,8 @@ void EventAction::EndOfEventAction(const G4Event *Event)
     man->AddNtupleRow(1);
 
     // refactoring
-    man->FillNtupleIColumn(2, 0, static_cast<int>(escapedPhoton));
+    man->FillNtupleIColumn(2, 0, PixelsSD::GetFirstID());
+    man->FillNtupleIColumn(2, 1, static_cast<int>(escapedPhoton));
     man->AddNtupleRow(2);
 }
 

@@ -19,6 +19,9 @@ private:
     MyHitsCollection *hitsCollection;
     G4int HCID;
 
+    G4int hitsCounter;
+    static G4int firstID;
+
 public:
     PixelsSD(G4String);
     ~PixelsSD() override = default;
@@ -26,4 +29,6 @@ public:
     void Initialize(G4HCofThisEvent *) override;
     G4bool ProcessHits(G4Step *, G4TouchableHistory *) override;
     void EndOfEvent(G4HCofThisEvent *) override;
+
+    static G4int GetFirstID() { return firstID; }
 };
