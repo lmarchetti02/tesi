@@ -3,6 +3,7 @@
 #include "G4AnalysisManager.hh"
 #include "G4RunManager.hh"
 #include "G4SDManager.hh"
+#include "G4VProcess.hh"
 
 #include "constants.hh"
 
@@ -45,26 +46,34 @@ void PixelsSD::Initialize(G4HCofThisEvent *HCE)
  */
 G4bool PixelsSD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
 {
-    // get the id of the detector that interacted w/ photon
-    const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
-    G4int copyNo = touchable->GetCopyNumber();
+    const G4Track *track = aStep->GetTrack();
+    const G4String &particleName = track->GetParticleDefinition()->GetParticleName();
+
+    const G4StepPoint *preStepPoint = aStep->GetPreStepPoint();
+    const G4VTouchable *touchable = preStepPoint->GetTouchable();
+    const G4int copyNo = touchable->GetCopyNumber();
+    const G4double eDep = aStep->GetTotalEnergyDeposit();
+    const G4VProcess *currentProcess = preStepPoint->GetProcessDefinedStep();
+
+    if (currentProcess)
+    {
+        const G4String &processName = currentProcess->GetProcessName();
+        if (processName == "compt" && particleName == "gamma")
+        {
+            G4cout << "\033[38:5:160m"
+                   << "Compton scattering"
+                   << "\033[0m" << G4endl;
+
+            G4cout << "ID = " << ConvertPixelID(copyNo) << " Energy = " << eDep << G4endl;
+        }
+    }
 
     // get pixel ID of primary photon
     if (hitsCounter < 1)
     {
-        // merged ID
-        const G4int i_s = copyNo / N_SUBPIXEL;
-        const G4int j_s = copyNo - i_s * N_SUBPIXEL;
-        const G4int i_m = i_s / PIXEL_RATIO;
-        const G4int j_m = j_s / PIXEL_RATIO;
-        const G4int ID_m = i_m * N_PIXEL + j_m;
-        firstID = ID_m;
-
+        firstID = ConvertPixelID(copyNo);
         hitsCounter++;
     }
-
-    // energy deposition of the step
-    G4double eDep = aStep->GetTotalEnergyDeposit();
 
     // save step in HC
     PixelsHit *hit = new PixelsHit();
@@ -89,4 +98,15 @@ void PixelsSD::EndOfEvent(G4HCofThisEvent *HCE)
         HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
     }
     HCE->AddHitsCollection(HCID, hitsCollection);
+}
+
+G4int PixelsSD::ConvertPixelID(const G4int ID)
+{
+    const G4int i_s = ID / N_SUBPIXEL;
+    const G4int j_s = ID - i_s * N_SUBPIXEL;
+    const G4int i_m = i_s / PIXEL_RATIO;
+    const G4int j_m = j_s / PIXEL_RATIO;
+    const G4int ID_m = i_m * N_PIXEL + j_m;
+
+    return ID_m;
 }

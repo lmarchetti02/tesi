@@ -31,4 +31,6 @@ public:
     void EndOfEvent(G4HCofThisEvent *) override;
 
     static G4int GetFirstID() { return firstID; }
+
+    G4int ConvertPixelID(const G4int);
 };
