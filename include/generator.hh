@@ -19,6 +19,9 @@ private:
   G4double energy;
   G4int beamWidth;
 
+  G4double monoEnergy;
+  G4int energyDistType;
+
   G4GenericMessenger *fMessenger;
 
 public:
@@ -26,7 +29,9 @@ public:
   ~MyPrimaryGenerator() override;
 
   void GeneratePrimaries(G4Event *) override;
-  G4ThreeVector randomPositionVector(G4double, G4double);
+
+  void SetPositionDistribution();
+  void SetEnergyDistribution();
 
   void DefineCommands();
 
