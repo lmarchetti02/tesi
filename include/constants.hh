@@ -7,12 +7,12 @@
  * Whether to save the energy in the subpixels (before
  * adding the charge sharing) in the .root file.
  */
-constexpr G4bool INCLUDE_ORIGINAL = true;
+constexpr G4bool INCLUDE_ORIGINAL = false;
 /**
  * Whether to save the energy in the subpixels (after
  * adding the charge sharing) in the .root file.
  */
-constexpr G4bool INCLUDE_CS = true;
+constexpr G4bool INCLUDE_CS = false;
 
 constexpr G4int N_PIXEL = 15;
 constexpr G4int PIXEL_RATIO = 5;

@@ -4,6 +4,8 @@
 /run/numberOfThreads 10
 /run/initialize
 
+# set beam direction
+/gps/direction 0 0 1
+
 /beam/beam_width 0
-/beam/energy 100 keV
 /run/beamOn 10000
