@@ -14,20 +14,14 @@
  */
 MyPrimaryGenerator::MyPrimaryGenerator() : energy(50 * keV), beamWidth(BEAM_WIDTH)
 {
-    particleGun = new G4ParticleGun(1); // 1 particles per event
+    particleGun = new G4GeneralParticleSource();
 
     // fetch particle
     G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName = "gamma";
     G4ParticleDefinition *particle = particleTable->FindParticle(particleName);
 
-    // set position and momentum vectors
-    G4ThreeVector pos(0., 0., -Z_WORLD);
-
-    // generate particle
-    particleGun->SetParticlePosition(pos);
-    particleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
-    particleGun->SetParticleEnergy(energy);
+    // set particle type
     particleGun->SetParticleDefinition(particle);
 
     // messenger
@@ -55,22 +49,39 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
         return;
     }
 
+    G4ThreeVector centre{0, 0, -Z_WORLD};
+
     // set position
     if (beamWidth > 1)
-        particleGun->SetParticlePosition(G4ThreeVector(0, 0, -Z_WORLD));
+    {
+        particleGun->GetCurrentSource()->GetPosDist()->SetPosDisType("Point");
+        particleGun->GetCurrentSource()->GetPosDist()->SetCentreCoords(centre);
+    }
     else
     {
         // 0 for central pixel, 1 for whole array (see constants.hh)
         G4double max = (beamWidth == 0) ? XY_PIXEL : XY_WORLD;
-        G4ThreeVector positionVector = randomPositionVector(max, max);
-        particleGun->SetParticlePosition(positionVector);
+
+        particleGun->GetCurrentSource()->GetPosDist()->SetPosDisType("Plane");
+        particleGun->GetCurrentSource()->GetPosDist()->SetPosDisShape("Rectangle");
+        particleGun->GetCurrentSource()->GetPosDist()->SetCentreCoords(centre);
+        particleGun->GetCurrentSource()->GetPosDist()->SetHalfX(max);
+        particleGun->GetCurrentSource()->GetPosDist()->SetHalfY(max);
     }
 
     // set energy
-    particleGun->SetParticleEnergy(energy);
+    particleGun->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Brem");
+    particleGun->GetCurrentSource()->GetEneDist()->SetEmin(0.02); // in MeV
+    particleGun->GetCurrentSource()->GetEneDist()->SetEmax(0.1);  // in MeV
+    particleGun->GetCurrentSource()->GetEneDist()->SetTemp(2e9);
 
     // generate primary vertex
     particleGun->GeneratePrimaryVertex(anEvent);
+
+    // get particle energy
+    G4PrimaryVertex *primaryVertex = anEvent->GetPrimaryVertex(0);
+    G4PrimaryParticle *primaryParticle = primaryVertex->GetPrimary(0);
+    energy = primaryParticle->GetTotalEnergy() / keV;
 }
 
 /**

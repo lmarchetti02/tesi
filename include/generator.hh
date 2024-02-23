@@ -1,7 +1,7 @@
 #pragma once
 
 #include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
+#include "G4GeneralParticleSource.hh"
 #include "G4GenericMessenger.hh"
 
 /**
@@ -14,7 +14,7 @@
 class MyPrimaryGenerator : public G4VUserPrimaryGeneratorAction
 {
 private:
-  G4ParticleGun *particleGun;
+  G4GeneralParticleSource *particleGun;
 
   G4double energy;
   G4int beamWidth;
