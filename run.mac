@@ -7,5 +7,14 @@
 # set beam direction
 /gps/direction 0 0 1
 
-/beam/beam_width 0
-/run/beamOn 10000
+/beam/beam_width 1
+/beam/type 0
+/run/beamOn 100000
+
+/beam/beam_width 1
+/beam/type 1
+/run/beamOn 100000
+
+/beam/beam_width 1
+/beam/type 2
+/run/beamOn 100000

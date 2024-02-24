@@ -54,7 +54,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     G4PrimaryParticle *primaryParticle = primaryVertex->GetPrimary(0);
     energy = primaryParticle->GetTotalEnergy() / keV;
 
-    G4cout << "Photon energy = " << energy << " keV" << G4endl;
+    // G4cout << "Photon energy = " << energy << " keV" << G4endl;
 }
 
 /**
@@ -114,7 +114,7 @@ void MyPrimaryGenerator::SetEnergyDistribution()
     else if (energyDistType == 1)
     {
         particleGun->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Arb");
-        particleGun->GetCurrentSource()->GetEneDist()->ArbEnergyHistoFile("../spectrum/spectrum.dat");
+        particleGun->GetCurrentSource()->GetEneDist()->ArbEnergyHistoFile("./spectrum.dat");
         particleGun->GetCurrentSource()->GetEneDist()->ArbInterpolate("Lin");
     }
     // monoenergetic beam
@@ -132,10 +132,10 @@ void MyPrimaryGenerator::DefineCommands()
 {
     fMessenger = new G4GenericMessenger(this, "/beam/", "X ray beam customization");
 
-    auto &energyCmd = fMessenger->DeclareProperty("type", energyDistType, "Type of energy distribution");
-    energyCmd.SetParameterName("type", true);
-    energyCmd.SetRange("type>=0");
-    energyCmd.SetDefaultValue("0");
+    auto &energyTypeCmd = fMessenger->DeclareProperty("type", energyDistType, "Type of energy distribution");
+    energyTypeCmd.SetParameterName("type", true);
+    energyTypeCmd.SetRange("type>=0");
+    energyTypeCmd.SetDefaultValue("0");
 
     auto &beamWidthCmd = fMessenger->DeclareProperty("beam_width", beamWidth, "Type of beam");
     beamWidthCmd.SetParameterName("beam_width", true);
