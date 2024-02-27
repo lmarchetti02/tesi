@@ -16,6 +16,7 @@
 #include "sensitive_detector.hh"
 #include "constants.hh"
 #include "stepping_action.hh"
+#include "energy_spectrum.hh"
 
 int main(int argc, char **argv)
 {
@@ -36,9 +37,9 @@ int main(int argc, char **argv)
 	auto *runManager = G4RunManagerFactory::CreateRunManager(G4RunManagerType::MT);
 #endif
 
-	runManager->SetUserInitialization(new MyDetectorConstruction); // detector
-	runManager->SetUserInitialization(new MyPhysicsList);		   // physics
-	runManager->SetUserInitialization(new MyActionInitialization); // particles
+	runManager->SetUserInitialization(new DetectorConstruction); // detector
+	runManager->SetUserInitialization(new PhysicsList);			 // physics
+	runManager->SetUserInitialization(new ActionInitialization); // particles
 
 	// for visualization
 	auto *visManager = new G4VisExecutive;
@@ -48,6 +49,8 @@ int main(int argc, char **argv)
 	// START PROGRAM
 	// --------------------------------------------------------------------------------
 	auto *uiManager = G4UImanager::GetUIpointer();
+
+	spectrum::save_to_file();
 
 	/* If no interactive mode, just execute in
 	the terminal. */
@@ -62,7 +65,7 @@ int main(int argc, char **argv)
 	else
 	{
 		uiManager->ApplyCommand("/control/execute vis.mac");
-		MyDetectorConstruction::SetVisualization();
+		DetectorConstruction::SetVisualization();
 		ui->SessionStart();
 
 		delete ui;

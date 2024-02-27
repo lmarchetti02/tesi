@@ -16,7 +16,7 @@
  * Defines the geometry and the materials of the detector used
  * in the simulation.
  */
-class MyDetectorConstruction : public G4VUserDetectorConstruction
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
 private:
     // dimensions
@@ -54,8 +54,8 @@ private:
     void ConstructSDandField() override;
 
 public:
-    MyDetectorConstruction();
-    ~MyDetectorConstruction() override = default;
+    DetectorConstruction();
+    ~DetectorConstruction() override = default;
 
     G4VPhysicalVolume *Construct() override;
 
