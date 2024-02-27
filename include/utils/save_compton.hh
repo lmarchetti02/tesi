@@ -14,7 +14,7 @@ struct ComptonInfo
     G4int volume_id_iter;  // volume id secondary interaction (if < 1 it is escaped - to be confirmed)
     G4double energy;       // energy of the scattered photon
     G4double eneLoss;      // energy loss in the primary interaction
-    G4double eneLoss_iter; // energy loss in the secontary interaction
+    G4double eneLoss_iter; // energy loss in the secondary interaction
     G4int iter_found;      // n.steps with energy loss in the primary interaction
     G4int iter_found_iter; // n.steps with energy loss in the secondary interaction
     G4double escaped_ene;
