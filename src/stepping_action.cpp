@@ -19,22 +19,22 @@
  *
  * @param[in] eventAction The pointer to the event action instance.
  */
-MySteppingAction::MySteppingAction(MyEventAction *eventAction) : eventAction(eventAction),
-                                                                 scoringVolume(nullptr),
-                                                                 scoringPlane(nullptr) {}
+SteppingAction::SteppingAction(EventAction *eventAction) : eventAction(eventAction),
+                                                           scoringVolume(nullptr),
+                                                           scoringPlane(nullptr) {}
 
 /**
  * Geant4 function for analyzing the steps of the events.
  *
  * @param[in] step The pointer to the current step.
  */
-void MySteppingAction::UserSteppingAction(const G4Step *step)
+void SteppingAction::UserSteppingAction(const G4Step *step)
 {
 
     // get scoring volumes
     if (!scoringVolume)
     {
-        const auto detConstruction = static_cast<const MyDetectorConstruction *>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+        const auto detConstruction = static_cast<const DetectorConstruction *>(G4RunManager::GetRunManager()->GetUserDetectorConstruction());
         scoringVolume = detConstruction->GetScoringVolume();
         scoringPlane = detConstruction->GetScoringPlane();
     }

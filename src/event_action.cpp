@@ -13,18 +13,18 @@
 #include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
 
-G4int MyEventAction::nEvents = 0;
+G4int EventAction::nEvents = 0;
 
 /**
  * The constructor.
  *
  * @param[in] run The pointer to the run action.
  */
-MyEventAction::MyEventAction(MyRunAction *run, MyPrimaryGenerator *generator) : index(-1),
-                                                                                myRun(run),
-                                                                                myGenerator(generator),
-                                                                                stepInfo(new SaveStepInfo),
-                                                                                saveCompton(new SaveCompton) {}
+EventAction::EventAction(RunAction *run, PrimaryGenerator *generator) : index(-1),
+                                                                        myRun(run),
+                                                                        myGenerator(generator),
+                                                                        stepInfo(new SaveStepInfo),
+                                                                        saveCompton(new SaveCompton) {}
 
 /**
  * Geant4 function called at the beginning of the event.
@@ -32,7 +32,7 @@ MyEventAction::MyEventAction(MyRunAction *run, MyPrimaryGenerator *generator) : 
  *
  * @param Event The pointer to the current event.
  */
-void MyEventAction::BeginOfEventAction(const G4Event *Event)
+void EventAction::BeginOfEventAction(const G4Event *Event)
 {
 
     energyVector = std::vector<G4double>(N_SUBPIXEL * N_SUBPIXEL, 0.);
@@ -60,7 +60,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
         man->FillNtupleDColumn(0, 4, XY_SUBPIXEL);
         man->FillNtupleDColumn(0, 5, Z_PIXEL);
         // number of events
-        man->FillNtupleIColumn(0, 6, MyEventAction::GetNEvents());
+        man->FillNtupleIColumn(0, 6, EventAction::GetNEvents());
         man->FillNtupleIColumn(0, 7, myGenerator->GetBeamWidth());
         man->AddNtupleRow(0);
     }
@@ -74,7 +74,7 @@ void MyEventAction::BeginOfEventAction(const G4Event *Event)
  *
  * @param[in] Event The pointer to the event.
  */
-void MyEventAction::EndOfEventAction(const G4Event *Event)
+void EventAction::EndOfEventAction(const G4Event *Event)
 {
     ReadHitsCollection(Event);
 
@@ -136,7 +136,7 @@ void MyEventAction::EndOfEventAction(const G4Event *Event)
  *
  * @param[in] Event The pointer to the current event.
  */
-void MyEventAction::ReadHitsCollection(const G4Event *Event)
+void EventAction::ReadHitsCollection(const G4Event *Event)
 {
     // find index of HC
     if (index < 0)
@@ -156,7 +156,7 @@ void MyEventAction::ReadHitsCollection(const G4Event *Event)
 
         for (int i = 0; i < nEntries; i++)
         {
-            MyHit *hit = (*hitsColl)[i];
+            PixelsHit *hit = (*hitsColl)[i];
 
             // add step info to `energyVector`
             energyVector[hit->GetID()] += hit->GetEnergy();
@@ -173,7 +173,7 @@ void MyEventAction::ReadHitsCollection(const G4Event *Event)
  * @return `true` if the vector only contains 0, `false` otherwise.
  */
 template <typename T>
-bool MyEventAction::IsVectorEmpty(std::vector<T> vector)
+bool EventAction::IsVectorEmpty(std::vector<T> vector)
 {
     for (T element : vector)
     {
@@ -188,7 +188,7 @@ bool MyEventAction::IsVectorEmpty(std::vector<T> vector)
  * Function for saving the pixels energies to the
  * vectors, which are then stored into the ROOT file.
  */
-void MyEventAction::SaveEnergies()
+void EventAction::SaveEnergies()
 {
     // no charge sharing and not merged
     for (int i = 0; i < energyVector.size(); i++)
@@ -222,7 +222,7 @@ void MyEventAction::SaveEnergies()
  * @param[in] inVector The vector to be merged.
  * @param[inout] outVector The reference the the merged vector.
  */
-void MyEventAction::MergePixels(std::vector<G4double> inVector, std::vector<G4double> &outVector)
+void EventAction::MergePixels(std::vector<G4double> inVector, std::vector<G4double> &outVector)
 {
     for (int i = 0; i < N_SUBPIXEL; i++)
     {
@@ -242,7 +242,7 @@ void MyEventAction::MergePixels(std::vector<G4double> inVector, std::vector<G4do
 }
 
 // VM added
-void MyEventAction::AddStepInfo(G4int partID, G4int parentID, G4int partType, G4int volID, G4double ene, G4double eneloss)
+void EventAction::AddStepInfo(G4int partID, G4int parentID, G4int partType, G4int volID, G4double ene, G4double eneloss)
 {
     if (partType == -2 && ene < myGenerator->GetEnergy())
     {
@@ -256,13 +256,13 @@ void MyEventAction::AddStepInfo(G4int partID, G4int parentID, G4int partType, G4
         stepInfo->AddStep(partID, parentID, partType, volID, ene, eneloss);
 }
 
-void MyEventAction::AddComptonInfo(G4int partID, G4int parentID, G4int partType, G4int volID, G4double ene,
-                                   G4double eneloss, G4String processname)
+void EventAction::AddComptonInfo(G4int partID, G4int parentID, G4int partType, G4int volID, G4double ene,
+                                 G4double eneloss, G4String processname)
 {
     saveCompton->AddStep(partID, parentID, partType, volID, ene, eneloss, eventID, processname);
 }
 
-void MyEventAction::SetInitialPhoton(G4int copyNo, G4double ene)
+void EventAction::SetInitialPhoton(G4int copyNo, G4double ene)
 {
     if (!initialPhotonSet)
     {

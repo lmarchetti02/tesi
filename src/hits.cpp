@@ -2,17 +2,17 @@
 
 #include "G4SystemOfUnits.hh"
 
-G4ThreadLocal G4Allocator<MyHit> *MyHitAllocator;
+G4ThreadLocal G4Allocator<PixelsHit> *MyHitAllocator;
 
 /**
  * The default constructor.
  */
-MyHit::MyHit() : energyDep(0.), detectorID(0) {}
+PixelsHit::PixelsHit() : energyDep(0.), detectorID(0) {}
 
 /**
  * The copy constructor.
  */
-MyHit::MyHit(const MyHit &otherHit) : G4VHit()
+PixelsHit::PixelsHit(const PixelsHit &otherHit) : G4VHit()
 {
     energyDep = otherHit.energyDep;
     detectorID = otherHit.detectorID;
@@ -21,7 +21,7 @@ MyHit::MyHit(const MyHit &otherHit) : G4VHit()
 /**
  * Overloading of the `=` operator.
  */
-const MyHit &MyHit::operator=(const MyHit &otherHit)
+const PixelsHit &PixelsHit::operator=(const PixelsHit &otherHit)
 {
     energyDep = otherHit.energyDep;
     detectorID = otherHit.detectorID;
@@ -32,7 +32,7 @@ const MyHit &MyHit::operator=(const MyHit &otherHit)
 /**
  * Overloading of the `==` operator.
  */
-G4bool MyHit::operator==(const MyHit &otherHit) const
+G4bool PixelsHit::operator==(const PixelsHit &otherHit) const
 {
     return (this == &otherHit) ? true : false;
 }
@@ -40,17 +40,17 @@ G4bool MyHit::operator==(const MyHit &otherHit) const
 /**
  * Overloading of the `new` operator
  */
-void *MyHit::operator new(size_t)
+void *PixelsHit::operator new(size_t)
 {
     if (!MyHitAllocator)
-        MyHitAllocator = new G4Allocator<MyHit>;
+        MyHitAllocator = new G4Allocator<PixelsHit>;
     return (void *)MyHitAllocator->MallocSingle();
 }
 
 /**
  * Overloading of the `new` operator
  */
-void MyHit::operator delete(void *aHit)
+void PixelsHit::operator delete(void *aHit)
 {
-    MyHitAllocator->FreeSingle((MyHit *)aHit);
+    MyHitAllocator->FreeSingle((PixelsHit *)aHit);
 }

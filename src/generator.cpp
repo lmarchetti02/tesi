@@ -12,7 +12,7 @@
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-MyPrimaryGenerator::MyPrimaryGenerator() : monoEnergy(100. * keV), beamWidth(BEAM_WIDTH), energyDistType(0)
+PrimaryGenerator::PrimaryGenerator() : monoEnergy(100. * keV), beamWidth(BEAM_WIDTH), energyDistType(0)
 {
     particleGun = new G4GeneralParticleSource();
 
@@ -31,7 +31,7 @@ MyPrimaryGenerator::MyPrimaryGenerator() : monoEnergy(100. * keV), beamWidth(BEA
 /**
  * The destructor.
  */
-MyPrimaryGenerator::~MyPrimaryGenerator()
+PrimaryGenerator::~PrimaryGenerator()
 {
     delete particleGun;
 }
@@ -41,7 +41,7 @@ MyPrimaryGenerator::~MyPrimaryGenerator()
  *
  * @param[in] anEvent The pointer to the event in which the particle has to be created.
  */
-void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
+void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
     SetPositionDistribution();
     SetEnergyDistribution();
@@ -61,7 +61,7 @@ void MyPrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
  * Function for setting the position distribution
  * of the source of photons.
  */
-void MyPrimaryGenerator::SetPositionDistribution()
+void PrimaryGenerator::SetPositionDistribution()
 {
     if (beamWidth < 0)
     {
@@ -94,7 +94,7 @@ void MyPrimaryGenerator::SetPositionDistribution()
  * Function for setting the energy distribution of
  * the source of photons.
  */
-void MyPrimaryGenerator::SetEnergyDistribution()
+void PrimaryGenerator::SetEnergyDistribution()
 {
     if (energyDistType < 0)
     {
@@ -128,7 +128,7 @@ void MyPrimaryGenerator::SetEnergyDistribution()
 /**
  * Function for defining the messenger commands.
  */
-void MyPrimaryGenerator::DefineCommands()
+void PrimaryGenerator::DefineCommands()
 {
     fMessenger = new G4GenericMessenger(this, "/beam/", "X ray beam customization");
 

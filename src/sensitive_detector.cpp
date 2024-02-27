@@ -9,7 +9,7 @@
  *
  * @param[in] name The name of the sensitive detector.
  */
-MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(name), HCID(-1)
+PixelsSD::PixelsSD(G4String name) : G4VSensitiveDetector(name), HCID(-1)
 {
     // SensitiveDetectorName and collectionName are data members of G4VSensitiveDetector
     collectionName.insert("MyHitsCollection");
@@ -20,7 +20,7 @@ MySensitiveDetector::MySensitiveDetector(G4String name) : G4VSensitiveDetector(n
  *
  * @param[in,out] HCE Pointer to the hits collection of the event.
  */
-void MySensitiveDetector::Initialize(G4HCofThisEvent *HCE)
+void PixelsSD::Initialize(G4HCofThisEvent *HCE)
 {
     hitsCollection = new MyHitsCollection(SensitiveDetectorName, collectionName[0]);
 
@@ -39,7 +39,7 @@ void MySensitiveDetector::Initialize(G4HCofThisEvent *HCE)
  *
  * @return `true`/`false` (Old Geant4 feature not used anymore).
  */
-G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
+G4bool PixelsSD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
 {
     // get the id of the detector that interacted w/ photon
     const G4VTouchable *touchable = aStep->GetPreStepPoint()->GetTouchable();
@@ -49,7 +49,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
     G4double eDep = aStep->GetTotalEnergyDeposit();
 
     // save step in HC
-    MyHit *hit = new MyHit();
+    PixelsHit *hit = new PixelsHit();
     hit->SetEnergy(eDep);
     hit->SetID(copyNo);
 
@@ -63,7 +63,7 @@ G4bool MySensitiveDetector::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhis
  *
  * @param[in,out] HCE Pointer to the hits collection of the event.
  */
-void MySensitiveDetector::EndOfEvent(G4HCofThisEvent *HCE)
+void PixelsSD::EndOfEvent(G4HCofThisEvent *HCE)
 {
     static G4int HCID = -1;
     if (HCID < 0)

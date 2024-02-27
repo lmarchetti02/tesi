@@ -13,11 +13,11 @@
  * run of the simulation. In particular, it is used to save
  * the results of the simulation.
  */
-class MyRunAction : public G4UserRunAction
+class RunAction : public G4UserRunAction
 {
 public:
-  MyRunAction();
-  ~MyRunAction() override = default;
+  RunAction();
+  ~RunAction() override = default;
 
   void BeginOfRunAction(const G4Run *) override;
   void EndOfRunAction(const G4Run *) override;

@@ -13,15 +13,15 @@
  * It is used for analyzing the steps generated
  * during each event of the simulation.
  */
-class MySteppingAction : public G4UserSteppingAction
+class SteppingAction : public G4UserSteppingAction
 {
 public:
-    MySteppingAction(MyEventAction *);
-    ~MySteppingAction() override = default;
+    SteppingAction(EventAction *);
+    ~SteppingAction() override = default;
 
     void UserSteppingAction(const G4Step *) override;
 
 private:
-    MyEventAction *eventAction;
+    EventAction *eventAction;
     G4LogicalVolume *scoringVolume, *scoringPlane;
 };

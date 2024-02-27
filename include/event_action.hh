@@ -19,7 +19,7 @@
  * data from the HitsCollection, operate on it, and save the results
  * in the NTuple.
  */
-class MyEventAction : public G4UserEventAction
+class EventAction : public G4UserEventAction
 {
 private:
   // HC index
@@ -35,8 +35,8 @@ private:
   // number of events
   static G4int nEvents;
 
-  MyRunAction *myRun;
-  MyPrimaryGenerator *myGenerator;
+  RunAction *myRun;
+  PrimaryGenerator *myGenerator;
 
   G4int eventID;
   SaveStepInfo *stepInfo;
@@ -58,8 +58,8 @@ private:
   bool IsVectorEmpty(std::vector<T>);
 
 public:
-  MyEventAction(MyRunAction *, MyPrimaryGenerator *);
-  ~MyEventAction() override = default;
+  EventAction(RunAction *, PrimaryGenerator *);
+  ~EventAction() override = default;
 
   void BeginOfEventAction(const G4Event *) override;
   void EndOfEventAction(const G4Event *) override;

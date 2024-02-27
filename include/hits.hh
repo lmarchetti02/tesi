@@ -17,15 +17,15 @@
  *  - the deposited energy of the step;
  *  - the ID of the detector inside which the step has been created.
  */
-class MyHit : public G4VHit
+class PixelsHit : public G4VHit
 {
 public:
-    MyHit();
-    ~MyHit() override = default;
-    MyHit(const MyHit &);
+    PixelsHit();
+    ~PixelsHit() override = default;
+    PixelsHit(const PixelsHit &);
 
-    const MyHit &operator=(const MyHit &);
-    G4bool operator==(const MyHit &) const;
+    const PixelsHit &operator=(const PixelsHit &);
+    G4bool operator==(const PixelsHit &) const;
 
     void *operator new(size_t);
     void operator delete(void *);
@@ -62,7 +62,7 @@ public:
 };
 
 // Alias of the HitsCollection
-typedef G4THitsCollection<MyHit> MyHitsCollection;
+typedef G4THitsCollection<PixelsHit> MyHitsCollection;
 
 // Allocator of the Hits Class
-extern G4ThreadLocal G4Allocator<MyHit> *MyHitAllocator;
+extern G4ThreadLocal G4Allocator<PixelsHit> *MyHitAllocator;
