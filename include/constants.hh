@@ -38,6 +38,14 @@ constexpr const char TGT_MATERIAL[] = "G4_CADMIUM_TELLURIDE";
 constexpr G4int BEAM_WIDTH = 1;
 
 /**
+ * Defines the energy spectrum of the photons:
+ *  - 0 for Geant4-defined distributions
+ *  - 1 for user-defined distribution
+ *  - 2 for monochromatic photons
+ */
+constexpr G4int BEAM_TYPE = 1;
+
+/**
  * The number of parts in which each pixel energy is divided into.
  * See charge_sharing.hh for more info.
  */
