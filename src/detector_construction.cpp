@@ -19,7 +19,7 @@
  */
 
 // pixel map
-auto DetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
+std::map<G4int, std::array<G4double, 2>> DetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
 
 DetectorConstruction::DetectorConstruction() : nPixel(N_SUBPIXEL),
                                                xWorld(XY_WORLD),

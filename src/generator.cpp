@@ -12,7 +12,7 @@
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-PrimaryGenerator::PrimaryGenerator() : monoEnergy(100. * keV), beamWidth(BEAM_WIDTH), energyDistType(0)
+PrimaryGenerator::PrimaryGenerator() : monoEnergy(50. * keV), beamWidth(BEAM_WIDTH), energyDistType(BEAM_TYPE)
 {
     particleGun = new G4GeneralParticleSource();
 
@@ -105,10 +105,10 @@ void PrimaryGenerator::SetEnergyDistribution()
     // bremsstrahlung distribution
     if (!energyDistType)
     {
-        particleGun->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Brem");
+        particleGun->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Exp");
         particleGun->GetCurrentSource()->GetEneDist()->SetEmin(0.02); // in MeV
         particleGun->GetCurrentSource()->GetEneDist()->SetEmax(0.1);  // in MeV
-        particleGun->GetCurrentSource()->GetEneDist()->SetTemp(2e9);
+        particleGun->GetCurrentSource()->GetEneDist()->SetEzero(0.1); // in MeV
     }
     // arbitrary distribution
     else if (energyDistType == 1)
@@ -136,6 +136,11 @@ void PrimaryGenerator::DefineCommands()
     energyTypeCmd.SetParameterName("type", true);
     energyTypeCmd.SetRange("type>=0");
     energyTypeCmd.SetDefaultValue("0");
+
+    auto &monoEnergyCmd = fMessenger->DeclarePropertyWithUnit("mono_energy", "keV", monoEnergy, "Energy of monochromatic photons");
+    monoEnergyCmd.SetParameterName("mono_energy", true);
+    monoEnergyCmd.SetRange("mono_energy>=0");
+    monoEnergyCmd.SetDefaultValue("50.");
 
     auto &beamWidthCmd = fMessenger->DeclareProperty("beam_width", beamWidth, "Type of beam");
     beamWidthCmd.SetParameterName("beam_width", true);
