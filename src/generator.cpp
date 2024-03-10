@@ -106,9 +106,9 @@ void PrimaryGenerator::SetEnergyDistribution()
     if (!energyDistType)
     {
         particleGun->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Exp");
-        particleGun->GetCurrentSource()->GetEneDist()->SetEmin(0.02); // in MeV
-        particleGun->GetCurrentSource()->GetEneDist()->SetEmax(0.1);  // in MeV
-        particleGun->GetCurrentSource()->GetEneDist()->SetEzero(0.1); // in MeV
+        particleGun->GetCurrentSource()->GetEneDist()->SetEmin(0.02);  // in MeV
+        particleGun->GetCurrentSource()->GetEneDist()->SetEmax(0.1);   // in MeV
+        particleGun->GetCurrentSource()->GetEneDist()->SetEzero(0.02); // in MeV
     }
     // arbitrary distribution
     else if (energyDistType == 1)
