@@ -12,10 +12,9 @@
 #/run/beamOn 100000
 
 /beam/beam_width 1
-/beam/type 0
-/run/beamOn 10000
+/beam/type 1
+/run/beamOn 100000
 
 #/beam/beam_width 1
 #/beam/type 2
-#/beam/mono_energy 100
 #/run/beamOn 100000

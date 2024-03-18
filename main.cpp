@@ -50,6 +50,7 @@ int main(int argc, char **argv)
 	// --------------------------------------------------------------------------------
 	auto *uiManager = G4UImanager::GetUIpointer();
 
+	// generate energy spectrum
 	spectrum::save_to_file();
 
 	/* If no interactive mode, just execute in
