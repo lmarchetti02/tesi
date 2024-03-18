@@ -17,8 +17,7 @@ namespace spectrum
     G4double mu = 0.06;
     G4double sigma = 0.005;
 
-    return (1 / (sigma * sqrt(2 * M_PI))) *
-           exp(-((x - mu) * (x - mu)) / (2 * sigma * sigma));
+    return (1 / (sigma * sqrt(2 * M_PI))) * exp(-((x - mu) * (x - mu)) / (2 * sigma * sigma));
   }
 
   /**

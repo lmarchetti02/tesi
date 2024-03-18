@@ -61,6 +61,10 @@ SampleEnergy::~SampleEnergy()
     F.clear();
 }
 
+/**
+ * Function for sampling a pseudo-random value from the
+ * energy distribution.
+ */
 G4double SampleEnergy::Sample()
 {
     G4double u = G4UniformRand();
