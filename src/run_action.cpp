@@ -35,20 +35,20 @@ RunAction::RunAction()
     man->CreateNtupleIColumn("Photon_NoInt");
     man->CreateNtupleDColumn("Compton_Energy");
     man->CreateNtupleIColumn("Compton_ID_Primary");
-    man->CreateNtupleDColumn("Compton_ELoss_Primary");
+    man->CreateNtupleDColumn("Compton_eneloss_primary");
     man->CreateNtupleIColumn("Compton_ID_Interaction"); // <0 escaped
-    man->CreateNtupleDColumn("Compton_ELoss_Interaction");
+    man->CreateNtupleDColumn("Compton_eneloss_interaction");
     man->CreateNtupleIColumn("ID", pixelIDVector);
     man->CreateNtupleDColumn("Energy", pixelEnergyVector);
     man->CreateNtupleIColumn("ID_CS", pixelIDVectorCS);
     man->CreateNtupleDColumn("Energy_CS", pixelEnergyVectorCS);
-    man->CreateNtupleIColumn("ID_Merge", pixelIDVectorMerge);
-    man->CreateNtupleDColumn("Energy_Merge", pixelEnergyVectorMerge);
-    man->CreateNtupleIColumn("ID_Merge_CS", pixelIDVectorMergeCS);
-    man->CreateNtupleDColumn("Energy_Merge_CS", pixelEnergyVectorMergeCS);
-    man->CreateNtupleDColumn("Energy_Fluorescence", energyFluorescence);
-    man->CreateNtupleIColumn("ID_Fluorescence", pixelIDFluorescence); // -1 escape else id interaction fluorescence
-    man->CreateNtupleDColumn("ELoss_Fluorescence", energyLossFluorescence);
+    man->CreateNtupleIColumn("ID_Merge", pixelIDVectorMergeCS);
+    man->CreateNtupleDColumn("Energy_Merge", pixelEnergyVectorMergeCS);
+    man->CreateNtupleIColumn("ID_Merge_NOCS", pixelIDVectorMerge);
+    man->CreateNtupleDColumn("Energy_Merge_NOCS", pixelEnergyVectorMerge);
+    man->CreateNtupleDColumn("Energy_Fluoro", energyFluorescence);
+    man->CreateNtupleIColumn("ID_Fluoro", pixelIDFluorescence); // -1 escape else id interaction fluorescence
+    man->CreateNtupleDColumn("EneLoss_Fluoro", energyLossFluorescence);
     man->FinishNtuple(1);
 }
 
