@@ -12,20 +12,28 @@
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-PrimaryGenerator::PrimaryGenerator() : monoEnergy(50. * keV), beamWidth(BEAM_WIDTH), energyDistType(BEAM_TYPE)
+PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * keV), energyDistType(BEAM_TYPE)
 {
-    particleGun = new G4GeneralParticleSource();
+    particleGun = new G4ParticleGun(1); // 1 particles per event
 
     // fetch particle
     G4ParticleTable *particleTable = G4ParticleTable::GetParticleTable();
     G4String particleName = "gamma";
     G4ParticleDefinition *particle = particleTable->FindParticle(particleName);
 
-    // set particle type
+    // set position and momentum vectors
+    G4ThreeVector pos(0., 0., -Z_WORLD);
+
+    // generate particle
+    particleGun->SetParticlePosition(pos);
+    particleGun->SetParticleMomentumDirection(G4ThreeVector(0., 0., 1.));
+    particleGun->SetParticleEnergy(monoEnergy);
     particleGun->SetParticleDefinition(particle);
 
     // messenger
     DefineCommands();
+
+    sampleEnergy = new SampleEnergy("./spectrum.dat");
 }
 
 /**
@@ -43,86 +51,47 @@ PrimaryGenerator::~PrimaryGenerator()
  */
 void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
-    SetPositionDistribution();
-    SetEnergyDistribution();
-
-    // generate primary vertex
-    particleGun->GeneratePrimaryVertex(anEvent);
-
-    // get particle energy
-    G4PrimaryVertex *primaryVertex = anEvent->GetPrimaryVertex(0);
-    G4PrimaryParticle *primaryParticle = primaryVertex->GetPrimary(0);
-    energy = primaryParticle->GetTotalEnergy() / keV;
-
-    // G4cout << "Photon energy = " << energy << " keV" << G4endl;
-}
-
-/**
- * Function for setting the position distribution
- * of the source of photons.
- */
-void PrimaryGenerator::SetPositionDistribution()
-{
     if (beamWidth < 0)
     {
-        G4cout << "MyPrimaryGenerator::SetPositionDistribution(G4event): Invalid 'beamWidth'" << G4endl;
+        G4cout << "PrimaryGenerator::GeneratePrimaries(G4event): Invalid 'beamWidth'" << G4endl;
         return;
     }
 
-    G4ThreeVector centre{0, 0, -Z_WORLD};
-
     // set position
     if (beamWidth > 1)
-    {
-        particleGun->GetCurrentSource()->GetPosDist()->SetPosDisType("Point");
-        particleGun->GetCurrentSource()->GetPosDist()->SetCentreCoords(centre);
-    }
+        particleGun->SetParticlePosition(G4ThreeVector(0, 0, -Z_WORLD));
     else
     {
         // 0 for central pixel, 1 for whole array (see constants.hh)
         G4double max = (beamWidth == 0) ? XY_PIXEL : XY_WORLD;
-
-        particleGun->GetCurrentSource()->GetPosDist()->SetPosDisType("Plane");
-        particleGun->GetCurrentSource()->GetPosDist()->SetPosDisShape("Rectangle");
-        particleGun->GetCurrentSource()->GetPosDist()->SetCentreCoords(centre);
-        particleGun->GetCurrentSource()->GetPosDist()->SetHalfX(max);
-        particleGun->GetCurrentSource()->GetPosDist()->SetHalfY(max);
+        G4ThreeVector positionVector = randomPositionVector(max, max);
+        particleGun->SetParticlePosition(positionVector);
     }
+
+    // set energy
+    if (!energyDistType)
+        energy = monoEnergy;
+    else
+        energy = sampleEnergy->Sample();
+
+    particleGun->SetParticleEnergy(energy);
+
+    // generate primary vertex
+    particleGun->GeneratePrimaryVertex(anEvent);
 }
 
 /**
- * Function for setting the energy distribution of
- * the source of photons.
+ * Function for generating a random unit vector inside a cone.
+ *
+ * @param[in] maxTheta The angle that defines the cone.
+ * @return A random unit vector inside the cone defined by `maxTheta`.
  */
-void PrimaryGenerator::SetEnergyDistribution()
+G4ThreeVector PrimaryGenerator::randomPositionVector(G4double xMax, G4double yMax)
 {
-    if (energyDistType < 0)
-    {
-        G4cout << "MyPrimaryGenerator::SetEnergyDistribution(): Invalid 'energyDistType'" << G4endl;
-        return;
-    }
+    G4double x = -xMax + G4UniformRand() * 2 * xMax;
+    G4double y = -yMax + G4UniformRand() * 2 * yMax;
 
-    // bremsstrahlung distribution
-    if (!energyDistType)
-    {
-        particleGun->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Exp");
-        particleGun->GetCurrentSource()->GetEneDist()->SetEmin(0.02);  // in MeV
-        particleGun->GetCurrentSource()->GetEneDist()->SetEmax(0.1);   // in MeV
-        particleGun->GetCurrentSource()->GetEneDist()->SetEzero(0.02); // in MeV
-    }
-    // arbitrary distribution
-    else if (energyDistType == 1)
-    {
-        particleGun->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Arb");
-        particleGun->GetCurrentSource()->GetEneDist()->ArbEnergyHistoFile("./spectrum.dat");
-        particleGun->GetCurrentSource()->GetEneDist()->ArbInterpolate("Lin");
-    }
-    // monoenergetic beam
-    else
-    {
-        particleGun->GetCurrentSource()->GetEneDist()->SetEnergyDisType("Mono");
-        particleGun->GetCurrentSource()->GetEneDist()->SetMonoEnergy(monoEnergy);
-    }
+    return G4ThreeVector(x, y, -Z_WORLD);
 }
 
 /**
@@ -132,18 +101,18 @@ void PrimaryGenerator::DefineCommands()
 {
     fMessenger = new G4GenericMessenger(this, "/beam/", "X ray beam customization");
 
-    auto &energyTypeCmd = fMessenger->DeclareProperty("type", energyDistType, "Type of energy distribution");
-    energyTypeCmd.SetParameterName("type", true);
-    energyTypeCmd.SetRange("type>=0");
-    energyTypeCmd.SetDefaultValue("0");
+    auto &momentumCmd = fMessenger->DeclarePropertyWithUnit("energy", "keV", monoEnergy, "Photon energy");
+    momentumCmd.SetParameterName("energy", true);
+    momentumCmd.SetRange("energy>=0.");
+    momentumCmd.SetDefaultValue("50.");
 
-    auto &monoEnergyCmd = fMessenger->DeclarePropertyWithUnit("mono_energy", "keV", monoEnergy, "Energy of monochromatic photons");
-    monoEnergyCmd.SetParameterName("mono_energy", true);
-    monoEnergyCmd.SetRange("mono_energy>=0");
-    monoEnergyCmd.SetDefaultValue("50.");
-
-    auto &beamWidthCmd = fMessenger->DeclareProperty("beam_width", beamWidth, "Type of beam");
+    auto &beamWidthCmd = fMessenger->DeclareProperty("beam_width", beamWidth, "The type of illumination.");
     beamWidthCmd.SetParameterName("beam_width", true);
     beamWidthCmd.SetRange("beam_width>=0");
     beamWidthCmd.SetDefaultValue("0");
+
+    auto &beamTypeCmd = fMessenger->DeclareProperty("beam_type", energyDistType, "The type of energy spectrum.");
+    beamTypeCmd.SetParameterName("beam_type", true);
+    beamTypeCmd.SetRange("beam_type>=0");
+    beamTypeCmd.SetDefaultValue("0");
 }

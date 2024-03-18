@@ -50,6 +50,3 @@
 # Re-establish auto refreshing and verbosity:
 /vis/viewer/set/autoRefresh true
 /vis/verbose warnings
-
-# set beam direction
-/gps/direction 0 0 1
