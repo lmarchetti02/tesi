@@ -3,6 +3,8 @@
 #include <string>
 #include <fstream>
 
+#include "Randomize.hh"
+
 /**
  * The default constructor.
  *
@@ -40,9 +42,7 @@ SampleEnergy::SampleEnergy(const char *fileName)
     // build the cumulative
     F[0] = f[0];
     for (int i = 1; i < x.size(); i++)
-    {
         F[i] = F[i - 1] + f[i];
-    }
 
     // normalize
     double factor = 1. / F[x.size() - 1];

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Randomize.hh"
 #include "globals.hh"
 
 class SampleEnergy
