@@ -7,7 +7,8 @@ Subpixel_N          number of sub-pixels
 Subpixels_xy_dim    pixel transversal size (in cm)
 Subpixels_z_dim     pixel longitudinal size (in cm)
 Event_N             number of events
-Beam_Width          0=beam spread on central pixel 1=beam spread on the whole detector 2=central position
+Beam_Width          type of illumination (see constants.hh)
+Beam_Type           type of energy distribution (see constants.hh)
 
 "Event"
 (I) Event_ID                            event number
