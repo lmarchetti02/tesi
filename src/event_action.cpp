@@ -61,7 +61,8 @@ void EventAction::BeginOfEventAction(const G4Event *Event)
         man->FillNtupleDColumn(0, 5, Z_PIXEL);
         // number of events
         man->FillNtupleIColumn(0, 6, EventAction::GetNEvents());
-        man->FillNtupleIColumn(0, 7, myGenerator->GetBeamWidth());
+        man->FillNtupleIColumn(0, 7, BEAM_WIDTH);
+        man->FillNtupleIColumn(0, 8, BEAM_TYPE);
         man->AddNtupleRow(0);
     }
 

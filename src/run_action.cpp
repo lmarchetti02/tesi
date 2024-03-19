@@ -26,6 +26,7 @@ RunAction::RunAction()
     man->CreateNtupleDColumn("Subpixels_z_dim");
     man->CreateNtupleIColumn("Event_N");
     man->CreateNtupleIColumn("Beam_Width");
+    man->CreateNtupleIColumn("Beam_Type");
     man->FinishNtuple(0);
 
     man->CreateNtuple("Event", "Event");
