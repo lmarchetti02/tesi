@@ -9,6 +9,6 @@
 #/run/beamOn 10000
 
 /beam/beam_width 0
-/beam/beam_type 1
-/run/beamOn 20000
+/beam/beam_type 0
+/run/beamOn 100000
 
