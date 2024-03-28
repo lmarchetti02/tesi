@@ -39,5 +39,6 @@ public:
   G4ThreeVector randomPositionVector(G4double, G4double);
 
   G4int GetBeamWidth() { return beamWidth; }
+  G4int GetBeamType() { return energyDistType; }
   G4double GetEnergy() { return energy; }
 };

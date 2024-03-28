@@ -10,5 +10,5 @@
 
 /beam/beam_width 0
 /beam/beam_type 0
-/run/beamOn 100000
+/run/beamOn 1000000
 
