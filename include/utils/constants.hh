@@ -53,4 +53,4 @@ constexpr G4int N_PARTS_ENERGY = 50;
  * The standard deviation of the gaussian used for distributing the energy bits around.
  * See charge_sharing.hh for more info.
  */
-constexpr G4double SMEAR_WIDTH = 10 * um;
+constexpr G4double SMEAR_WIDTH = 30 * um;
