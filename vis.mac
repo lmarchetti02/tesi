@@ -10,7 +10,7 @@
 /run/initialize
 
 # Use this open statement to create an OpenGL view:
-/vis/open OGL 600x600-0+0
+/vis/open OGL 1200x800-0+0
 
 # Disable auto refresh and quieten vis messages whilst scene and
 # trajectories are established:
@@ -38,7 +38,7 @@
 
 
 /vis/scene/add/eventID
-/vis/scene/add/date    
+#/vis/scene/add/date    
 
 # add axes
 /vis/scene/add/axes

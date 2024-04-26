@@ -71,6 +71,7 @@ void PhysicsList::ConstructProcess()
     de->SetFluo(true);
     de->SetAuger(true);
     de->SetPIXE(true);
+    de->SetAuger(true);
     de->SetAugerCascade(true);
 
     // To model full Auger cascade include in the macro file
