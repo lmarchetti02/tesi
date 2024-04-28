@@ -1,5 +1,4 @@
-#include <iostream>
-#include <memory>
+#include <filesystem>
 
 // Geant4 libraries
 #include "G4UIExecutive.hh"
@@ -20,6 +19,8 @@
 
 int main(int argc, char **argv)
 {
+	std::filesystem::create_directory("../results/");
+
 	// SETUP
 	// --------------------------------------------------------------------------------
 	// if no argument, interactive mode

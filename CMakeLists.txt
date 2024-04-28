@@ -1,6 +1,6 @@
 # SETUP
-#-----------------------------------------------------------------------
-cmake_minimum_required(VERSION 3.26 FATAL_ERROR)
+# -----------------------------------------------------------------------
+cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 20)
 project(Rivelatore)
 
@@ -9,7 +9,7 @@ set(results_path ${PROJECT_SOURCE_DIR}/results/)
 file(GLOB results "${results_path}/*.root")
 
 if(NOT results)
-    message("ROOT directory is empty")
+  message("ROOT directory is empty")
 else()
   file(REMOVE_RECURSE ${results})
   message("ROOT files deleted")
@@ -37,7 +37,7 @@ foreach(_script ${SCRIPTS})
     ${PROJECT_SOURCE_DIR}/${_script}
     ${PROJECT_BINARY_DIR}/${_script}
     COPYONLY
-    )
+  )
 endforeach()
 
 # create executable and link it to Geant4 libraries
@@ -46,4 +46,5 @@ target_link_libraries(rivelatore ${Geant4_LIBRARIES})
 
 # install executable
 install(TARGETS rivelatore DESTINATION bin)
-#-----------------------------------------------------------------------
+
+# -----------------------------------------------------------------------
