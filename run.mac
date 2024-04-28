@@ -1,6 +1,8 @@
 /control/verbose 1
 /run/verbose 1
 
+/process/em/deexcitationIgnoreCut true
+
 /run/numberOfThreads 10
 /run/initialize
 
