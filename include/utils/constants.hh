@@ -15,7 +15,9 @@ constexpr G4bool INCLUDE_ORIGINAL = false;
 constexpr G4bool INCLUDE_CS = false;
 
 constexpr G4int N_PIXEL = 15;
-constexpr G4int PIXEL_RATIO = 5;
+
+// pixel ratio must be odd
+constexpr G4int PIXEL_RATIO = 7;
 constexpr G4int N_SUBPIXEL = N_PIXEL * PIXEL_RATIO;
 
 constexpr G4double XY_PIXEL = 100 * um;
@@ -41,13 +43,18 @@ constexpr G4int BEAM_WIDTH = 1;
  * The number of parts in which each pixel energy is divided into.
  * See charge_sharing.hh for more info.
  */
-constexpr G4int N_PARTS_ENERGY = 50;
-
+constexpr G4int N_PARTS_ENERGY = 300;
 /**
  * The standard deviation of the gaussian used for distributing the energy bits around.
  * See charge_sharing.hh for more info.
  */
 constexpr G4double SMEAR_WIDTH = 30 * um;
+
+/**
+ * Make the center of the charge-sharing
+ * gaussian randomly chosen within the pixel.
+ */
+constexpr G4bool RND_GAUSS_CENTER = true;
 
 /**
  * Spectrum of the illuminating photons:

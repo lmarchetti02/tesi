@@ -77,7 +77,13 @@ namespace charge_sharing
             {
                 const G4double PIXEL_ENERGY = energyVector[ID];
                 const G4double ENERGY = PIXEL_ENERGY / nParts;
-                const std::array<G4double, 2> XY_CENTER = DetectorConstruction::GetPixelMap()[ID];
+                std::array<G4double, 2> XY_CENTER = DetectorConstruction::GetPixelMap()[ID];
+
+                if (RND_GAUSS_CENTER)
+                {
+                    XY_CENTER[0] += (2 * G4UniformRand() * XY_SUBPIXEL - XY_SUBPIXEL);
+                    XY_CENTER[1] += (2 * G4UniformRand() * XY_SUBPIXEL - XY_SUBPIXEL);
+                }
 
                 for (G4int i = 0; i < nParts; i++)
                 {
