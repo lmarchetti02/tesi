@@ -6,12 +6,22 @@
 #include "Randomize.hh"
 
 /**
- * The default constructor.
+ * The default destructor.
+ */
+SampleEnergy::~SampleEnergy()
+{
+    x.clear();
+    f.clear();
+    F.clear();
+}
+
+/**
+ * Function for reading the .dat file
+ * and generating the cumulative distribution.
  *
  * @param[in] fileName The name of the file where the energy distribution
- * is stored.
  */
-SampleEnergy::SampleEnergy(const char *fileName)
+void SampleEnergy::ReadFile(const char *fileName)
 {
     // get data from file
     std::fstream inFile;
@@ -49,16 +59,6 @@ SampleEnergy::SampleEnergy(const char *fileName)
 
     for (int i = 1; i < x.size(); i++)
         F[i] *= factor;
-}
-
-/**
- * The default destructor.
- */
-SampleEnergy::~SampleEnergy()
-{
-    x.clear();
-    f.clear();
-    F.clear();
 }
 
 /**

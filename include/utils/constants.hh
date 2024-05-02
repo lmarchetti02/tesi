@@ -38,19 +38,25 @@ constexpr const char TGT_MATERIAL[] = "G4_CADMIUM_TELLURIDE";
 constexpr G4int BEAM_WIDTH = 1;
 
 /**
- * Defines the energy spectrum of the photons:
- *  - 0 for monochromatic photons
- *  - 1 for user-defined distribution
- */
-constexpr G4int BEAM_TYPE = 1;
-
-/**
  * The number of parts in which each pixel energy is divided into.
  * See charge_sharing.hh for more info.
  */
 constexpr G4int N_PARTS_ENERGY = 50;
+
 /**
  * The standard deviation of the gaussian used for distributing the energy bits around.
  * See charge_sharing.hh for more info.
  */
 constexpr G4double SMEAR_WIDTH = 30 * um;
+
+/**
+ * Spectrum of the illuminating photons:
+ *  - 0 for monochromatic photons
+ *  - 1 for gaussian distribution
+ *  - 2 for uniform distribution
+ *  - 3 for linear distribution with a MAX_ENE
+ */
+constexpr G4int SPECTRUM_SHAPE = 1;
+
+// The maximum energy
+constexpr G4double MAX_ENE = 100. * keV;

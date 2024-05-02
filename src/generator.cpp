@@ -3,16 +3,18 @@
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"
+#include "G4Event.hh"
 
 #include "detector_construction.hh"
 #include "constants.hh"
+#include "energy_spectrum.hh"
 
 /**
  * Constructor.
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * keV), energyDistType(BEAM_TYPE)
+PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * keV), energyDistType(SPECTRUM_SHAPE)
 {
     particleGun = new G4ParticleGun(1); // 1 particles per event
 
@@ -33,7 +35,9 @@ PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * k
     // messenger
     DefineCommands();
 
-    sampleEnergy = new SampleEnergy("./spectrum.dat");
+    spectrum::save_to_file(energyDistType, MAX_ENE);
+    sampleEnergy = new SampleEnergy();
+    sampleEnergy->ReadFile("spectrum.dat");
 }
 
 /**

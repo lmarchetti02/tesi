@@ -15,7 +15,6 @@
 #include "sensitive_detector.hh"
 #include "constants.hh"
 #include "stepping_action.hh"
-#include "energy_spectrum.hh"
 
 int main(int argc, char **argv)
 {
@@ -50,9 +49,6 @@ int main(int argc, char **argv)
 	// START PROGRAM
 	// --------------------------------------------------------------------------------
 	auto *uiManager = G4UImanager::GetUIpointer();
-
-	// generate energy spectrum
-	spectrum::save_to_file();
 
 	/* If no interactive mode, just execute in
 	the terminal. */

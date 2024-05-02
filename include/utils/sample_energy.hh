@@ -10,8 +10,9 @@ private:
   std::vector<G4double> F;
 
 public:
-  SampleEnergy(const char *);
+  SampleEnergy() = default;
   ~SampleEnergy();
 
+  void ReadFile(const char *fileName);
   G4double Sample();
 };

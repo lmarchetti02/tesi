@@ -31,13 +31,13 @@ RunAction::RunAction()
 
     man->CreateNtuple("Event", "Event");
     man->CreateNtupleIColumn("Event_ID");
-    man->CreateNtupleDColumn("Photon_Energy");
+    man->CreateNtupleDColumn("Photon_energy");
     man->CreateNtupleIColumn("Photon_ID");
     man->CreateNtupleIColumn("Photon_NoInt");
-    man->CreateNtupleDColumn("Compton_Energy");
-    man->CreateNtupleIColumn("Compton_ID_Primary");
+    man->CreateNtupleDColumn("Compton_energy");
+    man->CreateNtupleIColumn("Compton_ID_primary");
     man->CreateNtupleDColumn("Compton_eneloss_primary");
-    man->CreateNtupleIColumn("Compton_ID_Interaction"); // <0 escaped
+    man->CreateNtupleIColumn("Compton_ID_interaction"); // <0 escaped
     man->CreateNtupleDColumn("Compton_eneloss_interaction");
     man->CreateNtupleIColumn("ID", pixelIDVector);
     man->CreateNtupleDColumn("Energy", pixelEnergyVector);
