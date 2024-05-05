@@ -19,6 +19,7 @@
 int main(int argc, char **argv)
 {
 	std::filesystem::create_directory("../results/");
+	std::filesystem::create_directory("../spectrums/");
 
 	// SETUP
 	// --------------------------------------------------------------------------------

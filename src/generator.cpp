@@ -35,9 +35,9 @@ PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * k
     // messenger
     DefineCommands();
 
-    spectrum::save_to_file(energyDistType, MAX_ENE);
+    // spectrum::save_to_file(energyDistType, MAX_ENE);
+    spectrum::save();
     sampleEnergy = new SampleEnergy();
-    sampleEnergy->ReadFile("spectrum.dat");
 }
 
 /**
@@ -73,7 +73,8 @@ void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     }
 
     // set energy
-    energy = (!energyDistType) ? monoEnergy : sampleEnergy->Sample();
+    energy = (!energyDistType) ? monoEnergy : sampleEnergy->Sample(energyDistType);
+    G4cout << energy << G4endl;
     particleGun->SetParticleEnergy(energy);
 
     // generate primary vertex

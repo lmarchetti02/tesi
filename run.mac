@@ -3,7 +3,7 @@
 
 /process/em/deexcitationIgnoreCut true
 
-/run/numberOfThreads 10
+/run/numberOfThreads 6
 /run/initialize
 
 #/beam/beam_width 1
@@ -12,5 +12,5 @@
 
 /beam/beam_width 1
 /beam/beam_type 1
-/run/beamOn 100000
+/run/beamOn 50000
 
