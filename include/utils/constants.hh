@@ -14,7 +14,7 @@ constexpr G4bool INCLUDE_ORIGINAL = false;
  */
 constexpr G4bool INCLUDE_CS = false;
 
-constexpr G4int N_PIXEL = 15;
+constexpr G4int N_PIXEL = 7;
 
 // pixel ratio must be odd
 constexpr G4int PIXEL_RATIO = 7;

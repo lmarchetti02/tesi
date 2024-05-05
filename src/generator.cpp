@@ -73,11 +73,7 @@ void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     }
 
     // set energy
-    if (!energyDistType)
-        energy = monoEnergy;
-    else
-        energy = sampleEnergy->Sample();
-
+    energy = (!energyDistType) ? monoEnergy : sampleEnergy->Sample();
     particleGun->SetParticleEnergy(energy);
 
     // generate primary vertex
