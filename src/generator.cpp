@@ -36,7 +36,7 @@ PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * k
     DefineCommands();
 
     // spectrum::save_to_file(energyDistType, MAX_ENE);
-    spectrum::save();
+    spectrum::save_files();
     sampleEnergy = new SampleEnergy();
 }
 
