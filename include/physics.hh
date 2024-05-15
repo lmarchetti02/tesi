@@ -11,14 +11,14 @@
  */
 class PhysicsList : public G4VModularPhysicsList
 {
-public:
+  public:
     explicit PhysicsList();
     ~PhysicsList() override;
 
     void ConstructParticle() override;
     void ConstructProcess() override;
 
-private:
+  private:
     G4VPhysicsConstructor *fEmPhysicsList;
     G4VPhysicsConstructor *fDecPhysicsList;
     G4VPhysicsConstructor *fRadDecayPhysicsList;

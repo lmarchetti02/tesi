@@ -1,8 +1,8 @@
 #pragma once
 
-#include "G4VHit.hh"
-#include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+#include "G4THitsCollection.hh"
+#include "G4VHit.hh"
 
 /**
  * Custom Hits Class
@@ -19,7 +19,7 @@
  */
 class PixelsHit : public G4VHit
 {
-public:
+  public:
     PixelsHit();
     ~PixelsHit() override = default;
     PixelsHit(const PixelsHit &);
@@ -30,11 +30,11 @@ public:
     void *operator new(size_t);
     void operator delete(void *);
 
-private:
+  private:
     G4double energyDep;
     G4int detectorID;
 
-public:
+  public:
     /**
      * Function for setting the `energyDep` data member.
      *

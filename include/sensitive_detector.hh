@@ -1,8 +1,7 @@
 #pragma once
 
-#include "G4VSensitiveDetector.hh"
 #include "G4TouchableHistory.hh"
-
+#include "G4VSensitiveDetector.hh"
 #include "hits.hh"
 
 /**
@@ -15,11 +14,11 @@
  */
 class PixelsSD : public G4VSensitiveDetector
 {
-private:
+  private:
     MyHitsCollection *hitsCollection;
     G4int HCID;
 
-public:
+  public:
     PixelsSD(G4String);
     ~PixelsSD() override = default;
 

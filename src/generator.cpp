@@ -1,11 +1,9 @@
 #include "generator.hh"
 
-#include "G4SystemOfUnits.hh"
-#include "G4ParticleTable.hh"
-#include "Randomize.hh"
 #include "G4Event.hh"
-
-#include "detector_construction.hh"
+#include "G4ParticleTable.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 #include "constants.hh"
 
 /**
@@ -13,7 +11,10 @@
  *
  * Initializes the particle gun (particle type, initial position and momentum).
  */
-PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * keV), energyDistType(SPECTRUM_SHAPE)
+PrimaryGenerator::PrimaryGenerator()
+    : beamWidth(BEAM_WIDTH)
+    , monoEnergy(100 * keV)
+    , energyDistType(SPECTRUM_SHAPE)
 {
     particleGun = new G4ParticleGun(1); // 1 particles per event
 
@@ -40,10 +41,7 @@ PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * k
 /**
  * The destructor.
  */
-PrimaryGenerator::~PrimaryGenerator()
-{
-    delete particleGun;
-}
+PrimaryGenerator::~PrimaryGenerator() { delete particleGun; }
 
 /**
  * Geant4 function for generating the primary vertex.
@@ -52,8 +50,7 @@ PrimaryGenerator::~PrimaryGenerator()
  */
 void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
 {
-    if (beamWidth < 0)
-    {
+    if (beamWidth < 0) {
         G4cout << "PrimaryGenerator::GeneratePrimaries(G4event): Invalid 'beamWidth'" << G4endl;
         return;
     }
@@ -61,8 +58,7 @@ void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     // set position
     if (beamWidth > 1)
         particleGun->SetParticlePosition(G4ThreeVector(0, 0, -Z_WORLD));
-    else
-    {
+    else {
         // 0 for central pixel, 1 for whole array (see constants.hh)
         G4double max = (beamWidth == 0) ? XY_PIXEL : XY_WORLD;
         G4ThreeVector positionVector = randomPositionVector(max, max);
@@ -72,8 +68,7 @@ void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     // set energy
     energy = (!energyDistType) ? monoEnergy : sampleEnergy->Sample(energyDistType);
     particleGun->SetParticleEnergy(energy);
-    if (std::isnan(energy))
-        G4cout << "ERROR - Invalid photon energy " << G4endl;
+    if (std::isnan(energy)) G4cout << "ERROR - Invalid photon energy " << G4endl;
 
     // generate primary vertex
     particleGun->GeneratePrimaryVertex(anEvent);

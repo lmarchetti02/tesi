@@ -2,12 +2,10 @@
 
 #include "G4NistManager.hh"
 #include "G4PVPlacement.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4UImanager.hh"
 #include "G4SDManager.hh"
-
-#include "sensitive_detector.hh"
+#include "G4UImanager.hh"
 #include "constants.hh"
+#include "sensitive_detector.hh"
 
 /**
  * IMPORTANT:
@@ -21,16 +19,18 @@
 // pixel map
 std::map<G4int, std::array<G4double, 2>> DetectorConstruction::pixelMap = std::map<G4int, std::array<G4double, 2>>();
 
-DetectorConstruction::DetectorConstruction() : nPixel(N_SUBPIXEL),
-                                               xWorld(XY_WORLD),
-                                               yWorld(XY_WORLD),
-                                               zWorld(Z_WORLD),
-                                               zPlanes(Z_PLANES),
-                                               xPixel(XY_SUBPIXEL),
-                                               yPixel(XY_SUBPIXEL),
-                                               zPixel(Z_PIXEL),
-                                               scoringVolume(nullptr),
-                                               scoringPlane(nullptr)
+// clang format off
+DetectorConstruction::DetectorConstruction()
+    : nPixel(N_SUBPIXEL)
+    , xWorld(XY_WORLD)
+    , yWorld(XY_WORLD)
+    , zWorld(Z_WORLD)
+    , zPlanes(Z_PLANES)
+    , xPixel(XY_SUBPIXEL)
+    , yPixel(XY_SUBPIXEL)
+    , zPixel(Z_PIXEL)
+    , scoringVolume(nullptr)
+    , scoringPlane(nullptr)
 {
     DefineMaterials();
 }
@@ -74,20 +74,14 @@ void DetectorConstruction::ConstructPixels()
     const G4double zPosition = zWorld - 2 * zPlanes - zPixel;
 
     // array of detectors
-    for (G4int i = 0; i < nPixel; i++)
-    {
-        for (G4int j = 0; j < nPixel; j++)
-        {
+    for (G4int i = 0; i < nPixel; i++) {
+        for (G4int j = 0; j < nPixel; j++) {
             const G4int ID = i * nPixel + j;
             const G4double x = -xWorld + (2 * j + 1) * xPixel;
             const G4double y = -yWorld + (2 * i + 1) * yPixel;
 
-            physDetector = new G4PVPlacement(nullptr,
-                                             G4ThreeVector(x, y, zPosition),
-                                             logicDetector,
-                                             "physDetector",
-                                             logicWorld,
-                                             false,
+            physDetector = new G4PVPlacement(nullptr, G4ThreeVector(x, y, zPosition), logicDetector, "physDetector",
+                                             logicWorld, false,
                                              ID, // unique id's
                                              true);
 
@@ -113,23 +107,11 @@ void DetectorConstruction::ConstructPlanes()
     const G4double zPosition1 = zWorld - 2 * zPlanes - 2 * zPixel - zPlanes;
     const G4double zPosition2 = zWorld - zPlanes;
 
-    physPlane1 = new G4PVPlacement(nullptr,
-                                   G4ThreeVector(0., 0., zPosition1),
-                                   logicPlane,
-                                   "physPlane",
-                                   logicWorld,
-                                   false,
-                                   1,
-                                   true);
+    physPlane1 = new G4PVPlacement(nullptr, G4ThreeVector(0., 0., zPosition1), logicPlane, "physPlane", logicWorld,
+                                   false, 1, true);
 
-    physPlane2 = new G4PVPlacement(nullptr,
-                                   G4ThreeVector(0., 0., zPosition2),
-                                   logicPlane,
-                                   "physPlane",
-                                   logicWorld,
-                                   false,
-                                   2,
-                                   true);
+    physPlane2 = new G4PVPlacement(nullptr, G4ThreeVector(0., 0., zPosition2), logicPlane, "physPlane", logicWorld,
+                                   false, 2, true);
 
     scoringPlane = logicPlane;
 }
@@ -188,20 +170,20 @@ void DetectorConstruction::SetVisualization()
     // number of pixels
     uiManager->ApplyCommand("/vis/set/textColour white");
     uiManager->ApplyCommand("/vis/set/textLayout right");
-    uiManager->ApplyCommand("/vis/scene/add/text2D 0.9 -0.8 18 ! ! Number of pixels: " + std::to_string(N_SUBPIXEL) + " x " + std::to_string(N_SUBPIXEL));
+    uiManager->ApplyCommand("/vis/scene/add/text2D 0.9 -0.8 18 ! ! Number of pixels: " + std::to_string(N_SUBPIXEL) +
+                            " x " + std::to_string(N_SUBPIXEL));
 
     // scale
-    uiManager->ApplyCommand("/vis/scene/add/scale " +
-                            std::to_string(2 * Z_PIXEL) + " mm z 1 0.75 0 manual " +
-                            std::to_string(XY_WORLD) + " " +
-                            std::to_string(XY_WORLD) + " " +
+    uiManager->ApplyCommand("/vis/scene/add/scale " + std::to_string(2 * Z_PIXEL) + " mm z 1 0.75 0 manual " +
+                            std::to_string(XY_WORLD) + " " + std::to_string(XY_WORLD) + " " +
                             std::to_string(Z_WORLD - 2 * Z_PLANES - Z_PIXEL) + " mm");
 }
 
 /**
  * Static function for adding a new element to `pixelMap`.
  *
- * @param[in] newElement Reference to the `std::pair` containing the ID of the pixel and the coordinates of its center.
+ * @param[in] newElement Reference to the `std::pair` containing the ID of the pixel and the
+ * coordinates of its center.
  */
 void DetectorConstruction::AddToPixelMap(std::pair<G4int, std::array<G4double, 2>> newElement)
 {

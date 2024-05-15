@@ -1,13 +1,13 @@
 #pragma once
 
-#include <array>
-#include <map>
-
-#include "G4VUserDetectorConstruction.hh"
-#include "G4VPhysicalVolume.hh"
+#include "G4Box.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Material.hh"
-#include "G4Box.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VUserDetectorConstruction.hh"
+
+#include <array>
+#include <map>
 
 /**
  * Detector Construction Class
@@ -18,7 +18,7 @@
  */
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
-private:
+  private:
     // dimensions
     G4int nPixel;
 
@@ -53,7 +53,7 @@ private:
 
     void ConstructSDandField() override;
 
-public:
+  public:
     DetectorConstruction();
     ~DetectorConstruction() override = default;
 

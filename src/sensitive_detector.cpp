@@ -1,7 +1,5 @@
 #include "sensitive_detector.hh"
 
-#include "G4AnalysisManager.hh"
-#include "G4RunManager.hh"
 #include "G4SDManager.hh"
 
 /**
@@ -9,7 +7,9 @@
  *
  * @param[in] name The name of the sensitive detector.
  */
-PixelsSD::PixelsSD(G4String name) : G4VSensitiveDetector(name), HCID(-1)
+PixelsSD::PixelsSD(G4String name)
+    : G4VSensitiveDetector(name)
+    , HCID(-1)
 {
     // SensitiveDetectorName and collectionName are data members of G4VSensitiveDetector
     collectionName.insert("MyHitsCollection");
@@ -24,8 +24,7 @@ void PixelsSD::Initialize(G4HCofThisEvent *HCE)
 {
     hitsCollection = new MyHitsCollection(SensitiveDetectorName, collectionName[0]);
 
-    if (HCID < 0)
-        HCID = GetCollectionID(0);
+    if (HCID < 0) HCID = GetCollectionID(0);
 
     HCE->AddHitsCollection(HCID, hitsCollection);
 }
@@ -66,8 +65,7 @@ G4bool PixelsSD::ProcessHits(G4Step *aStep, G4TouchableHistory *ROhist)
 void PixelsSD::EndOfEvent(G4HCofThisEvent *HCE)
 {
     static G4int HCID = -1;
-    if (HCID < 0)
-    {
+    if (HCID < 0) {
         HCID = G4SDManager::GetSDMpointer()->GetCollectionID(collectionName[0]);
     }
     HCE->AddHitsCollection(HCID, hitsCollection);

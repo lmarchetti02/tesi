@@ -1,17 +1,14 @@
 #include "event_action.hh"
 
-#include <vector>
-
-#include "hits.hh"
-#include "detector_construction.hh"
-#include "sensitive_detector.hh"
-#include "charge_sharing.hh"
-#include "generator.hh"
-#include "constants.hh"
-
 #include "G4AnalysisManager.hh"
-#include "G4SDManager.hh"
 #include "G4HCofThisEvent.hh"
+#include "G4SDManager.hh"
+#include "charge_sharing.hh"
+#include "constants.hh"
+#include "generator.hh"
+#include "hits.hh"
+
+#include <vector>
 
 G4int EventAction::nEvents = 0;
 
@@ -20,11 +17,14 @@ G4int EventAction::nEvents = 0;
  *
  * @param[in] run The pointer to the run action.
  */
-EventAction::EventAction(RunAction *run, PrimaryGenerator *generator) : index(-1),
-                                                                        myRun(run),
-                                                                        myGenerator(generator),
-                                                                        stepInfo(new SaveStepInfo),
-                                                                        saveCompton(new SaveCompton) {}
+EventAction::EventAction(RunAction *run, PrimaryGenerator *generator)
+    : index(-1)
+    , myRun(run)
+    , myGenerator(generator)
+    , stepInfo(new SaveStepInfo)
+    , saveCompton(new SaveCompton)
+{
+}
 
 /**
  * Geant4 function called at the beginning of the event.
@@ -48,8 +48,7 @@ void EventAction::BeginOfEventAction(const G4Event *Event)
     eventID = Event->GetEventID();
 
     // save info about the simulation
-    if (Event->GetEventID() == 0)
-    {
+    if (Event->GetEventID() == 0) {
         G4AnalysisManager *man = G4AnalysisManager::Instance();
         // pixels
         man->FillNtupleIColumn(0, 0, N_PIXEL);
@@ -79,7 +78,7 @@ void EventAction::EndOfEventAction(const G4Event *Event)
 {
     ReadHitsCollection(Event);
 
-    if (!(Event->GetEventID() % 10000) && Event->GetEventID() != 0)
+    if (!(Event->GetEventID() % 10'000) && Event->GetEventID() != 0)
         G4cout << Event->GetEventID() << " events processed." << G4endl;
 
     G4AnalysisManager *man = G4AnalysisManager::Instance();
@@ -91,8 +90,7 @@ void EventAction::EndOfEventAction(const G4Event *Event)
     man->FillNtupleDColumn(1, 4, (G4double)saveCompton->GetComptonEnergy());
 
     G4int comptID = saveCompton->GetComptonID();
-    if (saveCompton->GetComptonEnergy() < 0)
-        comptID = -1;
+    if (saveCompton->GetComptonEnergy() < 0) comptID = -1;
     man->FillNtupleIColumn(1, 5, comptID);
     man->FillNtupleDColumn(1, 6, (G4double)saveCompton->GetComptonEloss());
     man->FillNtupleIColumn(1, 7, (G4int)saveCompton->GetComptonIDiter()); // <0 escaped
@@ -101,11 +99,9 @@ void EventAction::EndOfEventAction(const G4Event *Event)
     SaveEnergies();
 
     std::vector<G4int> fluorescenceIDchannel = stepInfo->GetIDchannelsVector();
-    for (int i = 0; i < fluorescenceIDchannel.size(); i++)
-    {
+    for (int i = 0; i < fluorescenceIDchannel.size(); i++) {
         G4int ID = fluorescenceIDchannel[i];
-        if (ID >= 0)
-        {
+        if (ID >= 0) {
             G4int i_s = ID / N_SUBPIXEL;
             G4int j_s = ID - i_s * N_SUBPIXEL;
             G4int i_m = i_s / PIXEL_RATIO;
@@ -116,17 +112,14 @@ void EventAction::EndOfEventAction(const G4Event *Event)
     }
     std::vector<G4double> fluorescenceEnergies = stepInfo->GetEneVector();
     std::vector<G4double> fluorescenceEnergyLosses = stepInfo->GetEneLossVector();
-    for (int i = 0; i < fluorescenceIDchannel.size(); i++)
-    {
+    for (int i = 0; i < fluorescenceIDchannel.size(); i++) {
         if (fluorescenceEnergyLosses[i] > minEnergy || fluorescenceIDchannel[i] < 0)
             myRun->AddFluorescence(fluorescenceIDchannel[i], fluorescenceEnergies[i], fluorescenceEnergyLosses[i]);
     }
 
     // delete subpixels info
-    if (!INCLUDE_ORIGINAL)
-        myRun->ClearOriginal();
-    if (!INCLUDE_CS)
-        myRun->ClearCS();
+    if (!INCLUDE_ORIGINAL) myRun->ClearOriginal();
+    if (!INCLUDE_CS) myRun->ClearCS();
 
     man->AddNtupleRow(1);
 }
@@ -140,23 +133,19 @@ void EventAction::EndOfEventAction(const G4Event *Event)
 void EventAction::ReadHitsCollection(const G4Event *Event)
 {
     // find index of HC
-    if (index < 0)
-        index = G4SDManager::GetSDMpointer()->GetCollectionID("SensitiveDetector/MyHitsCollection");
+    if (index < 0) index = G4SDManager::GetSDMpointer()->GetCollectionID("SensitiveDetector/MyHitsCollection");
 
     // get HC of the current event
     G4HCofThisEvent *HCE = Event->GetHCofThisEvent();
 
     MyHitsCollection *hitsColl;
-    if (HCE)
-        hitsColl = (MyHitsCollection *)(HCE->GetHC(index));
+    if (HCE) hitsColl = (MyHitsCollection *)(HCE->GetHC(index));
 
     // get values inside HC
-    if (hitsColl)
-    {
+    if (hitsColl) {
         int nEntries = hitsColl->entries();
 
-        for (int i = 0; i < nEntries; i++)
-        {
+        for (int i = 0; i < nEntries; i++) {
             PixelsHit *hit = (*hitsColl)[i];
 
             // add step info to `energyVector`
@@ -173,13 +162,10 @@ void EventAction::ReadHitsCollection(const G4Event *Event)
  *
  * @return `true` if the vector only contains 0, `false` otherwise.
  */
-template <typename T>
-bool EventAction::IsVectorEmpty(std::vector<T> vector)
+template <typename T> bool EventAction::IsVectorEmpty(std::vector<T> vector)
 {
-    for (T element : vector)
-    {
-        if (element != 0)
-            return false;
+    for (T element : vector) {
+        if (element != 0) return false;
     }
 
     return true;
@@ -196,8 +182,7 @@ void EventAction::SaveEnergies()
         myRun->AddEntry(i, energyVector[i]);
 
     // energy vector isn't empty (photon has interacted)
-    if (!IsVectorEmpty(energyVector))
-    {
+    if (!IsVectorEmpty(energyVector)) {
         // no charge sharing but merged
         MergePixels(energyVector, energyVectorMerge);
         for (int i = 0; i < energyVectorMerge.size(); i++)
@@ -225,13 +210,10 @@ void EventAction::SaveEnergies()
  */
 void EventAction::MergePixels(std::vector<G4double> inVector, std::vector<G4double> &outVector)
 {
-    for (int i = 0; i < N_SUBPIXEL; i++)
-    {
-        for (int j = 0; j < N_SUBPIXEL; j++)
-        {
+    for (int i = 0; i < N_SUBPIXEL; i++) {
+        for (int j = 0; j < N_SUBPIXEL; j++) {
             G4int ID = i * N_SUBPIXEL + j;
-            if (inVector[ID] > 0)
-            {
+            if (inVector[ID] > 0) {
                 const G4int i_m = i / PIXEL_RATIO;
                 const G4int j_m = j / PIXEL_RATIO;
                 const G4int ID_m = i_m * N_PIXEL + j_m;
@@ -245,15 +227,12 @@ void EventAction::MergePixels(std::vector<G4double> inVector, std::vector<G4doub
 // VM added
 void EventAction::AddStepInfo(G4int partID, G4int parentID, G4int partType, G4int volID, G4double ene, G4double eneloss)
 {
-    if (partType == -2 && ene < myGenerator->GetEnergy())
-    {
-        // G4cout << " escaped partID=" << partID << " parentID=" << parentID << " ene=" << ene << " photonEnergy=" << myGenerator->GetEnergy() << G4endl;
-    }
-    else if (partType == -1)
-    {
+    if (partType == -2 && ene < myGenerator->GetEnergy()) {
+        // G4cout << " escaped partID=" << partID << " parentID=" << parentID << " ene=" << ene << " photonEnergy=" <<
+        // myGenerator->GetEnergy() << G4endl;
+    } else if (partType == -1) {
         stepInfo->AddStep(partID, parentID, partType, partType, ene, 0);
-    }
-    else if (partType >= 0)
+    } else if (partType >= 0)
         stepInfo->AddStep(partID, parentID, partType, volID, ene, eneloss);
 }
 
@@ -265,8 +244,7 @@ void EventAction::AddComptonInfo(G4int partID, G4int parentID, G4int partType, G
 
 void EventAction::SetInitialPhoton(G4int copyNo, G4double ene)
 {
-    if (!initialPhotonSet)
-    {
+    if (!initialPhotonSet) {
         G4int i_s = copyNo / N_SUBPIXEL;
         G4int j_s = copyNo - i_s * N_SUBPIXEL;
         G4int i_m = i_s / PIXEL_RATIO;
@@ -276,11 +254,8 @@ void EventAction::SetInitialPhoton(G4int copyNo, G4double ene)
         photonEnergy = myGenerator->GetEnergy();
         initialPhotonSet = 1;
         initialPhotonNoIter = 0;
-    }
-    else
-    {
-        if (copyNo == 2 && ene == photonEnergy)
-        {
+    } else {
+        if (copyNo == 2 && ene == photonEnergy) {
             // G4cout << "initialPhoton has not interacted" << G4endl;
             initialPhotonNoIter = 1;
         }

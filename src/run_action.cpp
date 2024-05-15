@@ -1,8 +1,6 @@
 #include "run_action.hh"
 
 #include "G4AnalysisManager.hh"
-
-#include "detector_construction.hh"
 #include "event_action.hh"
 
 /**
@@ -117,8 +115,7 @@ void RunAction::ClearVectors()
  */
 void RunAction::AddEntry(G4int ID, G4double Energy)
 {
-    if (Energy != 0)
-    {
+    if (Energy != 0) {
         pixelIDVector.push_back(ID);
         pixelEnergyVector.push_back(Energy);
     }
@@ -133,8 +130,7 @@ void RunAction::AddEntry(G4int ID, G4double Energy)
  */
 void RunAction::AddEntryCS(G4int ID, G4double Energy)
 {
-    if (Energy != 0)
-    {
+    if (Energy != 0) {
         pixelIDVectorCS.push_back(ID);
         pixelEnergyVectorCS.push_back(Energy);
     }
@@ -149,8 +145,7 @@ void RunAction::AddEntryCS(G4int ID, G4double Energy)
  */
 void RunAction::AddEntryMerge(G4int ID, G4double Energy)
 {
-    if (Energy != 0)
-    {
+    if (Energy != 0) {
         pixelIDVectorMerge.push_back(ID);
         pixelEnergyVectorMerge.push_back(Energy);
     }
@@ -165,8 +160,7 @@ void RunAction::AddEntryMerge(G4int ID, G4double Energy)
  */
 void RunAction::AddEntryMergeCS(G4int ID, G4double Energy)
 {
-    if (Energy != 0)
-    {
+    if (Energy != 0) {
         pixelIDVectorMergeCS.push_back(ID);
         pixelEnergyVectorMergeCS.push_back(Energy);
     }
