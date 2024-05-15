@@ -1,11 +1,10 @@
 #include "sample_energy.hh"
 
-#include <string>
-#include <fstream>
-
+#include "G4ios.hh"
 #include "Randomize.hh"
-
 #include "constants.hh"
+
+#include <fstream>
 
 /**
  * The default constructor.
@@ -17,28 +16,24 @@
 SampleEnergy::SampleEnergy()
 {
 
-    for (int i = 0; i < DAT_PATHS.size(); i++)
-    {
+    for (int i = 0; i < DAT_PATHS.size(); i++) {
         x.push_back(std::vector<G4double>());
         f.push_back(std::vector<G4double>());
         F.push_back(std::vector<G4double>());
     }
 
-    for (int i = 0; i < DAT_PATHS.size(); i++)
-    {
+    for (int i = 0; i < DAT_PATHS.size(); i++) {
         // get data from file
         std::fstream inFile;
         inFile.open(DAT_PATHS[i], std::ios::in);
 
-        if (!inFile.is_open())
-        {
+        if (!inFile.is_open()) {
             G4cout << "SampleEnergy::SampleEnergy(): Error opening file " << DAT_PATHS[i] << G4endl;
             std::exit(0);
         }
 
         G4double energy, value;
-        while (!inFile.eof())
-        {
+        while (!inFile.eof()) {
             inFile >> energy >> value;
             x[i].push_back(energy);
             f[i].push_back(value);
@@ -64,8 +59,7 @@ SampleEnergy::SampleEnergy()
             F[i][j] *= factor;
     }
 
-    for (int i = 0; i < x[0].size(); i++)
-    {
+    for (int i = 0; i < x[0].size(); i++) {
         G4cout << x[0][i] << "  " << f[0][i] << "  " << F[0][i] << "\n";
     }
 }
@@ -84,11 +78,9 @@ G4double SampleEnergy::Sample(G4int type)
     G4double u = G4UniformRand();
     // the rnd number is between two consecutive y_c values.
     // the following code should be modified using a binary search
-    G4double energy;
-    for (int i = 0; i < F[type].size(); i++)
-    {
-        if (u < F[type][i])
-        {
+    G4double energy{};
+    for (int i = 0; i < F[type].size(); i++) {
+        if (u < F[type][i]) {
             energy = (x[type][i + 1] - x[type][i]) / (F[type][i + 1] - F[type][i]) * (u - F[type][i]) + x[type][i];
             break;
         }

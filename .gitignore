@@ -44,4 +44,5 @@ include/.DS_Store
 src/.DS_Store
 /.cache
 /spectrums
-
+compile_commands.json
+.clang-format

@@ -4,6 +4,9 @@ cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 set(CMAKE_CXX_STANDARD 20)
 project(Rivelatore)
 
+# compile commands
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # delete root files
 set(results_path ${PROJECT_SOURCE_DIR}/results/)
 file(GLOB results "${results_path}/*.root")

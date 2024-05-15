@@ -2,8 +2,9 @@
 
 #pragma once
 
-#include "constants.hh"
-#include "globals.hh"
+#include "G4String.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4Types.hh"
 
 struct ComptonInfo
 {
@@ -22,7 +23,7 @@ struct ComptonInfo
 
 class SaveCompton
 {
-public:
+  public:
     SaveCompton() = default;
 
     ~SaveCompton() = default;
@@ -45,7 +46,7 @@ public:
 
     G4double GetComptonElossiter();
 
-private:
+  private:
     const G4double min_ene = 0.1 * keV;
     std::vector<ComptonInfo *> list_info;
 };

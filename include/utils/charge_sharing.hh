@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "Randomize.hh"
-#include "G4SystemOfUnits.hh"
 
 #include "detector_construction.hh"
 #include "constants.hh"
@@ -24,7 +23,7 @@ namespace charge_sharing
      *
      * @return The aforementioned random array.
      */
-    std::array<double, 2> sample(std::array<double, 2> center, const double std)
+    inline std::array<double, 2> sample(std::array<double, 2> center, const double std)
     {
         // check for values outside the pixel array
         G4double x, y;
@@ -43,7 +42,7 @@ namespace charge_sharing
      *
      * @return The ID of the detector corresponding to (x,y).
      */
-    G4int which_pixel(const std::array<G4double, 2> position)
+    inline G4int which_pixel(const std::array<G4double, 2> position)
     {
         const G4int j = ((position[0] + XY_WORLD) / XY_SUBPIXEL) * 0.5;
         const G4int i = ((position[1] + XY_WORLD) / XY_SUBPIXEL) * 0.5;
@@ -67,7 +66,7 @@ namespace charge_sharing
      *
      * @return The vector containing the energy depositions after the charge sharing.
      */
-    std::vector<G4double> add_charge_sharing(std::vector<G4double> energyVector, const G4int nParts)
+    inline std::vector<G4double> add_charge_sharing(std::vector<G4double> energyVector, const G4int nParts)
     {
         auto result = std::vector<G4double>(N_SUBPIXEL * N_SUBPIXEL, 0);
 

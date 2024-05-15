@@ -1,19 +1,19 @@
 #pragma once
 
-#include <vector>
+#include "G4Types.hh"
 
-#include "globals.hh"
+#include <vector>
 
 class SampleEnergy
 {
-private:
-  std::vector<std::vector<G4double>> x;
-  std::vector<std::vector<G4double>> f;
-  std::vector<std::vector<G4double>> F;
+  private:
+    std::vector<std::vector<G4double>> x;
+    std::vector<std::vector<G4double>> f;
+    std::vector<std::vector<G4double>> F;
 
-public:
-  SampleEnergy();
-  ~SampleEnergy() = default;
+  public:
+    SampleEnergy();
+    ~SampleEnergy() = default;
 
-  G4double Sample(G4int type);
+    G4double Sample(G4int type);
 };

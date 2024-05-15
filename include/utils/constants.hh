@@ -4,7 +4,7 @@
 #include <filesystem>
 
 #include "G4SystemOfUnits.hh"
-#include "globals.hh"
+#include "G4Types.hh"
 
 /**
  * Whether to save the energy in the subpixels (before
@@ -48,8 +48,8 @@ constexpr G4int BEAM_WIDTH = 1;
  */
 constexpr G4int N_PARTS_ENERGY = 300;
 /**
- * The standard deviation of the gaussian used for distributing the energy bits around.
- * See charge_sharing.hh for more info.
+ * The standard deviation of the gaussian used for distributing the energy bits
+ * around. See charge_sharing.hh for more info.
  */
 constexpr G4double SMEAR_WIDTH = 30 * um;
 
@@ -72,6 +72,6 @@ constexpr G4int SPECTRUM_SHAPE = 1;
 constexpr G4double MAX_ENE = 100. * keV;
 
 // paths where the .dt files are stored
-const std::array<std::filesystem::path, 3> DAT_PATHS = {"../spectrums/gauss.dat",
-                                                        "../spectrums/uniform.dat",
-                                                        "../spectrums/linear.dat"};
+const std::array<std::filesystem::path, 3> DAT_PATHS = {
+    "../spectrums/gauss.dat", "../spectrums/uniform.dat",
+    "../spectrums/linear.dat"};

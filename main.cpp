@@ -5,16 +5,12 @@
 #include "G4UImanager.hh"
 #include "G4VisExecutive.hh"
 #include "G4RunManagerFactory.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4SteppingVerbose.hh"
 
 // my scripts
 #include "physics.hh"
 #include "detector_construction.hh"
 #include "action_initialization.hh"
-#include "sensitive_detector.hh"
-#include "constants.hh"
-#include "stepping_action.hh"
 #include "energy_spectrum.hh"
 
 int main(int argc, char **argv)

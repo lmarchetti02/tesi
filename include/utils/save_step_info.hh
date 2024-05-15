@@ -3,7 +3,7 @@
 #pragma once
 
 #include "G4SystemOfUnits.hh"
-#include "globals.hh"
+#include "G4Types.hh"
 
 struct StepInfo
 {
@@ -16,7 +16,7 @@ struct StepInfo
 
 class SaveStepInfo
 {
-public:
+  public:
     SaveStepInfo() = default;
 
     ~SaveStepInfo() = default;
@@ -33,7 +33,7 @@ public:
 
     std::vector<G4double> GetEneLossVector();
 
-private:
+  private:
     const G4double min_ene = 0.1 * keV;
     std::vector<StepInfo *> list_info;
 };
