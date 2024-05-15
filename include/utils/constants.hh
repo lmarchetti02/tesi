@@ -1,5 +1,8 @@
 #pragma once
 
+#include <array>
+#include <filesystem>
+
 #include "G4SystemOfUnits.hh"
 #include "globals.hh"
 
@@ -67,3 +70,8 @@ constexpr G4int SPECTRUM_SHAPE = 1;
 
 // The maximum energy
 constexpr G4double MAX_ENE = 100. * keV;
+
+// paths where the .dt files are stored
+const std::array<std::filesystem::path, 3> DAT_PATHS = {"../spectrums/gauss.dat",
+                                                        "../spectrums/uniform.dat",
+                                                        "../spectrums/linear.dat"};
