@@ -1,10 +1,10 @@
 #pragma once
 
-#include <array>
-#include <filesystem>
-
 #include "G4SystemOfUnits.hh"
 #include "G4Types.hh"
+
+#include <array>
+#include <filesystem>
 
 /**
  * Whether to save the energy in the subpixels (before
@@ -73,5 +73,7 @@ constexpr G4double MAX_ENE = 100. * keV;
 
 // paths where the .dt files are stored
 const std::array<std::filesystem::path, 3> DAT_PATHS = {
-    "../spectrums/gauss.dat", "../spectrums/uniform.dat",
-    "../spectrums/linear.dat"};
+    "../spectrums/gauss.dat",
+    "../spectrums/uniform.dat",
+    "../spectrums/linear.dat",
+};

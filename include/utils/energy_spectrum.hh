@@ -57,13 +57,14 @@ inline void save_spectrum_files()
 {
     using std::filesystem::path;
     typedef G4double (*distribution)(G4double);
-    const std::map<path, distribution> files_map = {{DAT_PATHS[0], gaussian_distribution}, {DAT_PATHS[1], uniform_distribution}, {DAT_PATHS[2], linear_distribution}};
+    const std::map<path, distribution> files_map = {{DAT_PATHS[0], gaussian_distribution},
+                                                    {DAT_PATHS[1], uniform_distribution},
+                                                    {DAT_PATHS[2], linear_distribution}};
 
     for (auto &[path, dist] : files_map) {
         std::fstream out_file;
         out_file.open(path, std::ios::out);
-        if (!out_file.is_open())
-            std::runtime_error("Impossible to open .dat file.");
+        if (!out_file.is_open()) std::runtime_error("Impossible to open .dat file.");
 
         const G4double min = 0.;
         const G4double max = MAX_ENE;
