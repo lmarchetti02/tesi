@@ -64,7 +64,7 @@ namespace spectrum
    * Function for saving the .dat files
    * containing the energy spectrums.
    */
-  void save_files()
+  void save_spectrum_files()
   {
     using std::filesystem::path;
     typedef G4double (*distribution)(G4double, G4double);

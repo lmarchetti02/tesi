@@ -7,7 +7,6 @@
 
 #include "detector_construction.hh"
 #include "constants.hh"
-#include "energy_spectrum.hh"
 
 /**
  * Constructor.
@@ -35,8 +34,6 @@ PrimaryGenerator::PrimaryGenerator() : beamWidth(BEAM_WIDTH), monoEnergy(100 * k
     // messenger
     DefineCommands();
 
-    // spectrum::save_to_file(energyDistType, MAX_ENE);
-    spectrum::save_files();
     sampleEnergy = new SampleEnergy();
 }
 
@@ -75,6 +72,8 @@ void PrimaryGenerator::GeneratePrimaries(G4Event *anEvent)
     // set energy
     energy = (!energyDistType) ? monoEnergy : sampleEnergy->Sample(energyDistType);
     particleGun->SetParticleEnergy(energy);
+    if (std::isnan(energy))
+        G4cout << "ERROR - Invalid photon energy " << G4endl;
 
     // generate primary vertex
     particleGun->GeneratePrimaryVertex(anEvent);

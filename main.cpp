@@ -15,6 +15,7 @@
 #include "sensitive_detector.hh"
 #include "constants.hh"
 #include "stepping_action.hh"
+#include "energy_spectrum.hh"
 
 int main(int argc, char **argv)
 {
@@ -30,6 +31,9 @@ int main(int argc, char **argv)
 
 	G4int precision = 4;
 	G4SteppingVerbose::UseBestUnit(precision);
+
+	// save .dat files for energy spectrum
+	spectrum::save_spectrum_files();
 
 // for running simulation
 #ifndef G4MULTITHREADED

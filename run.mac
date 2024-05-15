@@ -3,13 +3,9 @@
 
 /process/em/deexcitationIgnoreCut true
 
-/run/numberOfThreads 8
+/run/numberOfThreads 10
 /run/initialize
 
-#/beam/beam_width 1
-#/beam/beam_type 0
-#/run/beamOn 10000
-
 /beam/beam_width 0
-/beam/beam_type 0
-/run/beamOn 1000000
+/beam/beam_type 3
+/run/beamOn 20000
