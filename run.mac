@@ -7,5 +7,5 @@
 /run/initialize
 
 /beam/beam_width 0
-/beam/beam_type 3
-/run/beamOn 20000
+/beam/beam_type 4
+/run/beamOn 1000000

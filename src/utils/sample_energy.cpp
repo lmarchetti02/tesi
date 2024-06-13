@@ -35,6 +35,7 @@ SampleEnergy::SampleEnergy()
         G4double energy, value;
         while (!inFile.eof()) {
             inFile >> energy >> value;
+            if (i == 3) energy /= 1000.; // from keV to MeV
             x[i].push_back(energy);
             f[i].push_back(value);
             F[i].push_back(0);
@@ -57,10 +58,6 @@ SampleEnergy::SampleEnergy()
 
         for (int j = 1; j < x[i].size(); j++)
             F[i][j] *= factor;
-    }
-
-    for (int i = 0; i < x[0].size(); i++) {
-        G4cout << x[0][i] << "  " << f[0][i] << "  " << F[0][i] << "\n";
     }
 }
 
